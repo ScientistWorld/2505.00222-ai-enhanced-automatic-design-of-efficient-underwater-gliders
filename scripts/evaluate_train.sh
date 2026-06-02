@@ -11,4 +11,6 @@ cd /home/user
 
 mkdir -p scoring
 
+export PYTHONPATH="/home/user:${PYTHONPATH:-}"
+
 python eval/train/evaluate.py --output scoring/scores_train.json "$@"

@@ -1,4 +1,4 @@
 action: submit
 gpus: 0
 test: false
-notes: "Run train/test slice evaluators against discovered final outputs; populate scores_train.json and scores_test.json."
+notes: "Retry train/test scoring after setting PYTHONPATH in slice wrappers so eval can import data.glider_proxy."
