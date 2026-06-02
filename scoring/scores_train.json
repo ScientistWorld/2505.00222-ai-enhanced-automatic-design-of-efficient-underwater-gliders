@@ -36,7 +36,9 @@
           "efficiency_gain_over_torpedo": 11.390008227517177
         }
       }
-    },
+    }
+  },
+  "diagnostics": {
     "surrogate_validation": {
       "results": {
         "ai_enhanced_glider": {

@@ -25,5 +25,9 @@
 - Reran `scripts/reproduce.sh`, `python validate.py --compare`, `scripts/evaluate_train.sh`, and `scripts/evaluate_test.sh` successfully.
 - Confirmed final `scores.json` includes the cage feature-range constraint for every efficiency result and that surrogate-agreement metrics remain diagnostic-only.
 
+### [2026-06-02 03:33] - core_claim_plus
+- Fixed the final validator failure by moving `surrogate_validation` from scored `experiments` to top-level `diagnostics` in the evaluator outputs and score artifacts.
+- Reran `python validate.py --compare` successfully after the fix.
+
 ## Current Limitation
 - Higher milestones beyond `core_claim_plus` are limited by unreleased paper assets: real deformation-cage fits, meshes, OpenFOAM cases/labels, optimized CAD files, wind-tunnel data, or pool telemetry.

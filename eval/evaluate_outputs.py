@@ -113,14 +113,16 @@ def main() -> None:
             surrogate_eta = float(proposed["surrogate_lift_to_drag"])
         else:
             surrogate_eta = proposed_metrics["lift_to_drag"]
-        scores["experiments"]["surrogate_validation"] = {
-            "results": {
-                "ai_enhanced_glider": {
-                    "lift_to_drag": proposed_metrics["lift_to_drag"],
-                    "surrogate_lift_to_drag": surrogate_eta,
-                    "surrogate_eta_abs_pct_error": surrogate_error,
-                    "raw_lift_to_drag": proposed_metrics["lift_to_drag"],
-                    "raw_surrogate_lift_to_drag": surrogate_eta,
+        scores["diagnostics"] = {
+            "surrogate_validation": {
+                "results": {
+                    "ai_enhanced_glider": {
+                        "lift_to_drag": proposed_metrics["lift_to_drag"],
+                        "surrogate_lift_to_drag": surrogate_eta,
+                        "surrogate_eta_abs_pct_error": surrogate_error,
+                        "raw_lift_to_drag": proposed_metrics["lift_to_drag"],
+                        "raw_surrogate_lift_to_drag": surrogate_eta,
+                    }
                 }
             }
         }

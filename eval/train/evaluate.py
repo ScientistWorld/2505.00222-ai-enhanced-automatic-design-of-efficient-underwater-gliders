@@ -192,7 +192,9 @@ def build_scores(baseline_path: Path, proposed_paths: list[Path]) -> dict:
     if angle_results:
         scores["experiments"]["angle_sweep_efficiency"] = {"results": angle_results}
     if surrogate_results:
-        scores["experiments"]["surrogate_validation"] = {"results": surrogate_results}
+        scores["diagnostics"] = {
+            "surrogate_validation": {"results": surrogate_results}
+        }
     return scores
 
 

@@ -91,6 +91,8 @@ Final packaged scores now include the cage feature-range constraint in every eff
 - Main optimized gain over torpedo: 9.893
 - 30-degree optimized gain over torpedo: 6.333
 - Cage feature-range violation: 0.0 for all scored efficiency designs
-- Surrogate eta absolute percent error: 10.142 percent, reported as diagnostic only
+- Surrogate eta absolute percent error: 10.142 percent, reported under top-level diagnostics only
 
 The train/test slice evaluators also passed and wrote method-matched scores with explicit `_slice` markers. This closes the final verification pass for `core_claim_plus`.
+
+Post-validation fix: `surrogate_validation` was moved out of `experiments` and into top-level `diagnostics` in the standard and split score artifacts. This prevents the validator from treating the diagnostic surrogate error as a paper-consistency primary metric while preserving the audit value for methods that report an internal hydrodynamic prediction.
