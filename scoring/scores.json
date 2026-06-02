@@ -8,18 +8,32 @@
           "trajectory_angle_deg": 45.51487549013377
         },
         "ai_enhanced_glider": {
-          "lift_to_drag": 9.336261867257896,
-          "energy_per_distance_relative": 0.10710924931390177,
-          "trajectory_angle_deg": 6.113599826825283
+          "lift_to_drag": 9.708322185868697,
+          "energy_per_distance_relative": 0.1030044101189376,
+          "trajectory_angle_deg": 5.880977614556487
         }
       }
     },
     "surrogate_validation": {
       "results": {
         "ai_enhanced_glider": {
-          "lift_to_drag": 9.336261867257896,
-          "surrogate_lift_to_drag": 8.36572030011978,
-          "surrogate_eta_abs_pct_error": 10.395397868410146
+          "lift_to_drag": 9.708322185868697,
+          "surrogate_lift_to_drag": 9.056823770621989,
+          "surrogate_eta_abs_pct_error": 6.710720995590984
+        }
+      }
+    },
+    "angle_sweep_efficiency": {
+      "results": {
+        "ai_enhanced_9deg": {
+          "lift_to_drag": 9.708322185868697,
+          "energy_per_distance_relative": 0.1030044101189376,
+          "trajectory_angle_deg": 5.880977614556487
+        },
+        "ai_enhanced_30deg": {
+          "lift_to_drag": 6.2378643404196055,
+          "energy_per_distance_relative": 0.1603112772941023,
+          "trajectory_angle_deg": 9.107665774782806
         }
       }
     }

@@ -30,5 +30,5 @@
 action: submit
 gpus: 0
 test: true
-milestone: method_runs
-notes: "Second CPU test job after stabilizing surrogate target scaling; reruns baseline, 4-layer neural surrogate training, CMA-ES optimization, and evaluation for core-claim readiness."
+milestone: core_claim
+notes: "Third CPU test job to populate expanded angle-sweep scoring and verify best-validation surrogate checkpointing for core_claim_plus."
