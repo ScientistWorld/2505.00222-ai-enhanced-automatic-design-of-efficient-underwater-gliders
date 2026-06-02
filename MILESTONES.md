@@ -1,6 +1,6 @@
 # Reproduction Milestones
 
-**Current: core_claim_plus**
+**Current: secondary_claims**
 
 ## Progress Log
 
@@ -14,5 +14,10 @@
 - Fixed the evaluator so `scripts/baseline.sh` can score a torpedo-only artifact while full proposed scoring still requires the baseline artifact for the gain metric.
 - Cleaned `scoring/TARGETS.md` so all named targets correspond to experiments present in `reference.json` and `scores.json`; energy and glide angle remain constraint metrics inside efficiency experiments.
 
+### [2026-06-02 03:03] - secondary_claims
+- Completed CPU smoke job `6b0aae30-c2a` with exit code 0.
+- Verified the baseline-only evaluation path, then reran `scripts/reproduce.sh` and `python validate.py --compare` successfully.
+- Reproduced the main efficiency gain, the additional 9-degree/30-degree angle sweep, and the secondary surrogate-validation claim on the local hydrodynamic oracle benchmark.
+
 ## Current Limitation
-- Higher milestones beyond `core_claim_plus` are limited by unreleased paper assets: real deformation-cage fits, meshes, OpenFOAM cases/labels, optimized CAD files, wind-tunnel data, or pool telemetry.
+- Higher milestones beyond `secondary_claims` are limited by unreleased paper assets: real deformation-cage fits, meshes, OpenFOAM cases/labels, optimized CAD files, wind-tunnel data, or pool telemetry.

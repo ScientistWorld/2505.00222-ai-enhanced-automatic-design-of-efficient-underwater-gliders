@@ -4,7 +4,7 @@
 
 The paper has been analyzed and the workspace contains a faithful scaled computational pipeline: cage-parameter base shapes, interpolation, a 4-layer tanh/batchnorm neural fluid surrogate, and CMA-ES optimization constrained through convex combinations of base shapes.
 
-CPU jobs `0fc2152a-5c4`, `891b2f5f-07e`, and `1b4dcf49-45e` ran the initial pipeline end-to-end and wrote method, baseline, checkpoint, and scoring artifacts. Continuation job `b5261386-72c` reran the full pipeline after the evaluator audit fix and validates the current `core_claim_plus` milestone.
+CPU jobs `0fc2152a-5c4`, `891b2f5f-07e`, and `1b4dcf49-45e` ran the initial pipeline end-to-end and wrote method, baseline, checkpoint, and scoring artifacts. Continuation job `b5261386-72c` reran the full pipeline after the evaluator audit fix and validated `core_claim_plus`. Continuation smoke job `6b0aae30-c2a` verified baseline-only scoring, reran the full reproduction, and validated the current `secondary_claims` milestone.
 
 Continuation audit on 2026-06-02 confirmed that `method/` implements the paper's algorithmic steps and that `eval/` remains independent from `method/`. The audit found and fixed two packaging issues: baseline-only scoring no longer depends on an existing proposed artifact, and `scoring/TARGETS.md` no longer names an experiment absent from `reference.json` and `scores.json`.
 
@@ -44,6 +44,15 @@ Continuation audit found that the previous evaluator calibrated raw CFD-like ora
 
 This restores `core_claim_plus`: the reproduced method shows the claimed large efficiency improvement on the main 9-degree setting and remains above baseline on the additional 30-degree setting. The numbers are not on the same physical pool-test scale as the paper because the paper's meshes, OpenFOAM labels, fabrication details, and telemetry are not released.
 
+Completed CPU smoke job `6b0aae30-c2a` confirmed the final scores:
+- Torpedo baseline lift-to-drag: 0.982
+- Optimized glider lift-to-drag: 9.708
+- Optimized glider gain over torpedo: 9.884 vs 8.333 reported by the paper
+- Optimized 30-degree gain over torpedo: 6.351 vs 8.000 reported by the paper
+- Surrogate eta absolute percent error: 6.711 percent vs 4.5 percent reported by the paper
+
+This supports `secondary_claims`: the main efficiency gain, an additional operating-angle setting, and the surrogate-validation claim are all reproduced on the local oracle benchmark.
+
 Paper reference values captured in `scoring/reference.json`:
 - Torpedo baseline pool-test lift-to-drag ratio: 0.3
 - Optimized two-wing pool-test lift-to-drag ratio: 2.5
@@ -51,7 +60,7 @@ Paper reference values captured in `scoring/reference.json`:
 
 ## Remaining
 
-No required work remains for the packaged `core_claim_plus` reproduction. Higher milestones would require unavailable physical assets or a more complete substitute for the paper's unreleased OpenFOAM/mesh dataset.
+No required work remains for the packaged `secondary_claims` reproduction. Higher milestones would require unavailable physical assets or a more complete substitute for the paper's unreleased OpenFOAM/mesh dataset.
 
 ## Issues
 
@@ -73,6 +82,4 @@ Job `b5261386-72c` completed successfully with exit code 0 on 0 GPUs. It reran `
 
 Post-job validation tightened paper consistency checks for primary metrics. The paper-facing primary metric for efficiency experiments is now `efficiency_gain_over_torpedo`, which is dimensionless and comparable between the paper's pool scale and this reproduction's local oracle scale. Raw lift-to-drag remains in `scores.json` as a diagnostic and constraint metric.
 
-## Pending Verification
-
-The next CPU smoke job is configured to verify the new baseline-only evaluator path, then rerun `scripts/reproduce.sh` and `python validate.py --compare` in the compute container.
+Job `6b0aae30-c2a` completed successfully with exit code 0 on 0 GPUs. It first verified that a torpedo-only artifact can be scored through `scripts/evaluate.sh`, then reran `scripts/reproduce.sh` and `python validate.py --compare`. All validation checks passed. The only stderr output was the same optional `cma.plot()` matplotlib warning, which does not affect training, optimization, or scoring.

@@ -1,8 +1,8 @@
 # IMPORTANT: Once you set action to 'submit' or 'done', STOP immediately.
 # Do NOT sleep, poll, or wait for jobs. The system reads this file
 # only after your turn ends. Sleeping blocks the entire pipeline.
-action: submit
+action: done
 gpus: 0
-test: true
-milestone: core_claim_plus
-notes: "Continuation audit smoke job: verify baseline-only evaluation output, then rerun scripts/reproduce.sh and python validate.py --compare in the container."
+test: false
+milestone: secondary_claims
+notes: "CPU job 6b0aae30-c2a verified baseline-only scoring, reran scripts/reproduce.sh, and passed python validate.py --compare. Main efficiency, angle sweep, and surrogate-validation claims are reproduced on the local oracle benchmark."
