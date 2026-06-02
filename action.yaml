@@ -1,5 +1,3 @@
-action: submit
-gpus: 0
-test: true
+action: done
 milestone: core_claim_plus
-notes: "CPU smoke job for final verification: rerun evaluate.sh, train/test evaluators, and validate.py after neutral scoring/docs cleanup."
+notes: "Final verification passed; CPU smoke job b01de9c2-b2b completed successfully and workspace is ready as a core_claim_plus gym."

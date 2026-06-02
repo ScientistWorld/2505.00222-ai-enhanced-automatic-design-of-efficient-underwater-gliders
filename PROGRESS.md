@@ -96,3 +96,5 @@ Final packaged scores now include the shape-domain constraint in every efficienc
 The train/test slice evaluators also passed and wrote method-matched scores with explicit `_slice` markers. This closes the final verification pass for `core_claim_plus`.
 
 Post-validation fix: `surrogate_validation` was moved out of `experiments` and into top-level `diagnostics` in the standard and split score artifacts. This prevents the validator from treating the diagnostic surrogate error as a paper-consistency primary metric while preserving the audit value for methods that report an internal hydrodynamic prediction.
+
+Final verification job `b01de9c2-b2b` completed successfully with exit code 0 on 0 GPUs. It reran `scripts/evaluate.sh`, `python validate.py --compare`, `scripts/evaluate_train.sh`, `scripts/evaluate_test.sh`, and a final `python validate.py --compare` inside the managed container. All validation checks passed, including method/eval separation, no committed `shared/` references, train/test independence, method-key consistency across train/test scores, and primary-metric discrimination.

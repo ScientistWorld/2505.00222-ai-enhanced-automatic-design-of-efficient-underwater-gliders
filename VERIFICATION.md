@@ -8,18 +8,19 @@ The workspace is not a physical or CFD-data reproduction. The paper's base meshe
 ## Issues Found
 - Minor: Method-agnostic documentation and one scored constraint metric used paper-specific "cage" wording. This could unnecessarily steer from-scratch agents toward the paper's representation.
 - Minor: The existing `VERIFICATION.md` was stale and referred to an earlier milestone audit.
-- Minor: Tracked `trajectory/turn_*_raw.jsonl` logs were already deleted in the worktree. They are generated workflow artifacts and should not ship with the gym.
+- Minor: Tracked `trajectory/` logs were already deleted in the worktree. They are generated workflow artifacts and should not ship with the gym.
 
 ## Fixes Applied
 - Renamed the scored validity metric from `cage_feature_range_violation` to `shape_domain_violation` across `reference.json`, score artifacts, and evaluators. The computation is unchanged.
 - Reworded method-agnostic documentation in `briefing/problem.md`, `briefing/evaluation.md`, `scoring/EXPERIMENTS.md`, `scoring/TARGETS.md`, `scoring/CONSTRAINTS.md`, and `scoring/DIRECTION.md`.
 - Removed stale generated trajectory logs from git.
-- Ran `python validate.py --compare` locally after the changes; it passed. A CPU test job is being submitted to re-run the evaluator scripts inside the managed container because login-node Python lacks the container dependencies.
+- Ran `python validate.py --compare` locally after the changes; it passed.
+- Ran final CPU smoke job `b01de9c2-b2b` in the managed container. It completed with exit code 0 after running `scripts/evaluate.sh`, `python validate.py --compare`, `scripts/evaluate_train.sh`, `scripts/evaluate_test.sh`, and a final `python validate.py --compare`. The job confirmed evaluator independence from `method/`, no committed `shared/` paths, train/test rewiring, train/test method-key consistency, and primary-metric discrimination.
 
 ## Final Judgment
-Pending the CPU evaluator smoke job, the workspace is ready to serve as a research gym in both improve and from-scratch modes. The main limitation is that the benchmark uses a local deterministic hydrodynamic evaluator rather than the unreleased physical and OpenFOAM assets.
+The workspace is ready to serve as a research gym in both improve and from-scratch modes. Problem/evaluation documentation is method-agnostic, scored metrics reward the scientific objective and constraints rather than fit-to-paper error, and the standard plus train/test evaluators run inside the managed container.
 
 - Milestone: core_claim_plus
-- Ready for gym use: partial pending container evaluator smoke job
-- Confidence: medium
+- Ready for gym use: yes
+- Confidence: high
 - Key limitation: Substitute hydrodynamic oracle because the paper's CFD and physical-test assets are unreleased.

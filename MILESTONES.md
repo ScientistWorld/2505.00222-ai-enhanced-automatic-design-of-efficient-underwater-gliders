@@ -29,5 +29,10 @@
 - Fixed the final validator failure by moving `surrogate_validation` from scored `experiments` to top-level `diagnostics` in the evaluator outputs and score artifacts.
 - Reran `python validate.py --compare` successfully after the fix.
 
+### [2026-06-02 03:46] - core_claim_plus
+- Completed final managed-container CPU smoke job `b01de9c2-b2b` with exit code 0.
+- Reran `scripts/evaluate.sh`, `python validate.py --compare`, `scripts/evaluate_train.sh`, `scripts/evaluate_test.sh`, and a final `python validate.py --compare` successfully.
+- Confirmed the workspace is ready for gym use at `core_claim_plus` after method-agnostic documentation and scoring cleanup.
+
 ## Current Limitation
 - Higher milestones beyond `core_claim_plus` are limited by unreleased paper assets: real deformation-cage fits, meshes, OpenFOAM cases/labels, optimized CAD files, wind-tunnel data, or pool telemetry.
