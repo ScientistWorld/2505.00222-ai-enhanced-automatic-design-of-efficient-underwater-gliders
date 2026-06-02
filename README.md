@@ -130,4 +130,7 @@ The paper reports an optimized pool-test lift-to-drag ratio of 2.5 for its two-w
 
 # Reproduction Milestones
 
-**Current: core_claim_plus**
+**Current: core_claim**
+
+## Stop Justification
+- Completed at milestone `core_claim`.

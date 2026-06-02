@@ -1,8 +1,8 @@
 # IMPORTANT: Once you set action to 'submit' or 'done', STOP immediately.
 # Do NOT sleep, poll, or wait for jobs. The system reads this file
 # only after your turn ends. Sleeping blocks the entire pipeline.
-action: done
-gpus: 0
+action: pending
+gpus: 1
 test: false
-milestone: core_claim_plus
-notes: "Validation fixed and passing. Efficiency experiments now use scale-normalized efficiency_gain_over_torpedo as primary metric, with raw local-oracle lift_to_drag retained as diagnostics."
+milestone: core_claim
+notes: ""
