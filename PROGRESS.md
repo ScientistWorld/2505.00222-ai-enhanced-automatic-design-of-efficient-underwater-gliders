@@ -32,13 +32,13 @@ Completed CPU test job with expanded angle-sweep scoring before pool-scale calib
 
 Both highlighted operating-angle settings outperform the torpedo baseline on the raw proxy metric.
 
-Validation later flagged that these were raw CFD-like oracle eta values compared against paper pool-test eta. The evaluator now reports pool-equivalent eta for pool-facing experiments and keeps raw eta only for surrogate/oracle diagnostics. On the calibrated paper-facing scale, the final scores are:
-- Torpedo baseline lift-to-drag: 0.300
-- Optimized 9-degree lift-to-drag: 2.500
-- Optimized 30-degree lift-to-drag: 1.713
+Continuation audit found that the previous evaluator calibrated raw CFD-like oracle eta values onto paper pool-test eta using paper constants. That made the 9-degree result match the paper by construction, so the evaluator was fixed to report direct uncalibrated oracle scores from method artifacts. The current honest local-scale scores are:
+- Torpedo baseline lift-to-drag: 0.982
+- Optimized 9-degree lift-to-drag: 9.708
+- Optimized 30-degree lift-to-drag: 6.238
 - Surrogate eta absolute percent error: 6.711
 
-This reaches `core_claim_plus`: the reproduced method shows the claimed large efficiency improvement on the main 9-degree setting and remains above baseline on the additional 30-degree setting, though the 30-degree value is below the paper's reported 2.4 pool-test ratio.
+This restores `core_claim_plus`: the reproduced method shows the claimed large efficiency improvement on the main 9-degree setting and remains above baseline on the additional 30-degree setting. The numbers are not on the same physical pool-test scale as the paper because the paper's meshes, OpenFOAM labels, fabrication details, and telemetry are not released.
 
 Paper reference values captured in `scoring/reference.json`:
 - Torpedo baseline pool-test lift-to-drag ratio: 0.3
@@ -59,6 +59,6 @@ The final job emitted a `cma.plot()` matplotlib warning from the optional CMA pl
 
 ## Deviations from Paper
 
-The paper used OpenFOAM-generated CFD labels for real cage-deformed meshes. Those labels and meshes are unavailable, so this reproduction uses a deterministic tracked hydrodynamic oracle in `data/glider_proxy.py` as the label source. The paper's algorithmic procedure is preserved: low-dimensional cage parameters, interpolation between base shapes, 4-layer tanh/batchnorm surrogate training, and CMA-ES optimization of lift-to-drag ratio.
+The paper used OpenFOAM-generated CFD labels for real cage-deformed meshes. Those labels and meshes are unavailable, so this reproduction uses a deterministic tracked hydrodynamic oracle in `data/glider_proxy.py` as the label source. The paper's algorithmic procedure is preserved: low-dimensional cage parameters, interpolation between base shapes, 4-layer tanh/batchnorm surrogate training, and CMA-ES optimization of lift-to-drag ratio. Evaluation reports this local oracle scale directly rather than calibrating to the paper's pool-test values.
 
 The paper used 10 morphs per base-shape pair. This reproduction defaults to 3 morphs per pair to keep jobs small; the interpolation procedure is the same and can be scaled by changing `--morphs-per-pair`.
