@@ -15,9 +15,9 @@
 # This reproduction has no external files to fetch. The script still creates
 # the expected downloads directory so fresh clones have the standard layout.
 
-set -e
+set -euo pipefail
 
-cd /home/user
+cd "$(dirname "$0")/.."
 
 mkdir -p data/downloads
 echo "No external downloads are required. The paper's OpenFOAM labels and cage assets are not released, so this gym uses deterministic tracked data code in data/."
