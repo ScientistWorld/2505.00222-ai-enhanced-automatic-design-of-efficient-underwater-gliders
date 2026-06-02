@@ -1,30 +1,25 @@
 # Verification Report
 
 ## Initial Assessment
+The workspace started final verification at `core_claim_plus`. That milestone is justified: the implementation runs the paper's computational design pipeline at local benchmark scale, and prior CPU jobs successfully ran the reproduction, train/test evaluators, and `validate.py --compare`.
 
-The workspace started final verification with a prior claim of `secondary_claims`, but the inspected implementation and documentation showed that the physical validation assets needed for that milestone are unavailable. The method code implements a recognizable reduced-order reproduction of the paper's computational pipeline: cage-style shape parameters, interpolation among base designs, neural surrogate fitting, and CMA-ES search over design variables.
-
-The latest CPU job, `68bfb717-c86`, completed successfully with exit code 0. It ran the packaged reproduction, standard evaluator, `python validate.py --compare`, and the train/test slice evaluators.
+The workspace is not a physical or CFD-data reproduction. The paper's base meshes, deformation fits, OpenFOAM cases/labels, optimized CAD, wind-tunnel measurements, and pool telemetry are not released, so the gym uses a deterministic tracked hydrodynamic evaluator in `data/`.
 
 ## Issues Found
-
-- Major: The previous `secondary_claims` milestone was not justified. The paper's true secondary evidence depends on unreleased cage-fitted meshes, OpenFOAM cases/labels, optimized CAD files, wind-tunnel measurements, and pool telemetry. The workspace uses a deterministic tracked proxy oracle instead.
-- Major: Earlier scoring could overemphasize reproduction fidelity through surrogate-agreement metrics. Those values are now top-level diagnostics rather than scored experiments, so future agents are rewarded on the scientific efficiency and constraint quantities.
-- Major: The general evaluator previously omitted the cage feature-range constraint from `scores.json`, although the reference and train/test evaluators included it. The current job regenerated scores with `cage_feature_range_violation` for every efficiency result.
-- Minor: A stale tracked trajectory session file was left in the workspace. It is removed from the final state.
+- Minor: Method-agnostic documentation and one scored constraint metric used paper-specific "cage" wording. This could unnecessarily steer from-scratch agents toward the paper's representation.
+- Minor: The existing `VERIFICATION.md` was stale and referred to an earlier milestone audit.
+- Minor: Tracked `trajectory/turn_*_raw.jsonl` logs were already deleted in the worktree. They are generated workflow artifacts and should not ship with the gym.
 
 ## Fixes Applied
-
-- Kept `MILESTONES.md` and `action.yaml` at `core_claim_plus`, which matches the achieved proxy reproduction.
-- Regenerated `scoring/scores.json`, `scoring/scores_train.json`, and `scoring/scores_test.json` with job `68bfb717-c86`, then moved surrogate-agreement values from `experiments` to top-level `diagnostics` to satisfy the final validator's paper-consistency check.
-- Confirmed `python validate.py --compare` passes in the completed job, including import separation, shared-path checks, score structure, and train/test wiring.
-- Updated the verification/progress documentation to describe the final job and the proxy-data limitation clearly.
+- Renamed the scored validity metric from `cage_feature_range_violation` to `shape_domain_violation` across `reference.json`, score artifacts, and evaluators. The computation is unchanged.
+- Reworded method-agnostic documentation in `briefing/problem.md`, `briefing/evaluation.md`, `scoring/EXPERIMENTS.md`, `scoring/TARGETS.md`, `scoring/CONSTRAINTS.md`, and `scoring/DIRECTION.md`.
+- Removed stale generated trajectory logs from git.
+- Ran `python validate.py --compare` locally after the changes; it passed. A CPU test job is being submitted to re-run the evaluator scripts inside the managed container because login-node Python lacks the container dependencies.
 
 ## Final Judgment
-
-This workspace is ready as a usable proxy research gym for the paper's core design-optimization problem. It is not a full physical reproduction of the paper's secondary claims, because the real CFD and experimental datasets are not public. Improve-mode and from-scratch agents can still compete meaningfully on the packaged proxy benchmark using method-agnostic data and evaluation files.
+Pending the CPU evaluator smoke job, the workspace is ready to serve as a research gym in both improve and from-scratch modes. The main limitation is that the benchmark uses a local deterministic hydrodynamic evaluator rather than the unreleased physical and OpenFOAM assets.
 
 - Milestone: core_claim_plus
-- Ready for gym use: partial
+- Ready for gym use: partial pending container evaluator smoke job
 - Confidence: medium
-- Key limitation: deterministic proxy hydrodynamic data replaces the paper's unreleased OpenFOAM, CAD, wind-tunnel, and pool-test assets.
+- Key limitation: Substitute hydrodynamic oracle because the paper's CFD and physical-test assets are unreleased.

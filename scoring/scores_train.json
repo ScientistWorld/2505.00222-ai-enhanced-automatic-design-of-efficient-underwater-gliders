@@ -7,14 +7,14 @@
           "lift_to_drag": 0.6180823732618688,
           "energy_per_distance_relative": 1.6401229420728836,
           "trajectory_angle_deg": 58.37630148046985,
-          "cage_feature_range_violation": 0.0,
+          "shape_domain_violation": 0.0,
           "efficiency_gain_over_torpedo": 1.0
         },
         "ai_enhanced_glider": {
           "lift_to_drag": 7.977339870914914,
           "energy_per_distance_relative": 0.1316128358096594,
           "trajectory_angle_deg": 7.491769969362297,
-          "cage_feature_range_violation": 0.0,
+          "shape_domain_violation": 0.0,
           "efficiency_gain_over_torpedo": 12.906596622089852
         }
       }
@@ -25,14 +25,14 @@
           "lift_to_drag": 9.7168165717116,
           "energy_per_distance_relative": 0.10291436424880991,
           "trajectory_angle_deg": 5.8758724838680365,
-          "cage_feature_range_violation": 0.0,
+          "shape_domain_violation": 0.0,
           "efficiency_gain_over_torpedo": 14.081998143412237
         },
         "ai_enhanced_30deg": {
           "lift_to_drag": 6.220628572930444,
           "energy_per_distance_relative": 0.16075545875726754,
           "trajectory_angle_deg": 9.132476111346218,
-          "cage_feature_range_violation": 0.0,
+          "shape_domain_violation": 0.0,
           "efficiency_gain_over_torpedo": 11.390008227517177
         }
       }

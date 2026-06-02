@@ -12,7 +12,7 @@ Tests whether optimized designs remain efficient at the two operating angles emp
 - **Diagnostic metric**: `lift_to_drag` (higher is better)
 
 ## Non-Target Diagnostics
-Score artifacts may include top-level diagnostics, including surrogate prediction agreement for methods that report an internal hydrodynamic estimate. These diagnostics are not optimization targets and are not listed under `experiments`.
+Score artifacts may include top-level diagnostics, including prediction agreement for methods that report an internal hydrodynamic estimate. These diagnostics are not optimization targets and are not listed under `experiments`.
 
 Run all targets with:
 

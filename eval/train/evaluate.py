@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Train-slice evaluator for glider design artifacts.
 
-This evaluator reads JSON artifacts written under outputs/ and rescored the
-submitted cage-parameter shapes on visible operating angles. It intentionally
+This evaluator reads JSON artifacts written under outputs/ and rescores the
+submitted shape vectors on visible operating angles. It intentionally
 does not import method code.
 """
 
@@ -93,11 +93,11 @@ def shape_metrics(shape: np.ndarray, angles: tuple[float, ...]) -> dict:
         "lift_to_drag": float(np.mean(etas)),
         "energy_per_distance_relative": float(np.mean(energies)),
         "trajectory_angle_deg": float(np.mean(trajectories)),
-        "cage_feature_range_violation": cage_feature_range_violation(shape),
+        "shape_domain_violation": shape_domain_violation(shape),
     }
 
 
-def cage_feature_range_violation(shape: np.ndarray) -> float:
+def shape_domain_violation(shape: np.ndarray) -> float:
     """Mean absolute excursion outside the base-shape feature envelope."""
 
     below = np.maximum(FEATURE_MIN - shape, 0.0)

@@ -6,10 +6,10 @@
       "primary_metric": "efficiency_gain_over_torpedo",
       "metrics": {
         "efficiency_gain_over_torpedo": {"higher_is_better": true, "coefficient": 1.0, "description": "Dimensionless hydrodynamic-efficiency gain over the torpedo reference under the same slice angles."},
-        "lift_to_drag": {"higher_is_better": true, "coefficient": 1.0, "description": "Raw lift-to-drag efficiency of the submitted cage shape."},
+        "lift_to_drag": {"higher_is_better": true, "coefficient": 1.0, "description": "Raw lift-to-drag efficiency of the submitted shape."},
         "energy_per_distance_relative": {"higher_is_better": false, "coefficient": -0.6, "description": "Relative work proxy, computed as inverse lift-to-drag, that penalizes inefficient glide distance."},
         "trajectory_angle_deg": {"higher_is_better": false, "coefficient": -0.3, "description": "Predicted glide trajectory angle implied by lift-to-drag, where shallower trajectories are more efficient."},
-        "cage_feature_range_violation": {"higher_is_better": false, "coefficient": -1.0, "description": "Mean cage-parameter excursion outside the feature envelope of the base design library."}
+        "shape_domain_violation": {"higher_is_better": false, "coefficient": -1.0, "description": "Mean shape-parameter excursion outside the feature envelope of the base design library."}
       },
       "results": {
         "torpedo_baseline": {
@@ -18,7 +18,7 @@
           "lift_to_drag": 0.3,
           "energy_per_distance_relative": 3.3333333333,
           "trajectory_angle_deg": 73.300755766,
-          "cage_feature_range_violation": 0.0
+          "shape_domain_violation": 0.0
         },
         "ai_enhanced_glider": {
           "type": "proposed",
@@ -26,7 +26,7 @@
           "lift_to_drag": 2.5,
           "energy_per_distance_relative": 0.4,
           "trajectory_angle_deg": 21.801409486,
-          "cage_feature_range_violation": 0.0
+          "shape_domain_violation": 0.0
         }
       }
     },
@@ -36,10 +36,10 @@
       "primary_metric": "efficiency_gain_over_torpedo",
       "metrics": {
         "efficiency_gain_over_torpedo": {"higher_is_better": true, "coefficient": 1.0, "description": "Dimensionless hydrodynamic-efficiency gain over the torpedo reference at each requested operating angle."},
-        "lift_to_drag": {"higher_is_better": true, "coefficient": 1.0, "description": "Raw lift-to-drag efficiency for the angle-specific submitted cage shape."},
+        "lift_to_drag": {"higher_is_better": true, "coefficient": 1.0, "description": "Raw lift-to-drag efficiency for the angle-specific submitted shape."},
         "energy_per_distance_relative": {"higher_is_better": false, "coefficient": -0.6, "description": "Relative work proxy, computed as inverse lift-to-drag, for the angle-specific design."},
         "trajectory_angle_deg": {"higher_is_better": false, "coefficient": -0.3, "description": "Predicted glide trajectory angle at the operating angle, where smaller is better."},
-        "cage_feature_range_violation": {"higher_is_better": false, "coefficient": -1.0, "description": "Mean cage-parameter excursion outside the feature envelope of the base design library."}
+        "shape_domain_violation": {"higher_is_better": false, "coefficient": -1.0, "description": "Mean shape-parameter excursion outside the feature envelope of the base design library."}
       },
       "results": {
         "ai_enhanced_9deg": {
@@ -48,7 +48,7 @@
           "lift_to_drag": 2.5,
           "energy_per_distance_relative": 0.4,
           "trajectory_angle_deg": 21.801409486,
-          "cage_feature_range_violation": 0.0
+          "shape_domain_violation": 0.0
         },
         "ai_enhanced_30deg": {
           "type": "proposed",
@@ -56,12 +56,12 @@
           "lift_to_drag": 2.4,
           "energy_per_distance_relative": 0.4166666667,
           "trajectory_angle_deg": 22.619864948,
-          "cage_feature_range_violation": 0.0
+          "shape_domain_violation": 0.0
         }
       }
     },
     "surrogate_validation": {
-      "description": "Diagnostic validation that the submitted design's recorded hydrodynamic prediction agrees with independent evaluation. This is not part of the gym ranking because predictions can be omitted or gamed by non-surrogate methods.",
+      "description": "Diagnostic validation that the submitted design's recorded hydrodynamic prediction agrees with independent evaluation. This is not part of the gym ranking because predictions can be omitted or gamed by methods that do not rely on internal predictors.",
       "weight": 0.01,
       "primary_metric": "surrogate_eta_abs_pct_error",
       "metrics": {

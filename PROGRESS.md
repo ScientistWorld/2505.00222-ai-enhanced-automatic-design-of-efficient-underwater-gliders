@@ -2,7 +2,7 @@
 
 ## What Works
 
-The paper has been analyzed and the workspace contains a faithful scaled computational pipeline: cage-parameter base shapes, interpolation, a 4-layer tanh/batchnorm neural fluid surrogate, and CMA-ES optimization constrained through convex combinations of base shapes.
+The paper has been analyzed and the workspace contains a faithful scaled computational pipeline: shape-parameter base shapes, interpolation, a 4-layer tanh/batchnorm neural fluid surrogate, and CMA-ES optimization constrained through convex combinations of base shapes.
 
 CPU jobs `0fc2152a-5c4`, `891b2f5f-07e`, and `1b4dcf49-45e` ran the initial pipeline end-to-end and wrote method, baseline, checkpoint, and scoring artifacts. Continuation job `b5261386-72c` reran the full pipeline after the evaluator audit fix and validated `core_claim_plus`. Continuation smoke job `6b0aae30-c2a` verified baseline-only scoring, reran the full reproduction, and validated the current `core_claim_plus` milestone.
 
@@ -72,7 +72,7 @@ The final job emitted a `cma.plot()` matplotlib warning from the optional CMA pl
 
 ## Deviations from Paper
 
-The paper used OpenFOAM-generated CFD labels for real cage-deformed meshes. Those labels and meshes are unavailable, so this reproduction uses a deterministic tracked hydrodynamic oracle in `data/glider_proxy.py` as the label source. The paper's algorithmic procedure is preserved: low-dimensional cage parameters, interpolation between base shapes, 4-layer tanh/batchnorm surrogate training, and CMA-ES optimization of lift-to-drag ratio. Evaluation reports this local oracle scale directly rather than calibrating to the paper's pool-test values.
+The paper used OpenFOAM-generated CFD labels for real cage-deformed meshes. Those labels and meshes are unavailable, so this reproduction uses a deterministic tracked hydrodynamic oracle in `data/glider_proxy.py` as the label source. The paper's algorithmic procedure is preserved: low-dimensional shape parameters, interpolation between base shapes, 4-layer tanh/batchnorm surrogate training, and CMA-ES optimization of lift-to-drag ratio. Evaluation reports this local oracle scale directly rather than calibrating to the paper's pool-test values.
 
 The paper used 10 morphs per base-shape pair. This reproduction defaults to 3 morphs per pair to keep jobs small; the interpolation procedure is the same and can be scaled by changing `--morphs-per-pair`.
 
@@ -86,11 +86,11 @@ Job `6b0aae30-c2a` completed successfully with exit code 0 on 0 GPUs. It first v
 
 Job `68bfb717-c86` completed successfully with exit code 0 on 0 GPUs. It reran `scripts/reproduce.sh`, `python validate.py --compare`, `scripts/evaluate_train.sh`, and `scripts/evaluate_test.sh`. All validation checks passed. The only stderr output was the same optional `cma.plot()` matplotlib warning, which does not affect training, optimization, or scoring.
 
-Final packaged scores now include the cage feature-range constraint in every efficiency result:
+Final packaged scores now include the shape-domain constraint in every efficiency result:
 - Main optimized lift-to-drag: 9.717
 - Main optimized gain over torpedo: 9.893
 - 30-degree optimized gain over torpedo: 6.333
-- Cage feature-range violation: 0.0 for all scored efficiency designs
+- Shape-domain violation: 0.0 for all scored efficiency designs
 - Surrogate eta absolute percent error: 10.142 percent, reported under top-level diagnostics only
 
 The train/test slice evaluators also passed and wrote method-matched scores with explicit `_slice` markers. This closes the final verification pass for `core_claim_plus`.
