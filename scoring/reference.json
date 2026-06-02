@@ -3,8 +3,9 @@
     "pool_efficiency": {
       "description": "Pool efficiency comparison against the torpedo-shaped underwater glider baseline reported by the paper.",
       "weight": 0.6,
-      "primary_metric": "lift_to_drag",
+      "primary_metric": "efficiency_gain_over_torpedo",
       "metrics": {
+        "efficiency_gain_over_torpedo": {"higher_is_better": true, "coefficient": 1.0},
         "lift_to_drag": {"higher_is_better": true, "coefficient": 1.0},
         "energy_per_distance_relative": {"higher_is_better": false, "coefficient": -0.6},
         "trajectory_angle_deg": {"higher_is_better": false, "coefficient": -0.3}
@@ -12,12 +13,14 @@
       "results": {
         "torpedo_baseline": {
           "type": "baseline",
+          "efficiency_gain_over_torpedo": 1.0,
           "lift_to_drag": 0.3,
           "energy_per_distance_relative": 3.3333333333,
           "trajectory_angle_deg": 73.300755766
         },
         "ai_enhanced_glider": {
           "type": "proposed",
+          "efficiency_gain_over_torpedo": 8.3333333333,
           "lift_to_drag": 2.5,
           "energy_per_distance_relative": 0.4,
           "trajectory_angle_deg": 21.801409486
@@ -27,8 +30,9 @@
     "angle_sweep_efficiency": {
       "description": "Optimized glider efficiency at the two fabricated operating angles emphasized by the paper.",
       "weight": 0.2,
-      "primary_metric": "lift_to_drag",
+      "primary_metric": "efficiency_gain_over_torpedo",
       "metrics": {
+        "efficiency_gain_over_torpedo": {"higher_is_better": true, "coefficient": 1.0},
         "lift_to_drag": {"higher_is_better": true, "coefficient": 1.0},
         "energy_per_distance_relative": {"higher_is_better": false, "coefficient": -0.6},
         "trajectory_angle_deg": {"higher_is_better": false, "coefficient": -0.3}
@@ -36,12 +40,14 @@
       "results": {
         "ai_enhanced_9deg": {
           "type": "proposed",
+          "efficiency_gain_over_torpedo": 8.3333333333,
           "lift_to_drag": 2.5,
           "energy_per_distance_relative": 0.4,
           "trajectory_angle_deg": 21.801409486
         },
         "ai_enhanced_30deg": {
           "type": "proposed",
+          "efficiency_gain_over_torpedo": 8.0,
           "lift_to_drag": 2.4,
           "energy_per_distance_relative": 0.4166666667,
           "trajectory_angle_deg": 22.619864948

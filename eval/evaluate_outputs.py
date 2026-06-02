@@ -30,6 +30,12 @@ def metrics_for_design(design: dict) -> dict:
     }
 
 
+def with_gain(metrics: dict, baseline_eta: float) -> dict:
+    out = dict(metrics)
+    out["efficiency_gain_over_torpedo"] = float(metrics["lift_to_drag"] / max(baseline_eta, 1e-8))
+    return out
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--proposed", default="outputs/proposed/optimization_results.json")
@@ -41,6 +47,9 @@ def main() -> None:
     baseline = load_design(Path(args.baseline))
     proposed_metrics = metrics_for_design(proposed)
     baseline_metrics = metrics_for_design(baseline)
+    baseline_eta = baseline_metrics["lift_to_drag"]
+    proposed_metrics = with_gain(proposed_metrics, baseline_eta)
+    baseline_metrics = with_gain(baseline_metrics, baseline_eta)
     angle_results = proposed.get("all_angle_results", [])
 
     surrogate_error = float(proposed.get("surrogate_eta_abs_pct_error", 999.0))
@@ -55,11 +64,11 @@ def main() -> None:
         shape = np.asarray(item["shape"], dtype=np.float32)
         cd, cl = hydrodynamic_coefficients(shape, float(item["angle"]))
         eta = lift_to_drag(float(cd), float(cl))
-        angle_scores[f"ai_enhanced_{angle}deg"] = {
+        angle_scores[f"ai_enhanced_{angle}deg"] = with_gain({
             "lift_to_drag": eta,
             "energy_per_distance_relative": float(1.0 / max(eta, 1e-8)),
             "trajectory_angle_deg": trajectory_angle_deg(eta),
-        }
+        }, baseline_eta)
 
     scores = {
         "experiments": {

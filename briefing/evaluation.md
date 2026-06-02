@@ -12,7 +12,8 @@ The evaluator reads design artifacts from `outputs/<method>/optimization_results
 
 `pool_efficiency` is the primary benchmark. It compares the optimized design against a torpedo baseline.
 
-- `lift_to_drag`: higher is better.
+- `efficiency_gain_over_torpedo`: higher is better and is the primary paper-facing metric. It is the candidate lift-to-drag ratio divided by the torpedo baseline lift-to-drag ratio under the same evaluator.
+- `lift_to_drag`: higher is better and is reported as a raw diagnostic.
 - `energy_per_distance_relative`: lower is better, computed as `1 / lift_to_drag`.
 - `trajectory_angle_deg`: lower is better, computed as `atan(1 / lift_to_drag)` in degrees.
 

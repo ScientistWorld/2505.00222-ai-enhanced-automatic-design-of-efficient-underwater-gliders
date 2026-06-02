@@ -37,6 +37,8 @@ Continuation audit found that the previous evaluator calibrated raw CFD-like ora
 - Optimized 9-degree lift-to-drag: 9.708
 - Optimized 30-degree lift-to-drag: 6.238
 - Surrogate eta absolute percent error: 6.711
+- Primary pool-efficiency gain over torpedo: 9.884 reproduced vs 8.333 reported by the paper
+- Primary 30-degree gain over torpedo: 6.351 reproduced vs 8.000 reported by the paper
 
 This restores `core_claim_plus`: the reproduced method shows the claimed large efficiency improvement on the main 9-degree setting and remains above baseline on the additional 30-degree setting. The numbers are not on the same physical pool-test scale as the paper because the paper's meshes, OpenFOAM labels, fabrication details, and telemetry are not released.
 
@@ -66,3 +68,5 @@ The paper used 10 morphs per base-shape pair. This reproduction defaults to 3 mo
 ## Latest Job
 
 Job `b5261386-72c` completed successfully with exit code 0 on 0 GPUs. It reran `scripts/reproduce.sh` and `python validate.py --compare`; all validation checks passed. The only stderr output was a warning that matplotlib is not installed for optional `cma.plot()` functionality, which is unused by the reproduction.
+
+Post-job validation tightened paper consistency checks for primary metrics. The paper-facing primary metric for efficiency experiments is now `efficiency_gain_over_torpedo`, which is dimensionless and comparable between the paper's pool scale and this reproduction's local oracle scale. Raw lift-to-drag remains in `scores.json` as a diagnostic and constraint metric.
