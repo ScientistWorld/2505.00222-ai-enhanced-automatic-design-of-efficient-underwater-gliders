@@ -9,7 +9,17 @@ from pathlib import Path
 
 import numpy as np
 
-from data.glider_proxy import hydrodynamic_coefficients, lift_to_drag, trajectory_angle_deg
+from data.glider_proxy import (
+    base_shape_library,
+    hydrodynamic_coefficients,
+    lift_to_drag,
+    trajectory_angle_deg,
+)
+
+
+BASE_SHAPES, _BASE_NAMES = base_shape_library()
+FEATURE_MIN = BASE_SHAPES.min(axis=0)
+FEATURE_MAX = BASE_SHAPES.max(axis=0)
 
 
 def load_design(path: Path) -> dict:
@@ -33,7 +43,14 @@ def metrics_for_design(design: dict) -> dict:
         "lift_to_drag": eta,
         "energy_per_distance_relative": float(1.0 / max(eta, 1e-8)),
         "trajectory_angle_deg": trajectory_angle_deg(eta),
+        "cage_feature_range_violation": cage_feature_range_violation(shape),
     }
+
+
+def cage_feature_range_violation(shape: np.ndarray) -> float:
+    below = np.maximum(FEATURE_MIN - shape, 0.0)
+    above = np.maximum(shape - FEATURE_MAX, 0.0)
+    return float(np.mean(below + above))
 
 
 def with_gain(metrics: dict, baseline_eta: float) -> dict:

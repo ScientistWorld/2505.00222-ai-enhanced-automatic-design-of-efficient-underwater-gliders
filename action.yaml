@@ -1,2 +1,5 @@
-action: done
-notes: "Fixed fresh-clone download packaging and confirmed no external artifacts or shared paths are required."
+action: submit
+gpus: 0
+test: true
+milestone: secondary_claims
+notes: "Rerun packaged CPU reproduction and validation after adding cage_feature_range_violation to the general evaluator scores."

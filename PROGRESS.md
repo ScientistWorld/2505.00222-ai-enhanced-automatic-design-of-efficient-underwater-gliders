@@ -83,3 +83,7 @@ Job `b5261386-72c` completed successfully with exit code 0 on 0 GPUs. It reran `
 Post-job validation tightened paper consistency checks for primary metrics. The paper-facing primary metric for efficiency experiments is now `efficiency_gain_over_torpedo`, which is dimensionless and comparable between the paper's pool scale and this reproduction's local oracle scale. Raw lift-to-drag remains in `scores.json` as a diagnostic and constraint metric.
 
 Job `6b0aae30-c2a` completed successfully with exit code 0 on 0 GPUs. It first verified that a torpedo-only artifact can be scored through `scripts/evaluate.sh`, then reran `scripts/reproduce.sh` and `python validate.py --compare`. All validation checks passed. The only stderr output was the same optional `cma.plot()` matplotlib warning, which does not affect training, optimization, or scoring.
+
+## Pending Submission
+
+The general evaluator now reports `cage_feature_range_violation` for every design in `scores.json`, matching the constraint metric already present in `reference.json` and in the train/test slice evaluators. A CPU test job is being submitted to rerun the packaged reproduction and validation after this evaluator fix.
