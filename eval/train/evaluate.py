@@ -14,13 +14,21 @@ from pathlib import Path
 
 import numpy as np
 
-from data.glider_proxy import hydrodynamic_coefficients, lift_to_drag, trajectory_angle_deg
+from data.glider_proxy import (
+    base_shape_library,
+    hydrodynamic_coefficients,
+    lift_to_drag,
+    trajectory_angle_deg,
+)
 
 
-POOL_ANGLES_DEG = (9.0,)
+POOL_ANGLES_DEG = (9.0, 30.0)
 ANGLE_SWEEP_LABELS = (9, 30)
 ANGLE_SWEEP_EVAL_ANGLES = {9: 9.0, 30: 30.0}
 SURROGATE_VALIDATION_LABEL = 9
+BASE_SHAPES, _BASE_NAMES = base_shape_library()
+FEATURE_MIN = BASE_SHAPES.min(axis=0)
+FEATURE_MAX = BASE_SHAPES.max(axis=0)
 
 
 def load_design(path: Path) -> dict:
@@ -85,7 +93,16 @@ def shape_metrics(shape: np.ndarray, angles: tuple[float, ...]) -> dict:
         "lift_to_drag": float(np.mean(etas)),
         "energy_per_distance_relative": float(np.mean(energies)),
         "trajectory_angle_deg": float(np.mean(trajectories)),
+        "cage_feature_range_violation": cage_feature_range_violation(shape),
     }
+
+
+def cage_feature_range_violation(shape: np.ndarray) -> float:
+    """Mean absolute excursion outside the base-shape feature envelope."""
+
+    below = np.maximum(FEATURE_MIN - shape, 0.0)
+    above = np.maximum(shape - FEATURE_MAX, 0.0)
+    return float(np.mean(below + above))
 
 
 def with_gain(metrics: dict, baseline_eta: float) -> dict:
@@ -136,6 +153,10 @@ def build_scores(baseline_path: Path, proposed_paths: list[Path]) -> dict:
     baseline_shape = np.asarray(baseline["shape"], dtype=np.float32)
     baseline_metrics = shape_metrics(baseline_shape, POOL_ANGLES_DEG)
     baseline_eta = baseline_metrics["lift_to_drag"]
+    angle_baseline_eta = {
+        label: shape_metrics(baseline_shape, (eval_angle,))["lift_to_drag"]
+        for label, eval_angle in ANGLE_SWEEP_EVAL_ANGLES.items()
+    }
     pool_results = {
         result_name(baseline_path, baseline, baseline=True): with_gain(
             baseline_metrics, baseline_eta
@@ -155,7 +176,7 @@ def build_scores(baseline_path: Path, proposed_paths: list[Path]) -> dict:
         prefix = angle_result_prefix(method_name)
         for label in ANGLE_SWEEP_LABELS:
             angle_results[f"{prefix}_{label}deg"] = metrics_for_angle_record(
-                design, label, ANGLE_SWEEP_EVAL_ANGLES[label], baseline_eta
+                design, label, ANGLE_SWEEP_EVAL_ANGLES[label], angle_baseline_eta[label]
             )
 
         surrogate_results[method_name] = surrogate_metrics(

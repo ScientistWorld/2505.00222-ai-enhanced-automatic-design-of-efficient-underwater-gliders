@@ -2,13 +2,14 @@
   "experiments": {
     "pool_efficiency": {
       "description": "Pool efficiency comparison against the torpedo-shaped underwater glider baseline reported by the paper.",
-      "weight": 0.6,
+      "weight": 0.5,
       "primary_metric": "efficiency_gain_over_torpedo",
       "metrics": {
-        "efficiency_gain_over_torpedo": {"higher_is_better": true, "coefficient": 1.0},
-        "lift_to_drag": {"higher_is_better": true, "coefficient": 1.0},
-        "energy_per_distance_relative": {"higher_is_better": false, "coefficient": -0.6},
-        "trajectory_angle_deg": {"higher_is_better": false, "coefficient": -0.3}
+        "efficiency_gain_over_torpedo": {"higher_is_better": true, "coefficient": 1.0, "description": "Dimensionless hydrodynamic-efficiency gain over the torpedo reference under the same slice angles."},
+        "lift_to_drag": {"higher_is_better": true, "coefficient": 1.0, "description": "Raw lift-to-drag efficiency of the submitted cage shape."},
+        "energy_per_distance_relative": {"higher_is_better": false, "coefficient": -0.6, "description": "Relative work proxy, computed as inverse lift-to-drag, that penalizes inefficient glide distance."},
+        "trajectory_angle_deg": {"higher_is_better": false, "coefficient": -0.3, "description": "Predicted glide trajectory angle implied by lift-to-drag, where shallower trajectories are more efficient."},
+        "cage_feature_range_violation": {"higher_is_better": false, "coefficient": -1.0, "description": "Mean cage-parameter excursion outside the feature envelope of the base design library."}
       },
       "results": {
         "torpedo_baseline": {
@@ -16,26 +17,29 @@
           "efficiency_gain_over_torpedo": 1.0,
           "lift_to_drag": 0.3,
           "energy_per_distance_relative": 3.3333333333,
-          "trajectory_angle_deg": 73.300755766
+          "trajectory_angle_deg": 73.300755766,
+          "cage_feature_range_violation": 0.0
         },
         "ai_enhanced_glider": {
           "type": "proposed",
           "efficiency_gain_over_torpedo": 8.3333333333,
           "lift_to_drag": 2.5,
           "energy_per_distance_relative": 0.4,
-          "trajectory_angle_deg": 21.801409486
+          "trajectory_angle_deg": 21.801409486,
+          "cage_feature_range_violation": 0.0
         }
       }
     },
     "angle_sweep_efficiency": {
       "description": "Optimized glider efficiency at the two fabricated operating angles emphasized by the paper.",
-      "weight": 0.2,
+      "weight": 0.3,
       "primary_metric": "efficiency_gain_over_torpedo",
       "metrics": {
-        "efficiency_gain_over_torpedo": {"higher_is_better": true, "coefficient": 1.0},
-        "lift_to_drag": {"higher_is_better": true, "coefficient": 1.0},
-        "energy_per_distance_relative": {"higher_is_better": false, "coefficient": -0.6},
-        "trajectory_angle_deg": {"higher_is_better": false, "coefficient": -0.3}
+        "efficiency_gain_over_torpedo": {"higher_is_better": true, "coefficient": 1.0, "description": "Dimensionless hydrodynamic-efficiency gain over the torpedo reference at each requested operating angle."},
+        "lift_to_drag": {"higher_is_better": true, "coefficient": 1.0, "description": "Raw lift-to-drag efficiency for the angle-specific submitted cage shape."},
+        "energy_per_distance_relative": {"higher_is_better": false, "coefficient": -0.6, "description": "Relative work proxy, computed as inverse lift-to-drag, for the angle-specific design."},
+        "trajectory_angle_deg": {"higher_is_better": false, "coefficient": -0.3, "description": "Predicted glide trajectory angle at the operating angle, where smaller is better."},
+        "cage_feature_range_violation": {"higher_is_better": false, "coefficient": -1.0, "description": "Mean cage-parameter excursion outside the feature envelope of the base design library."}
       },
       "results": {
         "ai_enhanced_9deg": {
@@ -43,14 +47,16 @@
           "efficiency_gain_over_torpedo": 8.3333333333,
           "lift_to_drag": 2.5,
           "energy_per_distance_relative": 0.4,
-          "trajectory_angle_deg": 21.801409486
+          "trajectory_angle_deg": 21.801409486,
+          "cage_feature_range_violation": 0.0
         },
         "ai_enhanced_30deg": {
           "type": "proposed",
           "efficiency_gain_over_torpedo": 8.0,
           "lift_to_drag": 2.4,
           "energy_per_distance_relative": 0.4166666667,
-          "trajectory_angle_deg": 22.619864948
+          "trajectory_angle_deg": 22.619864948,
+          "cage_feature_range_violation": 0.0
         }
       }
     },
@@ -59,11 +65,11 @@
       "weight": 0.2,
       "primary_metric": "surrogate_eta_abs_pct_error",
       "metrics": {
-        "lift_to_drag": {"higher_is_better": true, "coefficient": 0.4},
-        "surrogate_lift_to_drag": {"higher_is_better": true, "coefficient": 0.2},
-        "surrogate_eta_abs_pct_error": {"higher_is_better": false, "coefficient": -1.0},
-        "raw_lift_to_drag": {"higher_is_better": true, "coefficient": 0.2},
-        "raw_surrogate_lift_to_drag": {"higher_is_better": true, "coefficient": 0.1}
+        "lift_to_drag": {"higher_is_better": true, "coefficient": 0.4, "description": "Independent hydrodynamic lift-to-drag efficiency for the selected design."},
+        "surrogate_lift_to_drag": {"higher_is_better": true, "coefficient": 0.2, "description": "Method-side predicted lift-to-drag efficiency recorded in the design artifact."},
+        "surrogate_eta_abs_pct_error": {"higher_is_better": false, "coefficient": -1.0, "description": "Absolute percentage error between method-side predicted and independently rescored lift-to-drag."},
+        "raw_lift_to_drag": {"higher_is_better": true, "coefficient": 0.2, "description": "Unnormalized independent lift-to-drag value retained for diagnostics."},
+        "raw_surrogate_lift_to_drag": {"higher_is_better": true, "coefficient": 0.1, "description": "Unnormalized method-side surrogate lift-to-drag value retained for diagnostics."}
       },
       "results": {
         "ai_enhanced_glider": {
