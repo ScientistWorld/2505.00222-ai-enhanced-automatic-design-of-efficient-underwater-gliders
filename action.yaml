@@ -1,3 +1,5 @@
-action: done
+action: submit
+gpus: 0
+test: true
 milestone: core_claim_plus
-notes: "Fixed final validation by moving surrogate agreement to diagnostics; validate.py now passes for core_claim_plus proxy gym."
+notes: "CPU smoke job for final verification: rerun evaluate.sh, train/test evaluators, and validate.py after neutral scoring/docs cleanup."
