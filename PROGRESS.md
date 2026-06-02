@@ -2,36 +2,31 @@
 
 ## What Works
 
-<!-- What has been successfully reproduced so far. -->
+The paper has been analyzed and the workspace now contains a faithful scaled computational pipeline: cage-parameter base shapes, interpolation, a 4-layer tanh/batchnorm neural fluid surrogate, and CMA-ES optimization constrained through convex combinations of base shapes.
+
+The reusable evaluator reads design artifacts from `outputs/` and computes benchmark metrics without importing `method/`.
 
 ## Results
 
-<!-- Reproduced numbers compared to the paper's reported numbers. -->
+No compute job has completed yet in this reproduction. The next submitted job will run the full pipeline and write `scoring/scores.json`.
+
+Paper reference values captured in `scoring/reference.json`:
+- Torpedo baseline pool-test lift-to-drag ratio: 0.3
+- Optimized two-wing pool-test lift-to-drag ratio: 2.5
+- Wind-tunnel validation average lift-to-drag error: 4.5 percent
 
 ## Remaining
 
-<!-- What still needs to be done to reach higher milestones. -->
+Run the containerized reproduction job, inspect `scoring/scores.json`, compare with `python validate.py --compare`, and then update the milestone based on the completed job result.
 
 ## Issues
 
-<!-- Blockers, bugs, or difficulties encountered. -->
+The paper does not release its 20 base meshes, deformation-cage fits, OpenFOAM cases, CFD label table, trained surrogate, optimized CAD files, wind-tunnel raw data, or pool telemetry. No public code release was found.
+
+The login-node Python environment lacks numerical dependencies such as `numpy`; runtime validation is therefore deferred to the submitted container, where `environment/setup.sh` installs dependencies.
 
 ## Deviations from Paper
 
-<!-- Do not edit this section unless you deviated from the paper's original setup.
-     For each deviation, document: what the paper used, what you substituted, and why.
+The paper used OpenFOAM-generated CFD labels for real cage-deformed meshes. Those labels and meshes are unavailable, so this reproduction uses a deterministic tracked hydrodynamic oracle in `data/glider_proxy.py` as the label source. The paper's algorithmic procedure is preserved: low-dimensional cage parameters, interpolation between base shapes, 4-layer tanh/batchnorm surrogate training, and CMA-ES optimization of lift-to-drag ratio.
 
-     ACCEPTABLE deviations (data/resource/scale substitutions — milestones still valid):
-       - Replaced a proprietary dataset with a public one
-       - Used a smaller model of the same architecture
-       - Scaled down training (fewer epochs, smaller batch)
-       - Used a different library for the same algorithm
-
-     UNACCEPTABLE deviations (algorithm substitutions — milestones above 'none' are void):
-       - Replaced the paper's algorithm with a fundamentally different one
-       - Wrote a generic model trained to approximate the method's outputs
-         instead of implementing the method's computational steps
-
-     The test: could someone reading your code identify which algorithm from
-     the paper you implemented? If not, you replaced the method. -->
-
+The paper used 10 morphs per base-shape pair. This reproduction defaults to 3 morphs per pair to keep the first compute job small; the interpolation procedure is the same and can be scaled by changing `--morphs-per-pair`.

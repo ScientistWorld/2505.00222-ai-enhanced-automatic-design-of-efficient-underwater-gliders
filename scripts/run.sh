@@ -13,8 +13,9 @@ set -e
 
 cd /home/user
 
-# Example: train a model
-python method/train.py --epochs 10 --lr 0.001
+export EPOCHS="${EPOCHS:-200}"
+export GENERATIONS="${GENERATIONS:-80}"
+export POPULATION="${POPULATION:-24}"
+export ANGLES="${ANGLES:-9,30}"
 
-# Example: evaluate
-bash scripts/evaluate.sh checkpoints/best.pt
+bash scripts/reproduce.sh

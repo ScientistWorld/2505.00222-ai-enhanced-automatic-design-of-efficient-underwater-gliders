@@ -1,17 +1,11 @@
 # Problem Definition
 
-What problem does this paper address? Write this so that someone with no knowledge of the paper can understand what needs to be solved and how success is measured.
+Design an autonomous underwater glider hull and operating angle of attack that maximizes hydrodynamic efficiency. Efficiency is measured by the nondimensional lift-to-drag ratio:
 
-Do NOT describe the paper's method or solution here — only the problem itself. Think about if a future scientist agent try to solve this problem from scratch without knowing what approach the paper took. If you leak the solution, you compromise the benchmark.
+`eta = c_l / c_d`
 
-## Research Question
+where `c_l` is the lift coefficient and `c_d` is the drag coefficient for the candidate hull at the selected angle of attack.
 
-<!-- What problem or challenge does this paper tackle? What gap in existing work does it address? -->
+The reusable benchmark represents each hull by a fixed low-dimensional vector of normalized shape parameters. The evaluation problem is to output a valid shape vector and an angle of attack in degrees. The design must be evaluated by the same hydrodynamic oracle used by the benchmark, and compared against a torpedo-like glider baseline under the same procedure.
 
-## Why It Matters
-
-<!-- Why is this problem important? What would a good solution enable? Make it short -->
-
-## Success Criteria
-
-<!-- What would a successful solution look like? What properties should it have? This is about the goal, not the paper's specific approach. Make it short -->
+Success requires improving lift-to-drag ratio while also reducing the implied energy per horizontal distance and maintaining a shallow glide trajectory. Invalid designs, out-of-range cage coordinates, or designs that only exploit a prediction model without improving under the independent evaluator do not solve the problem.

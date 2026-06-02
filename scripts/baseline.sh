@@ -17,4 +17,15 @@ set -e
 
 cd /home/user
 
-# TODO: run baseline
+name="${1:-torpedo}"
+case "$name" in
+  torpedo|torpedo_baseline)
+    python -m baseline.torpedo --output-dir outputs/torpedo
+    ;;
+  *)
+    echo "Unknown baseline: $name" >&2
+    exit 2
+    ;;
+esac
+
+bash scripts/evaluate.sh
