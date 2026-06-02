@@ -30,5 +30,5 @@
 action: submit
 gpus: 0
 test: true
-milestone: none
-notes: "CPU test job for the full glider reproduction pipeline: baseline, 4-layer neural fluid surrogate training, CMA-ES optimization, and evaluation."
+milestone: method_runs
+notes: "Second CPU test job after stabilizing surrogate target scaling; reruns baseline, 4-layer neural surrogate training, CMA-ES optimization, and evaluation for core-claim readiness."
