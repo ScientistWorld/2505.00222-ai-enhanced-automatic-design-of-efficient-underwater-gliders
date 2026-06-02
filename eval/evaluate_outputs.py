@@ -42,7 +42,7 @@ def main() -> None:
     proposed_metrics = metrics_for_design(proposed)
     baseline_metrics = metrics_for_design(baseline)
 
-    surrogate_error = float(proposed.get("surrogate_eta_abs_pct_error", 0.0))
+    surrogate_error = float(proposed.get("surrogate_eta_abs_pct_error", 999.0))
     if "surrogate_lift_to_drag" in proposed:
         surrogate_eta = float(proposed["surrogate_lift_to_drag"])
     else:

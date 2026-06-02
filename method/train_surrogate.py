@@ -31,9 +31,14 @@ def main() -> None:
     order = np.random.permutation(n)
     split = int(0.8 * n)
     train_idx, val_idx = order[:split], order[split:]
-    train = TensorDataset(torch.tensor(x[train_idx]), torch.tensor(y[train_idx]))
+    y_mean = y[train_idx].mean(axis=0).astype(np.float32)
+    y_std = y[train_idx].std(axis=0).astype(np.float32)
+    y_std = np.maximum(y_std, 1e-6)
+    y_scaled = (y - y_mean) / y_std
+    train = TensorDataset(torch.tensor(x[train_idx]), torch.tensor(y_scaled[train_idx]))
     val_x = torch.tensor(x[val_idx])
     val_y = torch.tensor(y[val_idx])
+    val_y_scaled = torch.tensor(y_scaled[val_idx])
 
     loader = DataLoader(train, batch_size=args.batch_size, shuffle=True)
     model = FluidSurrogate(input_dim=x.shape[1])
@@ -57,8 +62,12 @@ def main() -> None:
             losses.append(float(loss.detach()))
         model.eval()
         with torch.no_grad():
-            val_pred = model(val_x)
-            val_loss = float(loss_fn(val_pred, val_y))
+            val_pred_scaled = model(val_x)
+            val_loss = float(loss_fn(val_pred_scaled, val_y_scaled))
+            y_mean_t = torch.tensor(y_mean)
+            y_std_t = torch.tensor(y_std)
+            val_pred = val_pred_scaled * y_std_t + y_mean_t
+            val_pred = val_pred.clamp_min(1e-6)
             eta_pred = val_pred[:, 1] / val_pred[:, 0].clamp_min(1e-8)
             eta_true = val_y[:, 1] / val_y[:, 0].clamp_min(1e-8)
             eta_mape = float((torch.abs(eta_pred - eta_true) / eta_true.clamp_min(1e-4)).mean() * 100.0)
@@ -68,7 +77,16 @@ def main() -> None:
 
     out = Path(args.checkpoint)
     out.parent.mkdir(parents=True, exist_ok=True)
-    torch.save({"state_dict": model.state_dict(), "history": history, "input_dim": x.shape[1]}, out)
+    torch.save(
+        {
+            "state_dict": model.state_dict(),
+            "history": history,
+            "input_dim": x.shape[1],
+            "target_mean": y_mean.tolist(),
+            "target_std": y_std.tolist(),
+        },
+        out,
+    )
     Path("outputs/proposed").mkdir(parents=True, exist_ok=True)
     Path("outputs/proposed/surrogate_training.json").write_text(json.dumps({"history": history}, indent=2) + "\n")
 

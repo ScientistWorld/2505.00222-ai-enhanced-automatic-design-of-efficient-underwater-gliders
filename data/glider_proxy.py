@@ -132,12 +132,13 @@ def hydrodynamic_coefficients(shape: np.ndarray, aoa_deg: float | np.ndarray) ->
 
     span, sweep, camber, thickness, tail, blunt, fin, sym = np.moveaxis(x, -1, 0)
     aspect = 1.0 + 5.5 * span / (0.55 + thickness)
-    lift_slope = (1.6 + 0.42 * aspect + 1.25 * tail + 0.55 * fin) * (0.82 + 0.18 * sym)
+    lifting_surface = np.clip(0.08 + 1.05 * span + 0.25 * tail + 0.12 * fin, 0.08, 1.25)
+    lift_slope = (1.6 + 0.42 * aspect + 1.25 * tail + 0.55 * fin) * (0.82 + 0.18 * sym) * lifting_surface
     zero_lift = np.deg2rad(-7.0 * camber + 1.5 * (blunt - 0.15))
     effective = aoa - zero_lift
     stall = 1.0 / (1.0 + np.exp((np.abs(np.rad2deg(effective)) - (18.0 + 12.0 * sweep)) / 3.2))
     cl = lift_slope * np.sin(effective) * np.cos(effective) * (0.45 + 0.55 * stall)
-    cl += 0.20 * camber + 0.06 * fin - 0.04 * (1.0 - sym)
+    cl += lifting_surface * (0.20 * camber + 0.06 * fin) - 0.04 * (1.0 - sym)
 
     wetted = 0.045 + 0.10 * thickness + 0.08 * blunt + 0.025 * fin
     induced = (cl * cl) / (math.pi * np.maximum(aspect, 0.5) * (0.70 + 0.22 * sym))

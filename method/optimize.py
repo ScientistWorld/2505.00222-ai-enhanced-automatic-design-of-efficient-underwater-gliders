@@ -36,6 +36,14 @@ def main() -> None:
     ckpt = torch.load(args.checkpoint, map_location="cpu")
     model.load_state_dict(ckpt["state_dict"])
     model.eval()
+    target_mean = np.asarray(ckpt.get("target_mean", [0.0, 0.0]), dtype=np.float32)
+    target_std = np.asarray(ckpt.get("target_std", [1.0, 1.0]), dtype=np.float32)
+
+    def predict_coefficients(features: np.ndarray) -> np.ndarray:
+        with torch.no_grad():
+            pred_scaled = model(torch.tensor(features[None, :], dtype=torch.float32))[0].numpy()
+        pred = pred_scaled * target_std + target_mean
+        return np.maximum(pred, 1e-6)
 
     output_dir = Path(args.output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -60,8 +68,7 @@ def main() -> None:
             weights = softmax(z)
             shape = weights @ bases
             features = np.concatenate([shape, [angle / 30.0]], dtype=np.float32)
-            with torch.no_grad():
-                pred = model(torch.tensor(features[None, :], dtype=torch.float32))[0].numpy()
+            pred = predict_coefficients(features)
             cd, cl = float(pred[0]), float(pred[1])
             return -lift_to_drag(cd, cl)
 
@@ -72,8 +79,7 @@ def main() -> None:
 
         weights = softmax(np.asarray(es.result.xbest))
         shape = weights @ bases
-        with torch.no_grad():
-            pred = model(torch.tensor(np.concatenate([shape, [angle / 30.0]], dtype=np.float32)[None, :]))[0].numpy()
+        pred = predict_coefficients(np.concatenate([shape, [angle / 30.0]], dtype=np.float32))
         pred_eta = lift_to_drag(float(pred[0]), float(pred[1]))
         cd, cl = hydrodynamic_coefficients(shape, angle)
         oracle_eta = lift_to_drag(float(cd), float(cl))

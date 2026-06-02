@@ -17,8 +17,7 @@ class FluidSurrogate(nn.Module):
             layers.append(nn.Tanh())
             dim = hidden_dim
         layers.append(nn.Linear(hidden_dim, 2))
-        layers.append(nn.Softplus())
         self.net = nn.Sequential(*layers)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        return self.net(x) + 1e-5
+        return self.net(x)
