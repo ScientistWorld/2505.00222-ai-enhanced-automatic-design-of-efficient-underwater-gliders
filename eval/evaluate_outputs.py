@@ -41,12 +41,25 @@ def main() -> None:
     baseline = load_design(Path(args.baseline))
     proposed_metrics = metrics_for_design(proposed)
     baseline_metrics = metrics_for_design(baseline)
+    angle_results = proposed.get("all_angle_results", [])
 
     surrogate_error = float(proposed.get("surrogate_eta_abs_pct_error", 999.0))
     if "surrogate_lift_to_drag" in proposed:
         surrogate_eta = float(proposed["surrogate_lift_to_drag"])
     else:
         surrogate_eta = proposed_metrics["lift_to_drag"]
+
+    angle_scores = {}
+    for item in angle_results:
+        angle = int(round(float(item["angle"])))
+        shape = np.asarray(item["shape"], dtype=np.float32)
+        cd, cl = hydrodynamic_coefficients(shape, float(item["angle"]))
+        eta = lift_to_drag(float(cd), float(cl))
+        angle_scores[f"ai_enhanced_{angle}deg"] = {
+            "lift_to_drag": eta,
+            "energy_per_distance_relative": float(1.0 / max(eta, 1e-8)),
+            "trajectory_angle_deg": trajectory_angle_deg(eta),
+        }
 
     scores = {
         "experiments": {
@@ -67,6 +80,8 @@ def main() -> None:
             },
         }
     }
+    if angle_scores:
+        scores["experiments"]["angle_sweep_efficiency"] = {"results": angle_scores}
     out = Path(args.output)
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(scores, indent=2) + "\n")

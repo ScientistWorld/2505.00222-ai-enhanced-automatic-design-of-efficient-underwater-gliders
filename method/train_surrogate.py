@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+import copy
 import json
 from pathlib import Path
 
@@ -45,6 +46,9 @@ def main() -> None:
     opt = torch.optim.Adam(model.parameters(), lr=args.lr)
     loss_fn = torch.nn.MSELoss()
     history = []
+    best_val_loss = float("inf")
+    best_state = None
+    best_epoch = 0
 
     for epoch in range(args.epochs):
         model.train()
@@ -72,15 +76,23 @@ def main() -> None:
             eta_true = val_y[:, 1] / val_y[:, 0].clamp_min(1e-8)
             eta_mape = float((torch.abs(eta_pred - eta_true) / eta_true.clamp_min(1e-4)).mean() * 100.0)
         history.append({"epoch": epoch + 1, "train_mse": float(np.mean(losses)), "val_mse": val_loss, "eta_mape_percent": eta_mape})
+        if val_loss < best_val_loss:
+            best_val_loss = val_loss
+            best_epoch = epoch + 1
+            best_state = copy.deepcopy(model.state_dict())
         if (epoch + 1) % 25 == 0 or epoch == 0:
             print(json.dumps(history[-1]), flush=True)
 
     out = Path(args.checkpoint)
     out.parent.mkdir(parents=True, exist_ok=True)
+    if best_state is not None:
+        model.load_state_dict(best_state)
     torch.save(
         {
             "state_dict": model.state_dict(),
             "history": history,
+            "best_epoch": best_epoch,
+            "best_val_mse": best_val_loss,
             "input_dim": x.shape[1],
             "target_mean": y_mean.tolist(),
             "target_std": y_std.tolist(),

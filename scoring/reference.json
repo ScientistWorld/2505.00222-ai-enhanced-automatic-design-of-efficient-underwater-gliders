@@ -2,7 +2,7 @@
   "experiments": {
     "pool_efficiency": {
       "description": "Pool efficiency comparison against the torpedo-shaped underwater glider baseline reported by the paper.",
-      "weight": 0.75,
+      "weight": 0.6,
       "primary_metric": "lift_to_drag",
       "metrics": {
         "lift_to_drag": {"higher_is_better": true, "coefficient": 1.0},
@@ -24,9 +24,33 @@
         }
       }
     },
+    "angle_sweep_efficiency": {
+      "description": "Optimized glider efficiency at the two fabricated operating angles emphasized by the paper.",
+      "weight": 0.2,
+      "primary_metric": "lift_to_drag",
+      "metrics": {
+        "lift_to_drag": {"higher_is_better": true, "coefficient": 1.0},
+        "energy_per_distance_relative": {"higher_is_better": false, "coefficient": -0.6},
+        "trajectory_angle_deg": {"higher_is_better": false, "coefficient": -0.3}
+      },
+      "results": {
+        "ai_enhanced_9deg": {
+          "type": "proposed",
+          "lift_to_drag": 2.5,
+          "energy_per_distance_relative": 0.4,
+          "trajectory_angle_deg": 21.801409486
+        },
+        "ai_enhanced_30deg": {
+          "type": "proposed",
+          "lift_to_drag": 2.4,
+          "energy_per_distance_relative": 0.4166666667,
+          "trajectory_angle_deg": 22.619864948
+        }
+      }
+    },
     "surrogate_validation": {
       "description": "Validation that the optimized design's predicted hydrodynamic efficiency agrees with independent physical/CFD-style evaluation.",
-      "weight": 0.25,
+      "weight": 0.2,
       "primary_metric": "surrogate_eta_abs_pct_error",
       "metrics": {
         "lift_to_drag": {"higher_is_better": true, "coefficient": 0.4},

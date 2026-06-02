@@ -12,6 +12,10 @@ Tests whether the efficiency gain also reduces the implied energy required per d
 Tests whether the method-side predicted efficiency remains aligned with an independent hydrodynamic evaluation of the selected design.
 - **Metric**: `surrogate_eta_abs_pct_error` (lower is better)
 
+## Additional Setting: angle_sweep_efficiency
+Tests whether optimized designs remain efficient at the two operating angles emphasized by the paper.
+- **Metric**: `lift_to_drag` (higher is better)
+
 Run all targets with:
 
 ```bash
