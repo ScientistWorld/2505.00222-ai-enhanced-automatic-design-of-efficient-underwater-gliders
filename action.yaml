@@ -2,8 +2,8 @@
 # Once you set action to 'done', STOP immediately.
 # Do NOT sleep, poll, or wait. The system reads this file
 # only after your turn ends.
-action: pending
+action: done
 gpus: 0
 test: false
 milestone: secondary_claims
-notes: ""
+notes: "Operating-angle split: train scores visible 9deg/native angle artifacts, test scores held-out 30deg/nearby angles; 3 train experiments and 3 test experiments defined; scripts written, scores produced later."
