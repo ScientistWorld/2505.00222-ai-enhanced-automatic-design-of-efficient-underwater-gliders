@@ -4,7 +4,7 @@
 
 The paper has been analyzed and the workspace contains a faithful scaled computational pipeline: cage-parameter base shapes, interpolation, a 4-layer tanh/batchnorm neural fluid surrogate, and CMA-ES optimization constrained through convex combinations of base shapes.
 
-CPU jobs `0fc2152a-5c4`, `891b2f5f-07e`, and `1b4dcf49-45e` ran the pipeline end-to-end and wrote method, baseline, checkpoint, and scoring artifacts. The final job supports the `core_claim_plus` milestone.
+CPU jobs `0fc2152a-5c4`, `891b2f5f-07e`, and `1b4dcf49-45e` ran the initial pipeline end-to-end and wrote method, baseline, checkpoint, and scoring artifacts. Continuation job `b5261386-72c` reran the full pipeline after the evaluator audit fix and validates the current `core_claim_plus` milestone.
 
 ## Results
 
@@ -62,3 +62,7 @@ The final job emitted a `cma.plot()` matplotlib warning from the optional CMA pl
 The paper used OpenFOAM-generated CFD labels for real cage-deformed meshes. Those labels and meshes are unavailable, so this reproduction uses a deterministic tracked hydrodynamic oracle in `data/glider_proxy.py` as the label source. The paper's algorithmic procedure is preserved: low-dimensional cage parameters, interpolation between base shapes, 4-layer tanh/batchnorm surrogate training, and CMA-ES optimization of lift-to-drag ratio. Evaluation reports this local oracle scale directly rather than calibrating to the paper's pool-test values.
 
 The paper used 10 morphs per base-shape pair. This reproduction defaults to 3 morphs per pair to keep jobs small; the interpolation procedure is the same and can be scaled by changing `--morphs-per-pair`.
+
+## Latest Job
+
+Job `b5261386-72c` completed successfully with exit code 0 on 0 GPUs. It reran `scripts/reproduce.sh` and `python validate.py --compare`; all validation checks passed. The only stderr output was a warning that matplotlib is not installed for optional `cma.plot()` functionality, which is unused by the reproduction.

@@ -3,6 +3,8 @@
 ## pool_efficiency
 Tests whether the reproduced design process produces a glider with better hydrodynamic efficiency than a conventional torpedo-shaped design. This is the central benchmark because the paper's main practical claim is that automated design finds more efficient underwater glider shapes.
 
+Reproduced scores are direct local-oracle values, not paper-fitted pool-test values. The paper reference remains useful for the direction and scale of the claim, while the benchmark score is what future methods must improve under the provided evaluator.
+
 ## surrogate_validation
 Tests whether the predicted hydrodynamic performance for the selected design agrees with an independent evaluation. This guards against methods that over-optimize a predictor without producing a design that remains efficient when rescored.
 
