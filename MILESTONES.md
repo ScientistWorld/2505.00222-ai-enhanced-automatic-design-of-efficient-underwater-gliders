@@ -20,5 +20,10 @@
 - Reproduced the main efficiency gain and the additional 9-degree/30-degree angle sweep on the local hydrodynamic oracle benchmark.
 - Surrogate agreement is reported as a diagnostic, but not counted as a physical secondary-claim reproduction because the paper's OpenFOAM cases, meshes, wind-tunnel data, and pool telemetry are not released.
 
+### [2026-06-02 03:33] - core_claim_plus
+- Completed final CPU verification job `68bfb717-c86` with exit code 0.
+- Reran `scripts/reproduce.sh`, `python validate.py --compare`, `scripts/evaluate_train.sh`, and `scripts/evaluate_test.sh` successfully.
+- Confirmed final `scores.json` includes the cage feature-range constraint for every efficiency result and that surrogate-agreement metrics remain diagnostic-only.
+
 ## Current Limitation
 - Higher milestones beyond `core_claim_plus` are limited by unreleased paper assets: real deformation-cage fits, meshes, OpenFOAM cases/labels, optimized CAD files, wind-tunnel data, or pool telemetry.

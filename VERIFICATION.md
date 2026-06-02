@@ -1,25 +1,30 @@
-# Verification
+# Verification Report
 
-Latest completed full reproduction smoke job: `6b0aae30-c2a` with exit code 0.
-Latest completed train/test slice job: `25d3a54e-c15` with exit code 0.
+## Initial Assessment
 
-Commands executed by the job:
+The workspace started final verification with a prior claim of `secondary_claims`, but the inspected implementation and documentation showed that the physical validation assets needed for that milestone are unavailable. The method code implements a recognizable reduced-order reproduction of the paper's computational pipeline: cage-style shape parameters, interpolation among base designs, neural surrogate fitting, and CMA-ES search over design variables.
 
-```bash
-bash scripts/reproduce.sh
-python validate.py --compare
-bash scripts/evaluate_train.sh
-bash scripts/evaluate_test.sh
-```
+The latest CPU job, `68bfb717-c86`, completed successfully with exit code 0. It ran the packaged reproduction, standard evaluator, `python validate.py --compare`, and the train/test slice evaluators.
 
-Final reproduced scores are written by `scripts/evaluate.sh` to `scoring/scores.json`; train/test diagnostics are written to `scoring/scores_train.json` and `scoring/scores_test.json`. `python validate.py --compare` passes.
+## Issues Found
 
-The evaluator reports direct uncalibrated hydrodynamic-oracle scores from method artifacts. This avoids fitting local results to paper values; paper pool-test numbers remain only in `scoring/reference.json`.
+- Major: The previous `secondary_claims` milestone was not justified. The paper's true secondary evidence depends on unreleased cage-fitted meshes, OpenFOAM cases/labels, optimized CAD files, wind-tunnel measurements, and pool telemetry. The workspace uses a deterministic tracked proxy oracle instead.
+- Major: Earlier scoring could overemphasize reproduction fidelity through surrogate-agreement metrics. Those metrics are now diagnostic-only with zero scoring coefficients, so future agents are rewarded on the scientific efficiency and constraint quantities.
+- Major: The general evaluator previously omitted the cage feature-range constraint from `scores.json`, although the reference and train/test evaluators included it. The current job regenerated scores with `cage_feature_range_violation` for every efficiency result.
+- Minor: A stale tracked trajectory session file was left in the workspace. It is removed from the final state.
 
-Summary:
-- `pool_efficiency`: optimized lift-to-drag 9.708 versus torpedo baseline 0.982, for a gain of 9.884.
-- `surrogate_validation`: surrogate eta error 6.711 percent with oracle eta 9.708 and surrogate eta 9.057.
-- `angle_sweep_efficiency`: 9-degree gain 9.884 and 30-degree gain 6.351 over the torpedo baseline.
-- `scores_train.json` and `scores_test.json` verify that the same method artifacts score on visible and held-out operating-angle slices.
+## Fixes Applied
 
-Milestone reached: `core_claim_plus`. The physical secondary claims are not claimed because the paper's real cage-fitted meshes, OpenFOAM data, wind-tunnel measurements, and pool telemetry are unavailable.
+- Kept `MILESTONES.md` and `action.yaml` at `core_claim_plus`, which matches the achieved proxy reproduction.
+- Regenerated `scoring/scores.json`, `scoring/scores_train.json`, and `scoring/scores_test.json` with job `68bfb717-c86`.
+- Confirmed `python validate.py --compare` passes in the completed job, including import separation, shared-path checks, score structure, and train/test wiring.
+- Updated the verification/progress documentation to describe the final job and the proxy-data limitation clearly.
+
+## Final Judgment
+
+This workspace is ready as a usable proxy research gym for the paper's core design-optimization problem. It is not a full physical reproduction of the paper's secondary claims, because the real CFD and experimental datasets are not public. Improve-mode and from-scratch agents can still compete meaningfully on the packaged proxy benchmark using method-agnostic data and evaluation files.
+
+- Milestone: core_claim_plus
+- Ready for gym use: partial
+- Confidence: medium
+- Key limitation: deterministic proxy hydrodynamic data replaces the paper's unreleased OpenFOAM, CAD, wind-tunnel, and pool-test assets.

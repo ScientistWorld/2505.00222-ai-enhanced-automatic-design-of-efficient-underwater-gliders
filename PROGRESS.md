@@ -84,6 +84,13 @@ Post-job validation tightened paper consistency checks for primary metrics. The 
 
 Job `6b0aae30-c2a` completed successfully with exit code 0 on 0 GPUs. It first verified that a torpedo-only artifact can be scored through `scripts/evaluate.sh`, then reran `scripts/reproduce.sh` and `python validate.py --compare`. All validation checks passed. The only stderr output was the same optional `cma.plot()` matplotlib warning, which does not affect training, optimization, or scoring.
 
-## Pending Submission
+Job `68bfb717-c86` completed successfully with exit code 0 on 0 GPUs. It reran `scripts/reproduce.sh`, `python validate.py --compare`, `scripts/evaluate_train.sh`, and `scripts/evaluate_test.sh`. All validation checks passed. The only stderr output was the same optional `cma.plot()` matplotlib warning, which does not affect training, optimization, or scoring.
 
-The general evaluator now reports `cage_feature_range_violation` for every design in `scores.json`, matching the constraint metric already present in `reference.json` and in the train/test slice evaluators. A CPU test job is being submitted to rerun the packaged reproduction and validation after this evaluator fix and milestone downgrade.
+Final packaged scores now include the cage feature-range constraint in every efficiency result:
+- Main optimized lift-to-drag: 9.717
+- Main optimized gain over torpedo: 9.893
+- 30-degree optimized gain over torpedo: 6.333
+- Cage feature-range violation: 0.0 for all scored efficiency designs
+- Surrogate eta absolute percent error: 10.142 percent, reported as diagnostic only
+
+The train/test slice evaluators also passed and wrote method-matched scores with explicit `_slice` markers. This closes the final verification pass for `core_claim_plus`.

@@ -1,5 +1,3 @@
-action: submit
-gpus: 0
-test: true
+action: done
 milestone: core_claim_plus
-notes: "Rerun packaged CPU reproduction and validation after adding cage_feature_range_violation and making prediction-alignment metrics diagnostic-only."
+notes: "Verified final proxy gym packaging after CPU job 68bfb717-c86; validation passed with documented limitations."
