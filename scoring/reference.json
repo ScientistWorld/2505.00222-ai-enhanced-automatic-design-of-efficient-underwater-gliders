@@ -2,7 +2,7 @@
   "experiments": {
     "pool_efficiency": {
       "description": "Pool efficiency comparison against the torpedo-shaped underwater glider baseline reported by the paper.",
-      "weight": 0.5,
+      "weight": 0.64,
       "primary_metric": "efficiency_gain_over_torpedo",
       "metrics": {
         "efficiency_gain_over_torpedo": {"higher_is_better": true, "coefficient": 1.0, "description": "Dimensionless hydrodynamic-efficiency gain over the torpedo reference under the same slice angles."},
@@ -32,7 +32,7 @@
     },
     "angle_sweep_efficiency": {
       "description": "Optimized glider efficiency at the two fabricated operating angles emphasized by the paper.",
-      "weight": 0.3,
+      "weight": 0.35,
       "primary_metric": "efficiency_gain_over_torpedo",
       "metrics": {
         "efficiency_gain_over_torpedo": {"higher_is_better": true, "coefficient": 1.0, "description": "Dimensionless hydrodynamic-efficiency gain over the torpedo reference at each requested operating angle."},
@@ -61,15 +61,15 @@
       }
     },
     "surrogate_validation": {
-      "description": "Validation that the optimized design's predicted hydrodynamic efficiency agrees with independent physical/CFD-style evaluation.",
-      "weight": 0.2,
+      "description": "Diagnostic validation that the submitted design's recorded hydrodynamic prediction agrees with independent evaluation. This is not part of the gym ranking because predictions can be omitted or gamed by non-surrogate methods.",
+      "weight": 0.01,
       "primary_metric": "surrogate_eta_abs_pct_error",
       "metrics": {
-        "lift_to_drag": {"higher_is_better": true, "coefficient": 0.4, "description": "Independent hydrodynamic lift-to-drag efficiency for the selected design."},
-        "surrogate_lift_to_drag": {"higher_is_better": true, "coefficient": 0.2, "description": "Method-side predicted lift-to-drag efficiency recorded in the design artifact."},
-        "surrogate_eta_abs_pct_error": {"higher_is_better": false, "coefficient": -1.0, "description": "Absolute percentage error between method-side predicted and independently rescored lift-to-drag."},
-        "raw_lift_to_drag": {"higher_is_better": true, "coefficient": 0.2, "description": "Unnormalized independent lift-to-drag value retained for diagnostics."},
-        "raw_surrogate_lift_to_drag": {"higher_is_better": true, "coefficient": 0.1, "description": "Unnormalized method-side surrogate lift-to-drag value retained for diagnostics."}
+        "lift_to_drag": {"higher_is_better": true, "coefficient": 0.0, "description": "Independent hydrodynamic lift-to-drag efficiency for the selected design."},
+        "surrogate_lift_to_drag": {"higher_is_better": true, "coefficient": 0.0, "description": "Method-side predicted lift-to-drag efficiency recorded in the design artifact, when provided."},
+        "surrogate_eta_abs_pct_error": {"higher_is_better": false, "coefficient": 0.0, "description": "Absolute percentage error between method-side predicted and independently rescored lift-to-drag; diagnostic only."},
+        "raw_lift_to_drag": {"higher_is_better": true, "coefficient": 0.0, "description": "Unnormalized independent lift-to-drag value retained for diagnostics."},
+        "raw_surrogate_lift_to_drag": {"higher_is_better": true, "coefficient": 0.0, "description": "Unnormalized method-side predicted lift-to-drag value retained for diagnostics."}
       },
       "results": {
         "ai_enhanced_glider": {

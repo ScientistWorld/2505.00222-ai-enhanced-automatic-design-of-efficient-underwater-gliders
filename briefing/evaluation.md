@@ -19,7 +19,7 @@ The evaluator reads design artifacts from `outputs/<method>/optimization_results
 
 Reproduced scores are reported directly on the local CFD-like oracle scale. The paper reports pool-test values with a large simulation-to-reality gap, so `scoring/reference.json` records the paper's physical numbers while `scoring/scores.json` records the uncalibrated values produced by this reusable benchmark. This avoids fitting or hardcoding paper results into the evaluator.
 
-`surrogate_validation` checks that the selected design is not only good according to its internal prediction model.
+`surrogate_validation` is a diagnostic check for methods that record their own efficiency prediction in the design artifact. Its metric coefficients are zero, so it is not part of the ranking; the benchmark also supports methods that do not expose an internal predictor.
 
 - `lift_to_drag`: independent evaluated efficiency on the local oracle scale.
 - `surrogate_lift_to_drag`: method-side predicted efficiency on the same local scale.
