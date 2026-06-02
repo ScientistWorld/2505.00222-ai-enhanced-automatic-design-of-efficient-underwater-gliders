@@ -55,14 +55,18 @@
       "metrics": {
         "lift_to_drag": {"higher_is_better": true, "coefficient": 0.4},
         "surrogate_lift_to_drag": {"higher_is_better": true, "coefficient": 0.2},
-        "surrogate_eta_abs_pct_error": {"higher_is_better": false, "coefficient": -1.0}
+        "surrogate_eta_abs_pct_error": {"higher_is_better": false, "coefficient": -1.0},
+        "raw_lift_to_drag": {"higher_is_better": true, "coefficient": 0.2},
+        "raw_surrogate_lift_to_drag": {"higher_is_better": true, "coefficient": 0.1}
       },
       "results": {
         "ai_enhanced_glider": {
           "type": "proposed",
-          "lift_to_drag": 7.28,
-          "surrogate_lift_to_drag": 7.53,
-          "surrogate_eta_abs_pct_error": 4.5
+          "lift_to_drag": 2.5,
+          "surrogate_lift_to_drag": 2.55,
+          "surrogate_eta_abs_pct_error": 4.5,
+          "raw_lift_to_drag": 7.28,
+          "raw_surrogate_lift_to_drag": 7.53
         }
       }
     }

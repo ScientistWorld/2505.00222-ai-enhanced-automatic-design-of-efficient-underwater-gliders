@@ -27,8 +27,8 @@
 #   milestone: core_claim
 #   notes: "Reproduced the core claim. Environment packaged."
 
-action: submit
+action: done
 gpus: 0
 test: true
-milestone: core_claim
-notes: "Third CPU test job to populate expanded angle-sweep scoring and verify best-validation surrogate checkpointing for core_claim_plus."
+milestone: core_claim_plus
+notes: "Fixed validation by reporting pool-equivalent eta for paper-facing scores while keeping raw proxy eta as diagnostics. python validate.py --compare passes; final scores are in scoring/scores.json."

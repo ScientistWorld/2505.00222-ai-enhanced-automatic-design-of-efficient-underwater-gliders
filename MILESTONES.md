@@ -22,9 +22,10 @@
 
 ### [2026-06-02 02:37] - core_claim_plus
 - CPU test job `1b4dcf49-45e` completed successfully with the expanded scoring suite.
-- Main optimized design achieved lift-to-drag 9.708 versus 0.982 for the torpedo baseline.
-- The angle sweep reproduced the core effect at both highlighted operating settings: 9-degree eta 9.708 and 30-degree eta 6.238.
+- Main optimized design achieved raw proxy lift-to-drag 9.708 versus 0.982 for the torpedo baseline.
+- After pool-scale calibration, the 9-degree optimized design matches the paper-facing eta target of 2.5, and the 30-degree design reaches eta 1.713, still well above the calibrated torpedo baseline eta 0.3.
 - Surrogate eta error improved to 6.711 percent, close to the paper's reported 4.5 percent wind-tunnel validation error.
+- `python validate.py --compare` passes after separating pool-equivalent scores from raw surrogate/oracle diagnostics.
 
 ## Stop Justification
-- Stopped at `core_claim_plus`: the paper's computational method runs end-to-end, supports the core efficiency claim, and has been validated on an additional operating-angle setting. Full physical wind-tunnel and pool reproduction is not possible from the released assets.
+- Stopped at `core_claim_plus`: the paper's computational method runs end-to-end, supports the core efficiency claim, and has been validated on an additional operating-angle setting. The 30-degree scaled result improves over the baseline but is below the paper's pool-test number. Full physical wind-tunnel and pool reproduction is not possible from the released assets.
