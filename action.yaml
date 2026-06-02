@@ -1,4 +1,4 @@
-action: submit
+action: done
 gpus: 0
 test: false
-notes: "Retry train/test scoring after setting PYTHONPATH in slice wrappers so eval can import data.glider_proxy."
+notes: "Held-out angle split; 15 train metric values and 15 test metric values across 3 experiments; pool gain 12.90x train vs 11.20x test, angle gain avg 12.75x vs 11.18x, surrogate error 6.71% vs 2.27%; caveat: cage-range constraint is zero for current in-domain methods but remains active for shortcut detection."
