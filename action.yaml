@@ -1,8 +1,8 @@
 # IMPORTANT: Once you set action to 'submit' or 'done', STOP immediately.
 # Do NOT sleep, poll, or wait for jobs. The system reads this file
 # only after your turn ends. Sleeping blocks the entire pipeline.
-action: done
+action: submit
 gpus: 0
-test: false
+test: true
 milestone: core_claim_plus
-notes: "Reproduction packaged and validated. Completed CPU job b5261386-72c ran the method, baseline, evaluator, and validate.py --compare successfully."
+notes: "Continuation audit smoke job: verify baseline-only evaluation output, then rerun scripts/reproduce.sh and python validate.py --compare in the container."
