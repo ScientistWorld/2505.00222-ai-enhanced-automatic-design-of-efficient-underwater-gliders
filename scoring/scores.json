@@ -1,0 +1,27 @@
+{
+  "experiments": {
+    "pool_efficiency": {
+      "results": {
+        "torpedo_baseline": {
+          "lift_to_drag": 3.0870899155812483,
+          "energy_per_distance_relative": 0.32392966429412096,
+          "trajectory_angle_deg": 17.948677151227674
+        },
+        "ai_enhanced_glider": {
+          "lift_to_drag": 5.534983532783564,
+          "energy_per_distance_relative": 0.18066901086101267,
+          "trajectory_angle_deg": 10.241097920541893
+        }
+      }
+    },
+    "surrogate_validation": {
+      "results": {
+        "ai_enhanced_glider": {
+          "lift_to_drag": 5.534983532783564,
+          "surrogate_lift_to_drag": 1.0,
+          "surrogate_eta_abs_pct_error": 81.93309891389873
+        }
+      }
+    }
+  }
+}
