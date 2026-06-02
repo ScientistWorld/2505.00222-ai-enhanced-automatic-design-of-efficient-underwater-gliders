@@ -6,6 +6,8 @@ The paper has been analyzed and the workspace contains a faithful scaled computa
 
 CPU jobs `0fc2152a-5c4`, `891b2f5f-07e`, and `1b4dcf49-45e` ran the initial pipeline end-to-end and wrote method, baseline, checkpoint, and scoring artifacts. Continuation job `b5261386-72c` reran the full pipeline after the evaluator audit fix and validates the current `core_claim_plus` milestone.
 
+Continuation audit on 2026-06-02 confirmed that `method/` implements the paper's algorithmic steps and that `eval/` remains independent from `method/`. The audit found and fixed two packaging issues: baseline-only scoring no longer depends on an existing proposed artifact, and `scoring/TARGETS.md` no longer names an experiment absent from `reference.json` and `scores.json`.
+
 ## Results
 
 Completed CPU test job results from the first run:
@@ -70,3 +72,7 @@ The paper used 10 morphs per base-shape pair. This reproduction defaults to 3 mo
 Job `b5261386-72c` completed successfully with exit code 0 on 0 GPUs. It reran `scripts/reproduce.sh` and `python validate.py --compare`; all validation checks passed. The only stderr output was a warning that matplotlib is not installed for optional `cma.plot()` functionality, which is unused by the reproduction.
 
 Post-job validation tightened paper consistency checks for primary metrics. The paper-facing primary metric for efficiency experiments is now `efficiency_gain_over_torpedo`, which is dimensionless and comparable between the paper's pool scale and this reproduction's local oracle scale. Raw lift-to-drag remains in `scores.json` as a diagnostic and constraint metric.
+
+## Pending Verification
+
+The next CPU smoke job is configured to verify the new baseline-only evaluator path, then rerun `scripts/reproduce.sh` and `python validate.py --compare` in the compute container.
