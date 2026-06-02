@@ -11,40 +11,40 @@
           "efficiency_gain_over_torpedo": 1.0
         },
         "ai_enhanced_glider": {
-          "lift_to_drag": 8.682937806560647,
-          "energy_per_distance_relative": 0.11712273892074831,
-          "trajectory_angle_deg": 6.678709375876846,
+          "lift_to_drag": 8.68610170238918,
+          "energy_per_distance_relative": 0.11709041930728115,
+          "trajectory_angle_deg": 6.676876093908897,
           "cage_feature_range_violation": 0.0,
-          "efficiency_gain_over_torpedo": 11.197948740798212
+          "efficiency_gain_over_torpedo": 11.202029058324197
         }
       }
     },
     "angle_sweep_efficiency": {
       "results": {
         "ai_enhanced_9deg": {
-          "lift_to_drag": 9.804560320373396,
-          "energy_per_distance_relative": 0.10199335485978388,
-          "trajectory_angle_deg": 5.823650697818878,
+          "lift_to_drag": 9.811049206616245,
+          "energy_per_distance_relative": 0.10192589792798443,
+          "trajectory_angle_deg": 5.8198254665363285,
           "cage_feature_range_violation": 0.0,
-          "efficiency_gain_over_torpedo": 11.304497758138348
+          "efficiency_gain_over_torpedo": 11.311979337891872
         },
         "ai_enhanced_30deg": {
-          "lift_to_drag": 7.561155647322572,
-          "energy_per_distance_relative": 0.13225491533878198,
-          "trajectory_angle_deg": 7.533925293926135,
+          "lift_to_drag": 7.563247457432884,
+          "energy_per_distance_relative": 0.13221833684910528,
+          "trajectory_angle_deg": 7.531865519150596,
           "cage_feature_range_violation": 0.0,
-          "efficiency_gain_over_torpedo": 11.0625104598111
+          "efficiency_gain_over_torpedo": 11.065570927324881
         }
       }
     },
     "surrogate_validation": {
       "results": {
         "ai_enhanced_glider": {
-          "lift_to_drag": 6.2378643404196055,
-          "surrogate_lift_to_drag": 6.096317968430489,
-          "surrogate_eta_abs_pct_error": 2.269147968992146,
-          "raw_lift_to_drag": 6.2378643404196055,
-          "raw_surrogate_lift_to_drag": 6.096317968430489
+          "lift_to_drag": 6.220628572930444,
+          "surrogate_lift_to_drag": 5.956148156033716,
+          "surrogate_eta_abs_pct_error": 4.251667075054683,
+          "raw_lift_to_drag": 6.220628572930444,
+          "raw_surrogate_lift_to_drag": 5.956148156033716
         }
       }
     }

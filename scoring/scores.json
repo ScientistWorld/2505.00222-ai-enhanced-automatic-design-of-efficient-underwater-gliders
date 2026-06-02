@@ -6,40 +6,44 @@
           "lift_to_drag": 0.9821870474785451,
           "energy_per_distance_relative": 1.018136008377614,
           "trajectory_angle_deg": 45.51487549013377,
+          "cage_feature_range_violation": 0.0,
           "efficiency_gain_over_torpedo": 1.0
         },
         "ai_enhanced_glider": {
-          "lift_to_drag": 9.708322185868697,
-          "energy_per_distance_relative": 0.1030044101189376,
-          "trajectory_angle_deg": 5.880977614556487,
-          "efficiency_gain_over_torpedo": 9.884392398364188
+          "lift_to_drag": 9.7168165717116,
+          "energy_per_distance_relative": 0.10291436424880991,
+          "trajectory_angle_deg": 5.8758724838680365,
+          "cage_feature_range_violation": 0.0,
+          "efficiency_gain_over_torpedo": 9.893040838459902
         }
       }
     },
     "surrogate_validation": {
       "results": {
         "ai_enhanced_glider": {
-          "lift_to_drag": 9.708322185868697,
-          "surrogate_lift_to_drag": 9.056823770621989,
-          "surrogate_eta_abs_pct_error": 6.710720995590984,
-          "raw_lift_to_drag": 9.708322185868697,
-          "raw_surrogate_lift_to_drag": 9.056823770621989
+          "lift_to_drag": 9.7168165717116,
+          "surrogate_lift_to_drag": 8.731306238534492,
+          "surrogate_eta_abs_pct_error": 10.142316939955498,
+          "raw_lift_to_drag": 9.7168165717116,
+          "raw_surrogate_lift_to_drag": 8.731306238534492
         }
       }
     },
     "angle_sweep_efficiency": {
       "results": {
         "ai_enhanced_9deg": {
-          "lift_to_drag": 9.708322185868697,
-          "energy_per_distance_relative": 0.1030044101189376,
-          "trajectory_angle_deg": 5.880977614556487,
-          "efficiency_gain_over_torpedo": 9.884392398364188
+          "lift_to_drag": 9.7168165717116,
+          "energy_per_distance_relative": 0.10291436424880991,
+          "trajectory_angle_deg": 5.8758724838680365,
+          "cage_feature_range_violation": 0.0,
+          "efficiency_gain_over_torpedo": 9.893040838459902
         },
         "ai_enhanced_30deg": {
-          "lift_to_drag": 6.2378643404196055,
-          "energy_per_distance_relative": 0.1603112772941023,
-          "trajectory_angle_deg": 9.107665774782806,
-          "efficiency_gain_over_torpedo": 6.350994300355875
+          "lift_to_drag": 6.220628572930444,
+          "energy_per_distance_relative": 0.16075545875726754,
+          "trajectory_angle_deg": 9.132476111346218,
+          "cage_feature_range_violation": 0.0,
+          "efficiency_gain_over_torpedo": 6.3334459448431355
         }
       }
     }
