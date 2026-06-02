@@ -1,5 +1,2 @@
-action: submit
-gpus: 0
-test: false
-milestone: secondary_claims
-notes: "Run the actual reproduction pipeline, validate core/secondary scores, then refresh train/test split scores; MILESTONES.md currently documents secondary_claims."
+action: done
+notes: "Fixed fresh-clone download packaging and confirmed no external artifacts or shared paths are required."
