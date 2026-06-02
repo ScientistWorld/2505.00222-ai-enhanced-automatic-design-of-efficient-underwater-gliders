@@ -1,5 +1,5 @@
 #!/bin/bash
-# Example job script submitted via the end-of-turn YAML block.
+# Job script submitted via the end-of-turn YAML block.
 #
 # This runs inside the compute container with:
 #   - Your workspace mounted at /home/user
@@ -19,3 +19,4 @@ export POPULATION="${POPULATION:-24}"
 export ANGLES="${ANGLES:-9,30}"
 
 bash scripts/reproduce.sh
+python validate.py --compare
