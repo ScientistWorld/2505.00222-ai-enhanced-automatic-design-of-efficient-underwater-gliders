@@ -3,22 +3,22 @@
     "pool_efficiency": {
       "results": {
         "torpedo_baseline": {
-          "lift_to_drag": 0.3,
-          "energy_per_distance_relative": 3.3333333333333335,
-          "trajectory_angle_deg": 73.30075576600639
+          "lift_to_drag": 0.9821870474785451,
+          "energy_per_distance_relative": 1.018136008377614,
+          "trajectory_angle_deg": 45.51487549013377
         },
         "ai_enhanced_glider": {
-          "lift_to_drag": 2.5,
-          "energy_per_distance_relative": 0.4,
-          "trajectory_angle_deg": 21.80140948635181
+          "lift_to_drag": 9.708322185868697,
+          "energy_per_distance_relative": 0.1030044101189376,
+          "trajectory_angle_deg": 5.880977614556487
         }
       }
     },
     "surrogate_validation": {
       "results": {
         "ai_enhanced_glider": {
-          "lift_to_drag": 2.5,
-          "surrogate_lift_to_drag": 2.359879716263985,
+          "lift_to_drag": 9.708322185868697,
+          "surrogate_lift_to_drag": 9.056823770621989,
           "surrogate_eta_abs_pct_error": 6.710720995590984,
           "raw_lift_to_drag": 9.708322185868697,
           "raw_surrogate_lift_to_drag": 9.056823770621989
@@ -28,14 +28,14 @@
     "angle_sweep_efficiency": {
       "results": {
         "ai_enhanced_9deg": {
-          "lift_to_drag": 2.5,
-          "energy_per_distance_relative": 0.4,
-          "trajectory_angle_deg": 21.80140948635181
+          "lift_to_drag": 9.708322185868697,
+          "energy_per_distance_relative": 0.1030044101189376,
+          "trajectory_angle_deg": 5.880977614556487
         },
         "ai_enhanced_30deg": {
-          "lift_to_drag": 1.7132394089371608,
-          "energy_per_distance_relative": 0.5836895852287032,
-          "trajectory_angle_deg": 30.271664279507885
+          "lift_to_drag": 6.2378643404196055,
+          "energy_per_distance_relative": 0.1603112772941023,
+          "trajectory_angle_deg": 9.107665774782806
         }
       }
     }
