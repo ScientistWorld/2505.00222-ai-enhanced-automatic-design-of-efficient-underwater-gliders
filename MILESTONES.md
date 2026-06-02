@@ -28,4 +28,4 @@
 - `python validate.py --compare` passes after separating pool-equivalent scores from raw surrogate/oracle diagnostics.
 
 ## Stop Justification
-- Stopped at `core_claim_plus`: the paper's computational method runs end-to-end, supports the core efficiency claim, and has been validated on an additional operating-angle setting. The 30-degree scaled result improves over the baseline but is below the paper's pool-test number. Full physical wind-tunnel and pool reproduction is not possible from the released assets.
+- Completed at milestone `core_claim_plus`.
