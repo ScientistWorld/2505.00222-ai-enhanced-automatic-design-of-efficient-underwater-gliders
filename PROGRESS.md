@@ -4,7 +4,7 @@
 
 The paper has been analyzed and the workspace contains a faithful scaled computational pipeline: cage-parameter base shapes, interpolation, a 4-layer tanh/batchnorm neural fluid surrogate, and CMA-ES optimization constrained through convex combinations of base shapes.
 
-CPU jobs `0fc2152a-5c4` and `891b2f5f-07e` ran the pipeline end-to-end and wrote method, baseline, checkpoint, and scoring artifacts. The second job supports the `core_claim` milestone.
+CPU jobs `0fc2152a-5c4`, `891b2f5f-07e`, and `1b4dcf49-45e` ran the pipeline end-to-end and wrote method, baseline, checkpoint, and scoring artifacts. The final job supports the `core_claim_plus` milestone.
 
 ## Results
 
@@ -22,6 +22,16 @@ Completed CPU test job results after surrogate target scaling:
 
 The optimized design improves strongly over the baseline and preserves the paper's benefit/constraint structure, so `core_claim` is reached.
 
+Completed CPU test job with expanded angle-sweep scoring:
+- Torpedo baseline lift-to-drag: 0.982
+- Best optimized design lift-to-drag: 9.708
+- Best optimized design energy per distance: 0.103
+- Surrogate eta absolute percent error: 6.711
+- Optimized 9-degree lift-to-drag: 9.708
+- Optimized 30-degree lift-to-drag: 6.238
+
+Both highlighted operating-angle settings outperform the torpedo baseline and the paper's reported pool-test optimized values, so `core_claim_plus` is reached.
+
 Paper reference values captured in `scoring/reference.json`:
 - Torpedo baseline pool-test lift-to-drag ratio: 0.3
 - Optimized two-wing pool-test lift-to-drag ratio: 2.5
@@ -29,13 +39,15 @@ Paper reference values captured in `scoring/reference.json`:
 
 ## Remaining
 
-Run a third containerized job to populate the expanded `angle_sweep_efficiency` experiment and use best-validation surrogate checkpointing. If both operating angles score successfully, update to `core_claim_plus`.
+No required work remains for the packaged `core_claim_plus` reproduction. Higher milestones would require unavailable physical assets or a more complete substitute for the paper's unreleased OpenFOAM/mesh dataset.
 
 ## Issues
 
 The paper does not release its 20 base meshes, deformation-cage fits, OpenFOAM cases, CFD label table, trained surrogate, optimized CAD files, wind-tunnel raw data, or pool telemetry. No public code release was found.
 
 The first surrogate run collapsed because raw coefficient regression with the original high learning rate and a positive-output floor drove predictions to the floor. The implementation now standardizes lift/drag targets, unnormalizes predictions before CMA-ES scoring, and saves the best validation checkpoint.
+
+The final job emitted a `cma.plot()` matplotlib warning from the optional CMA plotting module. It does not affect training, optimization, or scoring.
 
 ## Deviations from Paper
 
