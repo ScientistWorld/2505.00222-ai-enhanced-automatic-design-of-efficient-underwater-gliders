@@ -99,6 +99,7 @@ def main() -> None:
             "lift_to_drag": eta,
             "energy_per_distance_relative": float(1.0 / max(eta, 1e-8)),
             "trajectory_angle_deg": trajectory_angle_deg(eta),
+            "cage_feature_range_violation": cage_feature_range_violation(shape),
         }, baseline_eta)
 
     pool_results = {"torpedo_baseline": baseline_metrics}

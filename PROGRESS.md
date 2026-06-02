@@ -4,7 +4,7 @@
 
 The paper has been analyzed and the workspace contains a faithful scaled computational pipeline: cage-parameter base shapes, interpolation, a 4-layer tanh/batchnorm neural fluid surrogate, and CMA-ES optimization constrained through convex combinations of base shapes.
 
-CPU jobs `0fc2152a-5c4`, `891b2f5f-07e`, and `1b4dcf49-45e` ran the initial pipeline end-to-end and wrote method, baseline, checkpoint, and scoring artifacts. Continuation job `b5261386-72c` reran the full pipeline after the evaluator audit fix and validated `core_claim_plus`. Continuation smoke job `6b0aae30-c2a` verified baseline-only scoring, reran the full reproduction, and validated the current `secondary_claims` milestone.
+CPU jobs `0fc2152a-5c4`, `891b2f5f-07e`, and `1b4dcf49-45e` ran the initial pipeline end-to-end and wrote method, baseline, checkpoint, and scoring artifacts. Continuation job `b5261386-72c` reran the full pipeline after the evaluator audit fix and validated `core_claim_plus`. Continuation smoke job `6b0aae30-c2a` verified baseline-only scoring, reran the full reproduction, and validated the current `core_claim_plus` milestone.
 
 Continuation audit on 2026-06-02 confirmed that `method/` implements the paper's algorithmic steps and that `eval/` remains independent from `method/`. The audit found and fixed two packaging issues: baseline-only scoring no longer depends on an existing proposed artifact, and `scoring/TARGETS.md` no longer names an experiment absent from `reference.json` and `scores.json`.
 
@@ -51,7 +51,7 @@ Completed CPU smoke job `6b0aae30-c2a` confirmed the final scores:
 - Optimized 30-degree gain over torpedo: 6.351 vs 8.000 reported by the paper
 - Surrogate eta absolute percent error: 6.711 percent vs 4.5 percent reported by the paper
 
-This supports `secondary_claims`: the main efficiency gain, an additional operating-angle setting, and the surrogate-validation claim are all reproduced on the local oracle benchmark.
+This supports `core_claim_plus`: the main efficiency gain is reproduced on the local oracle benchmark, and the method also improves over the torpedo baseline at the additional 30-degree operating-angle setting. Surrogate agreement is reported as a diagnostic, but not counted as a physical secondary-claim reproduction because the paper's real CFD and experimental assets are unavailable.
 
 Paper reference values captured in `scoring/reference.json`:
 - Torpedo baseline pool-test lift-to-drag ratio: 0.3
@@ -60,7 +60,7 @@ Paper reference values captured in `scoring/reference.json`:
 
 ## Remaining
 
-No required work remains for the packaged `secondary_claims` reproduction. Higher milestones would require unavailable physical assets or a more complete substitute for the paper's unreleased OpenFOAM/mesh dataset.
+No required work remains for the packaged `core_claim_plus` reproduction. Higher milestones would require unavailable physical assets or a more complete substitute for the paper's unreleased OpenFOAM/mesh dataset.
 
 ## Issues
 
@@ -86,4 +86,4 @@ Job `6b0aae30-c2a` completed successfully with exit code 0 on 0 GPUs. It first v
 
 ## Pending Submission
 
-The general evaluator now reports `cage_feature_range_violation` for every design in `scores.json`, matching the constraint metric already present in `reference.json` and in the train/test slice evaluators. A CPU test job is being submitted to rerun the packaged reproduction and validation after this evaluator fix.
+The general evaluator now reports `cage_feature_range_violation` for every design in `scores.json`, matching the constraint metric already present in `reference.json` and in the train/test slice evaluators. A CPU test job is being submitted to rerun the packaged reproduction and validation after this evaluator fix and milestone downgrade.

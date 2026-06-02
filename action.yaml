@@ -1,5 +1,5 @@
 action: submit
 gpus: 0
 test: true
-milestone: secondary_claims
-notes: "Rerun packaged CPU reproduction and validation after adding cage_feature_range_violation to the general evaluator scores."
+milestone: core_claim_plus
+notes: "Rerun packaged CPU reproduction and validation after adding cage_feature_range_violation to the general evaluator scores and downgrading the claim to proxy core_claim_plus."
