@@ -1,2 +1,8 @@
-action: done
-notes: "Scoring audit complete: stronger predictor gains are below seed noise; five shortcuts beat or tie the reference. All 23 hidden-test runs and common-validation evidence are archived in redteam/, report committed, gym files restored."
+# Once you set action to 'submit' or 'done', STOP immediately.
+# Do NOT sleep, poll, or wait for jobs. The system reads this file
+# only after your turn ends.
+action: pending
+gpus: 0
+test: false
+milestone: core_claim_plus
+notes: ""
