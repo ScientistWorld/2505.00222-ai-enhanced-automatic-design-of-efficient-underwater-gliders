@@ -1,4 +1,4 @@
 action: submit
 gpus: 0
-test: false
-notes: "Run redteam 23-case scoring audit: three reference seeds, three stronger variants, weak controls, brute force, and persisted file-only shortcuts through exact no-argument hidden test."
+test: true
+notes: "Small CPU follow-up: compare saved reference and six trained checkpoints on one common 2048-example public-oracle validation set; hidden-test shortcut runs already completed and archived."
