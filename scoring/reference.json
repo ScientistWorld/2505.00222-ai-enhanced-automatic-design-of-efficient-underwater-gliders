@@ -1,15 +1,15 @@
 {
+  "_note": "results hold the paper's reported numbers (pool test: two-wing eta 2.5 at 9 deg, four-wing eta 2.4 at 30 deg, torpedo literature eta 0.3; wind tunnel: 4.5% average lift-to-drag error). The gym scores synthetic CFD-stand-in fluid instances, whose lift-to-drag values are on a different (simulation) scale than the paper's physical pool tests; the paper itself reports simulation eta of about 7 for its two-wing design. Runtime reference scores are scoring/scores_train.json and scoring/scores_test.json. Paper values that no longer correspond to a scored metric are kept under _paper_reported.",
   "experiments": {
     "pool_efficiency": {
-      "description": "Pool efficiency comparison against the torpedo-shaped underwater glider baseline reported by the paper.",
-      "weight": 0.64,
+      "description": "Co-designed hull and angle of attack per fluid instance, scored at the submitted angle and averaged over instances, against the conventional torpedo hull at its own best angle of attack (both fixed and evaluated by the evaluator).",
+      "weight": 0.5,
       "primary_metric": "efficiency_gain_over_torpedo",
       "metrics": {
-        "efficiency_gain_over_torpedo": {"higher_is_better": true, "coefficient": 1.0, "description": "Dimensionless hydrodynamic-efficiency gain over the torpedo reference under the same slice angles."},
-        "lift_to_drag": {"higher_is_better": true, "coefficient": 1.0, "description": "Raw lift-to-drag efficiency of the submitted shape."},
-        "energy_per_distance_relative": {"higher_is_better": false, "coefficient": -0.6, "description": "Relative work proxy, computed as inverse lift-to-drag, that penalizes inefficient glide distance."},
-        "trajectory_angle_deg": {"higher_is_better": false, "coefficient": -0.3, "description": "Predicted glide trajectory angle implied by lift-to-drag, where shallower trajectories are more efficient."},
-        "shape_domain_violation": {"higher_is_better": false, "coefficient": -1.0, "description": "Mean shape-parameter excursion outside the feature envelope of the base design library."}
+        "efficiency_gain_over_torpedo": {"higher_is_better": true, "coefficient": 1.0, "description": "Lift-to-drag of the submitted design divided by the torpedo hull's best lift-to-drag on the same fluid instance, averaged over instances."},
+        "lift_to_drag": {"higher_is_better": true, "coefficient": 1.0, "description": "Lift-to-drag ratio of the submitted (hull, angle) pair, averaged over instances."},
+        "energy_per_distance_relative": {"higher_is_better": false, "coefficient": -0.6, "description": "Buoyancy-engine work per horizontal distance, proportional to c_d/c_l (capped at 100 when lift vanishes), averaged over instances."},
+        "trajectory_angle_deg": {"higher_is_better": false, "coefficient": -0.3, "description": "Glide-path angle atan(c_d/c_l) in degrees (90 when lift vanishes); shallower is more efficient."}
       },
       "results": {
         "torpedo_baseline": {
@@ -17,29 +17,27 @@
           "efficiency_gain_over_torpedo": 1.0,
           "lift_to_drag": 0.3,
           "energy_per_distance_relative": 3.3333333333,
-          "trajectory_angle_deg": 73.300755766,
-          "shape_domain_violation": 0.0
+          "trajectory_angle_deg": 73.300755766
         },
         "ai_enhanced_glider": {
           "type": "proposed",
           "efficiency_gain_over_torpedo": 8.3333333333,
           "lift_to_drag": 2.5,
           "energy_per_distance_relative": 0.4,
-          "trajectory_angle_deg": 21.801409486,
-          "shape_domain_violation": 0.0
+          "trajectory_angle_deg": 21.801409486
         }
-      }
+      },
+      "_paper_reported": {"torpedo_baseline": {"shape_domain_violation": 0.0}, "ai_enhanced_glider": {"shape_domain_violation": 0.0}, "note": "Convex-hull membership is now enforced by the submission format and a validity gate rather than scored."}
     },
     "angle_sweep_efficiency": {
-      "description": "Optimized glider efficiency at the two fabricated operating angles emphasized by the paper.",
+      "description": "Hull optimised for each of the paper's two fabricated operating angles (9 and 30 degrees), scored at that angle against the torpedo hull at the same angle, averaged over fluid instances.",
       "weight": 0.35,
       "primary_metric": "efficiency_gain_over_torpedo",
       "metrics": {
-        "efficiency_gain_over_torpedo": {"higher_is_better": true, "coefficient": 1.0, "description": "Dimensionless hydrodynamic-efficiency gain over the torpedo reference at each requested operating angle."},
-        "lift_to_drag": {"higher_is_better": true, "coefficient": 1.0, "description": "Raw lift-to-drag efficiency for the angle-specific submitted shape."},
-        "energy_per_distance_relative": {"higher_is_better": false, "coefficient": -0.6, "description": "Relative work proxy, computed as inverse lift-to-drag, for the angle-specific design."},
-        "trajectory_angle_deg": {"higher_is_better": false, "coefficient": -0.3, "description": "Predicted glide trajectory angle at the operating angle, where smaller is better."},
-        "shape_domain_violation": {"higher_is_better": false, "coefficient": -1.0, "description": "Mean shape-parameter excursion outside the feature envelope of the base design library."}
+        "efficiency_gain_over_torpedo": {"higher_is_better": true, "coefficient": 1.0, "description": "Lift-to-drag of the angle-specific design divided by the torpedo hull's lift-to-drag at the same angle, averaged over instances."},
+        "lift_to_drag": {"higher_is_better": true, "coefficient": 1.0, "description": "Lift-to-drag ratio of the angle-specific design at its operating angle, averaged over instances."},
+        "energy_per_distance_relative": {"higher_is_better": false, "coefficient": -0.6, "description": "Work per horizontal distance, proportional to c_d/c_l (capped at 100), averaged over instances."},
+        "trajectory_angle_deg": {"higher_is_better": false, "coefficient": -0.3, "description": "Glide-path angle atan(c_d/c_l) in degrees, averaged over instances."}
       },
       "results": {
         "ai_enhanced_9deg": {
@@ -47,40 +45,32 @@
           "efficiency_gain_over_torpedo": 8.3333333333,
           "lift_to_drag": 2.5,
           "energy_per_distance_relative": 0.4,
-          "trajectory_angle_deg": 21.801409486,
-          "shape_domain_violation": 0.0
+          "trajectory_angle_deg": 21.801409486
         },
         "ai_enhanced_30deg": {
           "type": "proposed",
           "efficiency_gain_over_torpedo": 8.0,
           "lift_to_drag": 2.4,
           "energy_per_distance_relative": 0.4166666667,
-          "trajectory_angle_deg": 22.619864948,
-          "shape_domain_violation": 0.0
+          "trajectory_angle_deg": 22.619864948
         }
-      }
+      },
+      "_paper_reported": {"ai_enhanced_9deg": {"shape_domain_violation": 0.0}, "ai_enhanced_30deg": {"shape_domain_violation": 0.0}}
     },
     "surrogate_validation": {
-      "description": "Diagnostic validation that the submitted design's recorded hydrodynamic prediction agrees with independent evaluation. This is not part of the gym ranking because predictions can be omitted or gamed by methods that do not rely on internal predictors.",
-      "weight": 0.01,
+      "description": "Accuracy of the method's hydrodynamic predictions on held-out hull/angle queries: mean absolute percentage error of predicted lift-to-drag against the evaluator's ground truth (per-query error relative to max(true eta, 1), capped at 100%), averaged over queries and fluid instances. Missing predictions score 100%.",
+      "weight": 0.15,
       "primary_metric": "surrogate_eta_abs_pct_error",
       "metrics": {
-        "lift_to_drag": {"higher_is_better": true, "coefficient": 0.0, "description": "Independent hydrodynamic lift-to-drag efficiency for the selected design."},
-        "surrogate_lift_to_drag": {"higher_is_better": true, "coefficient": 0.0, "description": "Method-side predicted lift-to-drag efficiency recorded in the design artifact, when provided."},
-        "surrogate_eta_abs_pct_error": {"higher_is_better": false, "coefficient": 0.0, "description": "Absolute percentage error between method-side predicted and independently rescored lift-to-drag; diagnostic only."},
-        "raw_lift_to_drag": {"higher_is_better": true, "coefficient": 0.0, "description": "Unnormalized independent lift-to-drag value retained for diagnostics."},
-        "raw_surrogate_lift_to_drag": {"higher_is_better": true, "coefficient": 0.0, "description": "Unnormalized method-side predicted lift-to-drag value retained for diagnostics."}
+        "surrogate_eta_abs_pct_error": {"higher_is_better": false, "coefficient": -1.0, "description": "Mean absolute percentage error of predicted lift-to-drag on the evaluator's query set."}
       },
       "results": {
         "ai_enhanced_glider": {
           "type": "proposed",
-          "lift_to_drag": 2.5,
-          "surrogate_lift_to_drag": 2.55,
-          "surrogate_eta_abs_pct_error": 4.5,
-          "raw_lift_to_drag": 7.28,
-          "raw_surrogate_lift_to_drag": 7.53
+          "surrogate_eta_abs_pct_error": 4.5
         }
-      }
+      },
+      "_paper_reported": {"ai_enhanced_glider": {"lift_to_drag": 2.5, "surrogate_lift_to_drag": 2.55, "raw_lift_to_drag": 7.28, "raw_surrogate_lift_to_drag": 7.53}, "note": "Table I: simulated eta 7.53 vs wind-tunnel 7.28 at 9 deg; 4.5% average error over 0-9 deg."}
     }
   }
 }

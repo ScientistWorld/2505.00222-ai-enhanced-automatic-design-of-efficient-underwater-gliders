@@ -1,0 +1,11 @@
+{
+  "development": ["dev_0", "dev_1"],
+  "heldout": ["heldout_0", "heldout_1", "heldout_2", "heldout_3"],
+  "label_aoa_deg": [-30, -15, 0, 15, 30],
+  "morphs_per_pair": 10,
+  "aoa_range_deg": [-30, 30],
+  "design_angles_deg": [9, 30],
+  "n_queries": 400,
+  "query_aoa_range_deg": [3, 30],
+  "notes": "Each instance is a different fluid response over the same hull library. labels.csv lists c_d and c_l for every dataset hull (shape_id order of data.glider_proxy.dataset_weights) at each label angle. Development instances are scored by scripts/evaluate_train.sh; held-out instances only by the hidden test."
+}

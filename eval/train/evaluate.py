@@ -1,234 +1,327 @@
 #!/usr/bin/env python3
-"""Train-slice evaluator for glider design artifacts.
+"""Development-slice evaluator for glider design artifacts.
 
-This evaluator reads JSON artifacts written under outputs/ and rescores the
-submitted shape vectors on visible operating angles. It intentionally
-does not import method code.
+Scores every ``outputs/<method>/optimization_results.json`` on the public
+development fluid instances. Everything on the comparison side is fixed here:
+the hydrodynamic ground truth, the torpedo baseline and its operating point,
+the instance list, the design angles, the query set and the angle range.
+Only raw method outputs are read (convex weights over the base hulls, angles of
+attack and predicted coefficients); every scored number is recomputed.
+
+Artifact schema (per method)::
+
+    {"name": "<method>_glider",
+     "instances": {"<instance id>": {
+         "pool_design": {"weights": [20 floats], "aoa_deg": float},
+         "angle_designs": {"9": {"weights": [...]}, "30": {"weights": [...]}},
+         "query_predictions": [[c_d, c_l], ...]}}}
+
+A malformed or physically impossible value anywhere (non-finite numbers,
+weights outside the simplex, an angle outside the actuator range, a
+non-positive predicted drag) fails the whole run: every scored metric of every
+experiment then takes its worst value. A missing design or prediction scores
+the worst value for that item.
 """
 
 from __future__ import annotations
 
 import argparse
 import json
+import math
+import re
 from pathlib import Path
 
-import numpy as np
+from eval.train import hydro as H
 
-from data.glider_proxy import (
-    base_shape_library,
-    hydrodynamic_coefficients,
-    lift_to_drag,
-    trajectory_angle_deg,
+SLICE = "train"
+INSTANCES = {"dev_0": "dev-0", "dev_1": "dev-1"}
+DESIGN_ANGLES = ("9", "30")
+TORPEDO_AOA_GRID = [-30.0 + 0.25 * i for i in range(241)]
+ETA_FLOOR = 0.01
+WEIGHT_SUM_TOL = 1e-4
+WEIGHT_NEG_TOL = 1e-6
+EFFICIENCY_METRICS = (
+    "efficiency_gain_over_torpedo",
+    "lift_to_drag",
+    "energy_per_distance_relative",
+    "trajectory_angle_deg",
 )
+WORST = {
+    "efficiency_gain_over_torpedo": 0.0,
+    "lift_to_drag": 0.0,
+    "energy_per_distance_relative": 1.0 / ETA_FLOOR,
+    "trajectory_angle_deg": 90.0,
+    "surrogate_eta_abs_pct_error": 100.0,
+}
+RESERVED = {"torpedo", "torpedo_baseline"}
+NAME_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.-]{0,63}$")
 
 
-POOL_ANGLES_DEG = (9.0, 30.0)
-ANGLE_SWEEP_LABELS = (9, 30)
-ANGLE_SWEEP_EVAL_ANGLES = {9: 9.0, 30: 30.0}
-SURROGATE_VALIDATION_LABEL = 9
-BASE_SHAPES, _BASE_NAMES = base_shape_library()
-FEATURE_MIN = BASE_SHAPES.min(axis=0)
-FEATURE_MAX = BASE_SHAPES.max(axis=0)
+class InvalidSubmission(ValueError):
+    pass
 
 
-def load_design(path: Path) -> dict:
-    if not path.exists():
-        raise FileNotFoundError(f"Missing design artifact: {path}")
-    return json.loads(path.read_text())
+def _number(value, where: str) -> float:
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        raise InvalidSubmission(f"{where}: expected a number, got {type(value).__name__}")
+    v = float(value)
+    if not math.isfinite(v):
+        raise InvalidSubmission(f"{where}: non-finite value {value!r}")
+    return v
 
 
-def load_optional_design(path: Path | None) -> dict | None:
-    if path is None or not path.exists():
-        return None
-    return load_design(path)
+def parse_weights(obj, where: str) -> list[float]:
+    if not isinstance(obj, list) or len(obj) != H.NB:
+        raise InvalidSubmission(f"{where}: weights must be a list of {H.NB} numbers")
+    w = [_number(v, f"{where}[{i}]") for i, v in enumerate(obj)]
+    if min(w) < -WEIGHT_NEG_TOL:
+        raise InvalidSubmission(f"{where}: negative convex weight {min(w)!r} (outside the hull)")
+    total = sum(w)
+    if abs(total - 1.0) > WEIGHT_SUM_TOL:
+        raise InvalidSubmission(f"{where}: weights sum to {total!r}, not 1 (outside the hull)")
+    w = [max(v, 0.0) for v in w]
+    total = sum(w)
+    return [v / total for v in w]
 
 
-def is_baseline_design(path: Path, design: dict) -> bool:
-    name = str(design.get("name", path.parent.name)).lower()
-    return name in {"torpedo", "torpedo_baseline"} or path.parent.name.lower() in {
-        "torpedo",
-        "torpedo_baseline",
-    }
+def parse_aoa(value, where: str) -> float:
+    a = _number(value, where)
+    lo, hi = H.AOA_RANGE_DEG
+    if a < lo - 1e-9 or a > hi + 1e-9:
+        raise InvalidSubmission(f"{where}: angle of attack {a} outside [{lo}, {hi}] degrees")
+    return a
 
 
-def discover_artifacts(outputs_dir: Path) -> tuple[Path | None, list[Path]]:
-    baseline = None
-    proposed = []
-    for path in sorted(outputs_dir.glob("*/optimization_results.json")):
-        try:
-            design = load_design(path)
-        except (OSError, json.JSONDecodeError):
-            continue
-        if is_baseline_design(path, design):
-            baseline = path
-        else:
-            proposed.append(path)
-    return baseline, proposed
-
-
-def result_name(path: Path, design: dict, baseline: bool = False) -> str:
-    name = str(design.get("name") or path.parent.name)
-    if baseline and name.lower() == "torpedo":
-        return "torpedo_baseline"
-    return name
-
-
-def angle_result_prefix(method_name: str) -> str:
-    if method_name.endswith("_glider"):
-        return method_name[: -len("_glider")]
-    return method_name
-
-
-def shape_metrics(shape: np.ndarray, angles: tuple[float, ...]) -> dict:
-    etas = []
-    energies = []
-    trajectories = []
-    for angle in angles:
-        cd, cl = hydrodynamic_coefficients(shape, angle)
-        eta = lift_to_drag(float(cd), float(cl))
-        etas.append(eta)
-        energies.append(float(1.0 / max(eta, 1e-8)))
-        trajectories.append(trajectory_angle_deg(eta))
+def efficiency(eta: float, torpedo_eta: float) -> dict:
+    e = max(float(eta), 0.0)
     return {
-        "lift_to_drag": float(np.mean(etas)),
-        "energy_per_distance_relative": float(np.mean(energies)),
-        "trajectory_angle_deg": float(np.mean(trajectories)),
-        "shape_domain_violation": shape_domain_violation(shape),
+        "efficiency_gain_over_torpedo": e / torpedo_eta,
+        "lift_to_drag": e,
+        "energy_per_distance_relative": 1.0 / max(e, ETA_FLOOR),
+        "trajectory_angle_deg": math.degrees(math.atan2(1.0, e)),
     }
 
 
-def shape_domain_violation(shape: np.ndarray) -> float:
-    """Mean absolute excursion outside the base-shape feature envelope."""
-
-    below = np.maximum(FEATURE_MIN - shape, 0.0)
-    above = np.maximum(shape - FEATURE_MAX, 0.0)
-    return float(np.mean(below + above))
+def worst_efficiency() -> dict:
+    return {m: WORST[m] for m in EFFICIENCY_METRICS}
 
 
-def with_gain(metrics: dict, baseline_eta: float) -> dict:
-    out = dict(metrics)
-    out["efficiency_gain_over_torpedo"] = float(
-        metrics["lift_to_drag"] / max(baseline_eta, 1e-8)
-    )
+def mean_rows(rows: list[dict]) -> dict:
+    keys = rows[0].keys()
+    return {k: float(sum(r[k] for r in rows) / len(rows)) for k in keys}
+
+
+def instance_context(instance_id: str, seed: str) -> dict:
+    inst = H.make_instance(seed)
+    torpedo = H.BASE_SHAPES[H.TORPEDO_INDEX]
+    best_eta, best_aoa = max((H.lift_to_drag(inst, torpedo, a), a) for a in TORPEDO_AOA_GRID)
+    angle_eta = {lab: H.lift_to_drag(inst, torpedo, float(lab)) for lab in DESIGN_ANGLES}
+    queries = H.query_inputs(instance_id)
+    truth = [H.coefficients(inst, q["shape"], q["aoa_deg"]) for q in queries]
+    return {
+        "instance": inst, "torpedo_eta": best_eta, "torpedo_aoa": best_aoa,
+        "torpedo_angle_eta": angle_eta, "queries": queries, "truth": truth,
+    }
+
+
+def score_instance(design, ctx: dict, where: str) -> dict:
+    """Return per-instance raw results; raises InvalidSubmission on impossible values."""
+
+    inst = ctx["instance"]
+    out = {"pool": None, "angles": {lab: None for lab in DESIGN_ANGLES}, "query_error": None}
+    if design is None:
+        return out
+    if not isinstance(design, dict):
+        raise InvalidSubmission(f"{where}: instance entry must be an object")
+
+    pool = design.get("pool_design")
+    if pool is not None:
+        if not isinstance(pool, dict):
+            raise InvalidSubmission(f"{where}.pool_design: must be an object")
+        w = parse_weights(pool.get("weights"), f"{where}.pool_design.weights")
+        aoa = parse_aoa(pool.get("aoa_deg"), f"{where}.pool_design.aoa_deg")
+        out["pool"] = {"eta": H.lift_to_drag(inst, H.mix(w), aoa), "aoa_deg": aoa}
+
+    angles = design.get("angle_designs")
+    if angles is not None:
+        if not isinstance(angles, dict):
+            raise InvalidSubmission(f"{where}.angle_designs: must be an object")
+        for lab in DESIGN_ANGLES:
+            item = angles.get(lab)
+            if item is None:
+                continue
+            if not isinstance(item, dict):
+                raise InvalidSubmission(f"{where}.angle_designs.{lab}: must be an object")
+            w = parse_weights(item.get("weights"), f"{where}.angle_designs.{lab}.weights")
+            out["angles"][lab] = H.lift_to_drag(inst, H.mix(w), float(lab))
+
+    preds = design.get("query_predictions")
+    if preds is not None:
+        n = len(ctx["queries"])
+        if not isinstance(preds, list) or len(preds) != n:
+            raise InvalidSubmission(f"{where}.query_predictions: expected a list of {n} [c_d, c_l] pairs")
+        errors = []
+        for i, (pair, (cd_t, cl_t)) in enumerate(zip(preds, ctx["truth"])):
+            if not isinstance(pair, list) or len(pair) != 2:
+                raise InvalidSubmission(f"{where}.query_predictions[{i}]: expected [c_d, c_l]")
+            cd = _number(pair[0], f"{where}.query_predictions[{i}][0]")
+            cl = _number(pair[1], f"{where}.query_predictions[{i}][1]")
+            if cd <= 0.0:
+                raise InvalidSubmission(f"{where}.query_predictions[{i}]: drag coefficient must be positive")
+            eta_p = max(cl, 0.0) / cd
+            eta_t = cl_t / cd_t
+            errors.append(min(abs(eta_p - eta_t) / max(eta_t, 1.0) * 100.0, 100.0))
+        out["query_error"] = float(sum(errors) / len(errors))
     return out
 
 
-def find_angle_record(design: dict, label: int) -> dict | None:
-    records = design.get("all_angle_results") or []
-    if not records:
-        return None
-    return min(records, key=lambda item: abs(float(item.get("angle", label)) - label))
+def score_method(artifact, contexts: dict) -> tuple[dict, list[str]]:
+    """Return (per-instance raw results, failure reasons)."""
+
+    if not isinstance(artifact, dict):
+        return {}, ["artifact is not a JSON object"]
+    instances = artifact.get("instances")
+    if not isinstance(instances, dict):
+        return {}, ["artifact has no 'instances' object"]
+    raw = {}
+    try:
+        for iid, ctx in contexts.items():
+            raw[iid] = score_instance(instances.get(iid), ctx, f"instances.{iid}")
+    except InvalidSubmission as exc:
+        return {}, [str(exc)]
+    return raw, []
 
 
-def metrics_for_angle_record(design: dict, label: int, eval_angle: float, baseline_eta: float) -> dict:
-    record = find_angle_record(design, label)
-    shape = np.asarray((record or design)["shape"], dtype=np.float32)
-    return with_gain(shape_metrics(shape, (eval_angle,)), baseline_eta)
-
-
-def surrogate_metrics(design: dict, label: int) -> dict:
-    record = find_angle_record(design, label) or design
-    angle = float(record.get("angle", record.get("aoa_deg", label)))
-    shape = np.asarray(record["shape"], dtype=np.float32)
-    oracle = shape_metrics(shape, (angle,))
-    oracle_eta = oracle["lift_to_drag"]
-    if "surrogate_lift_to_drag" in record:
-        surrogate_eta = float(record["surrogate_lift_to_drag"])
-    elif "surrogate_cd" in record and "surrogate_cl" in record:
-        surrogate_eta = lift_to_drag(float(record["surrogate_cd"]), float(record["surrogate_cl"]))
-    else:
-        surrogate_eta = float(design.get("surrogate_lift_to_drag", oracle_eta))
-    error = abs(surrogate_eta - oracle_eta) / max(abs(oracle_eta), 1e-8) * 100.0
-    return {
-        "lift_to_drag": oracle_eta,
-        "surrogate_lift_to_drag": surrogate_eta,
-        "surrogate_eta_abs_pct_error": float(error),
-        "raw_lift_to_drag": oracle_eta,
-        "raw_surrogate_lift_to_drag": surrogate_eta,
-    }
-
-
-def build_scores(baseline_path: Path, proposed_paths: list[Path]) -> dict:
-    baseline = load_design(baseline_path)
-    baseline_shape = np.asarray(baseline["shape"], dtype=np.float32)
-    baseline_metrics = shape_metrics(baseline_shape, POOL_ANGLES_DEG)
-    baseline_eta = baseline_metrics["lift_to_drag"]
-    angle_baseline_eta = {
-        label: shape_metrics(baseline_shape, (eval_angle,))["lift_to_drag"]
-        for label, eval_angle in ANGLE_SWEEP_EVAL_ANGLES.items()
-    }
-    pool_results = {
-        result_name(baseline_path, baseline, baseline=True): with_gain(
-            baseline_metrics, baseline_eta
-        )
-    }
-
-    angle_results = {}
-    surrogate_results = {}
-    for path in proposed_paths:
-        design = load_design(path)
-        method_name = result_name(path, design)
-        shape = np.asarray(design["shape"], dtype=np.float32)
-        pool_results[method_name] = with_gain(
-            shape_metrics(shape, POOL_ANGLES_DEG), baseline_eta
-        )
-
-        prefix = angle_result_prefix(method_name)
-        for label in ANGLE_SWEEP_LABELS:
-            angle_results[f"{prefix}_{label}deg"] = metrics_for_angle_record(
-                design, label, ANGLE_SWEEP_EVAL_ANGLES[label], angle_baseline_eta[label]
+def aggregate(raw: dict, contexts: dict, failed: bool) -> dict:
+    pool_rows, angle_rows, query_rows = [], {lab: [] for lab in DESIGN_ANGLES}, []
+    for iid, ctx in contexts.items():
+        r = raw.get(iid) if not failed else None
+        pool = r["pool"] if r else None
+        pool_rows.append(efficiency(pool["eta"], ctx["torpedo_eta"]) if pool else worst_efficiency())
+        for lab in DESIGN_ANGLES:
+            eta = r["angles"][lab] if r else None
+            angle_rows[lab].append(
+                efficiency(eta, ctx["torpedo_angle_eta"][lab]) if eta is not None else worst_efficiency()
             )
+        q = r["query_error"] if r else None
+        query_rows.append({"surrogate_eta_abs_pct_error": q if q is not None else WORST["surrogate_eta_abs_pct_error"]})
+    return {
+        "pool": mean_rows(pool_rows),
+        "angles": {lab: mean_rows(rows) for lab, rows in angle_rows.items()},
+        "surrogate": mean_rows(query_rows),
+    }
 
-        surrogate_results[method_name] = surrogate_metrics(
-            design, SURROGATE_VALIDATION_LABEL
-        )
 
-    scores = {
-        "_slice": "train",
+def canonical_names() -> list[str]:
+    try:
+        ref = json.loads(Path("scoring/reference.json").read_text())
+        rows = ref["experiments"]["pool_efficiency"]["results"]
+        names = [k for k, v in rows.items() if isinstance(v, dict) and v.get("type") == "proposed"]
+        if names:
+            return names
+    except (OSError, ValueError, KeyError, TypeError):
+        pass
+    return ["ai_enhanced_glider"]
+
+
+def discover(outputs_dir: Path) -> list[tuple[str, object]]:
+    """Return [(result key, artifact or None)] for every method artifact on disk."""
+
+    found = []
+    for path in sorted(outputs_dir.glob("*/optimization_results.json")):
+        try:
+            artifact = json.loads(path.read_text())
+        except (OSError, ValueError):
+            artifact = None
+        name = artifact.get("name") if isinstance(artifact, dict) else None
+        valid = isinstance(name, str) and bool(NAME_RE.match(name)) and name.lower() not in RESERVED
+        found.append((path.parent.name, artifact, name if valid else None))
+    if not found:
+        # Nothing submitted: the canonical rows still exist, at their worst values.
+        return [(c, None) for c in canonical_names()]
+    used: set[str] = set()
+    keys: list[str | None] = [None] * len(found)
+    # Valid self-declared names first, so a broken artifact never takes a valid method's key.
+    for i, (_, _, name) in enumerate(found):
+        if name and name not in used:
+            keys[i] = name
+            used.add(name)
+    canonical = canonical_names()
+    for i, (dirname, _, _) in enumerate(found):
+        if keys[i] is not None:
+            continue
+        base = next((c for c in canonical if c not in used), f"{dirname}_glider")
+        key, n = base, 2
+        while key in used:
+            key, n = f"{base}_{n}", n + 1
+        keys[i] = key
+        used.add(key)
+    return [(key, artifact) for key, (_, artifact, _) in zip(keys, found)]
+
+
+def angle_prefix(key: str) -> str:
+    return key[: -len("_glider")] if key.endswith("_glider") else key
+
+
+def build_scores(outputs_dir: Path) -> dict:
+    contexts = {iid: instance_context(iid, seed) for iid, seed in INSTANCES.items()}
+    torpedo_rows = [efficiency(ctx["torpedo_eta"], ctx["torpedo_eta"]) for ctx in contexts.values()]
+    pool_results = {"torpedo_baseline": mean_rows(torpedo_rows)}
+    angle_results, surrogate_results, validity, per_instance = {}, {}, {}, {}
+    for key, artifact in discover(outputs_dir):
+        if artifact is None:
+            raw, reasons = {}, ["missing or unreadable optimization_results.json"]
+        else:
+            raw, reasons = score_method(artifact, contexts)
+        failed = bool(reasons)
+        agg = aggregate(raw, contexts, failed)
+        pool_results[key] = agg["pool"]
+        prefix = angle_prefix(key)
+        for lab in DESIGN_ANGLES:
+            angle_results[f"{prefix}_{lab}deg"] = agg["angles"][lab]
+        surrogate_results[key] = agg["surrogate"]
+        validity[key] = {"failed": failed, "reasons": reasons}
+        per_instance[key] = {
+            iid: {
+                "pool_eta": (r["pool"] or {}).get("eta"),
+                "pool_aoa_deg": (r["pool"] or {}).get("aoa_deg"),
+                **{f"eta_{lab}deg": r["angles"][lab] for lab in DESIGN_ANGLES},
+                "query_eta_abs_pct_error": r["query_error"],
+            }
+            for iid, r in raw.items()
+        }
+    return {
+        "_slice": SLICE,
         "experiments": {
             "pool_efficiency": {"results": pool_results},
+            "angle_sweep_efficiency": {"results": angle_results},
+            "surrogate_validation": {"results": surrogate_results},
+        },
+        "diagnostics": {
+            "validity": validity,
+            "instances": {
+                iid: {"torpedo_best_eta": ctx["torpedo_eta"], "torpedo_best_aoa_deg": ctx["torpedo_aoa"],
+                      **{f"torpedo_eta_{lab}deg": v for lab, v in ctx["torpedo_angle_eta"].items()}}
+                for iid, ctx in contexts.items()
+            },
+            "per_instance": per_instance,
         },
     }
-    if angle_results:
-        scores["experiments"]["angle_sweep_efficiency"] = {"results": angle_results}
-    if surrogate_results:
-        scores["diagnostics"] = {
-            "surrogate_validation": {"results": surrogate_results}
-        }
-    return scores
 
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--proposed", default=None)
-    parser.add_argument("--baseline", default=None)
-    parser.add_argument("--output", default="scoring/scores_train.json")
     parser.add_argument("--outputs-dir", default="outputs")
+    parser.add_argument("--output", default="scoring/scores_train.json")
     args = parser.parse_args()
-
-    discovered_baseline, discovered_proposed = discover_artifacts(Path(args.outputs_dir))
-    baseline_path = Path(args.baseline) if args.baseline else discovered_baseline
-    if baseline_path is None:
-        baseline_path = Path(args.outputs_dir) / "torpedo" / "optimization_results.json"
-
-    if args.proposed:
-        proposed_paths = [Path(args.proposed)] if Path(args.proposed).exists() else []
-    else:
-        proposed_paths = discovered_proposed
-
-    if not baseline_path.exists() and proposed_paths:
-        raise FileNotFoundError(
-            "Proposed designs require a baseline artifact so "
-            "`efficiency_gain_over_torpedo` can be computed."
-        )
-    if not baseline_path.exists():
-        raise FileNotFoundError(f"Missing baseline design artifact: {baseline_path}")
-
-    scores = build_scores(baseline_path, proposed_paths)
+    scores = build_scores(Path(args.outputs_dir))
     out = Path(args.output)
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(scores, indent=2) + "\n")
-    print(json.dumps(scores, indent=2))
+    print(json.dumps(scores["experiments"], indent=2))
+    for key, v in scores["diagnostics"]["validity"].items():
+        if v["failed"]:
+            print(f"[{SLICE}] {key}: FAILED -> worst values ({'; '.join(v['reasons'])})")
 
 
 if __name__ == "__main__":

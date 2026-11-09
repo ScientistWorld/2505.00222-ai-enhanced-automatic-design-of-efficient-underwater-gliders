@@ -1,21 +1,26 @@
 # Evaluation Targets
 
 ## Primary: pool_efficiency
-Tests whether an optimized glider design is more hydrodynamically efficient than the torpedo-shaped reference design under the same evaluation procedure.
+Co-designed hull and angle of attack versus the torpedo hull at its best angle, per fluid instance.
 - **Primary metric**: `efficiency_gain_over_torpedo` (higher is better)
-- **Diagnostic metric**: `lift_to_drag` (higher is better)
-- **Constraint metrics**: `energy_per_distance_relative` and `trajectory_angle_deg` (lower is better)
+- **Benefit metric**: `lift_to_drag` (higher is better)
+- **Energy/trajectory metrics**: `energy_per_distance_relative`, `trajectory_angle_deg` (lower is better)
 
-## Additional Setting: angle_sweep_efficiency
-Tests whether optimized designs remain efficient at the two operating angles emphasized by the paper.
+## angle_sweep_efficiency
+Hulls for the paper's two fabricated operating angles, 9° (`*_9deg`) and 30° (`*_30deg`), each versus the torpedo at that angle.
 - **Primary metric**: `efficiency_gain_over_torpedo` (higher is better)
-- **Diagnostic metric**: `lift_to_drag` (higher is better)
+- Same four metrics as above.
 
-## Non-Target Diagnostics
-Score artifacts may include top-level diagnostics, including prediction agreement for methods that report an internal hydrodynamic estimate. These diagnostics are not optimization targets and are not listed under `experiments`.
+## surrogate_validation
+Prediction accuracy on the evaluator's held-out query hulls and angles.
+- **Primary metric**: `surrogate_eta_abs_pct_error` (lower is better; missing predictions score 100)
 
-Run all targets with:
+## Constraints (gates)
+- Designs are convex weights over the base-hull library (inside the convex hull). The pool angle lies in [-30°, 30°].
+- Any violation or impossible value (non-finite numbers, negative weights, `c_d ≤ 0`, wrong lengths) fails the run, and every metric of every experiment gets its worst value.
+
+Run the development slice with:
 
 ```bash
-bash scripts/evaluate.sh
+bash scripts/evaluate_train.sh
 ```

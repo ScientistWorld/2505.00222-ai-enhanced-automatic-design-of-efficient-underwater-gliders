@@ -1,5 +1,5 @@
 # Overview
 
-This workspace reproduces the core computational claim of *AI-Enhanced Automatic Design of Efficient Underwater Gliders*: a reduced-order shape representation plus a neural hydrodynamic surrogate and CMA-ES can discover glider hulls with better lift-to-drag efficiency than a manually designed torpedo-like baseline.
+This workspace reproduces the core computational claim of *AI-Enhanced Automatic Design of Efficient Underwater Gliders*: a reduced-order shape representation, a neural hydrodynamic surrogate trained on a fixed simulation budget, and CMA-ES together discover glider hulls with far better lift-to-drag efficiency than a manually designed torpedo-like baseline.
 
-The unreleased physical and CFD assets are replaced by a deterministic benchmark oracle, while the algorithmic pipeline remains the paper's: shared cage parameters, interpolated shapes, 4-layer tanh/batchnorm surrogate, and convex-hull-constrained CMA-ES shape optimization across angle-of-attack settings.
+The unreleased CFD and physical assets are replaced by synthetic fluid instances whose ground truth is hidden from the method: each instance exposes only a labelled dataset of the paper's size, and designs are scored by the evaluator's ground truth on held-out instances.

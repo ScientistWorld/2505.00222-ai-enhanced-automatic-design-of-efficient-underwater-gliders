@@ -1,13 +1,17 @@
 # Research Direction
 
 ## Research Problem
-This benchmark studies automated hydrodynamic co-design of underwater glider hull shape and angle of attack. The goal is to find valid low-dimensional hull designs that improve lift-to-drag efficiency over conventional torpedo-like designs.
+Automated hydrodynamic co-design of underwater-glider hull shape and angle of attack under a fixed simulation budget. Each fluid instance provides a labelled dataset of the paper's size. The goal is to turn that data into hulls with the best true lift-to-drag ratio, plus accurate predictions of efficiency for unseen hulls.
 
 ## Core Contribution
-The paper's contribution is an efficient automated design loop for glider geometry and operating conditions. Future improvements should stay within this automated hydrodynamic co-design setting.
+The paper's contribution is a data-driven design loop: a reduced-order shape space, a learned hydrodynamic model, and global search inside the convex hull of known shapes. The loop beats conventional torpedo designs by a wide margin.
 
 ## Approach Scope
-A scientist may improve candidate generation, sampling, predictive modeling, uncertainty handling, optimization, or exploration of the provided design domain. The work should still produce glider shape parameters and an angle of attack evaluated by the benchmark.
+In scope: better predictive models of the fluid response (architecture, training, ensembles, uncertainty), better search and selection inside the design domain, how much to trust predictions away from the labelled data, and how to co-select the operating angle. Every design must come from an instance's own published data.
 
 ## Out of Bounds
-Switching to a different task, using external hydrodynamic labels for scored experiments, bypassing design optimization by hand-writing the answer, or modifying the evaluator to favor a method is out of bounds. Replacing the glider-design problem with a generic regression or black-box score-fitting task is also out of bounds.
+- Using the evaluator's ground-truth code or its functional form as a label source, model or optimisation target.
+- Adding simulation labels.
+- Hand-writing designs per instance.
+- Editing the evaluator.
+- Swapping the glider-design task for a different one.

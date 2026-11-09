@@ -1,9 +1,8 @@
 #!/bin/bash
-# Evaluate method outputs on the visible train slice.
+# Evaluate method outputs on the public development fluid instances (train slice).
 #
-# Mirrors scripts/evaluate.sh: pass --proposed, --baseline, --output, or other
-# evaluator flags through to the slice evaluator. With no --proposed flag, all
-# outputs/*/optimization_results.json method artifacts are enumerated.
+# Enumerates every outputs/*/optimization_results.json artifact; no method name
+# is assumed. Pass --outputs-dir to score artifacts elsewhere.
 
 set -e
 

@@ -1,12 +1,15 @@
 # Experiment Overview
 
-## pool_efficiency
-Tests whether a submitted glider design has better hydrodynamic efficiency than a conventional torpedo-shaped design. This is the central benchmark because the paper's main practical claim is that automated design can find more efficient underwater glider shapes.
+All experiments are averaged over the fluid instances of a slice: two public development instances (train) and four held-out instances (hidden test). The method sees only each instance's labelled dataset. The ground truth stays inside the evaluator.
 
-The primary score is the dimensionless efficiency gain over the torpedo baseline. Raw lift-to-drag is also reported, but it is diagnostic because the paper's pool-test scale and this benchmark's local oracle scale are not identical.
+## pool_efficiency (weight 0.5)
+Can a hull and operating angle chosen jointly beat a conventional torpedo-shaped glider on efficiency? This is the paper's central practical claim: automated design finds gliders that need less energy per distance than the standard design. The design is scored at the angle the submitter chose. The torpedo is scored at its own best angle. Both evaluations happen inside the evaluator.
 
-## angle_sweep_efficiency
-Tests whether efficient designs are found at multiple operating angles rather than only at the easiest single setting. This broadens the benchmark across the paper's two highlighted design conditions.
+## angle_sweep_efficiency (weight 0.35)
+Are efficient hulls found at each of the two operating angles the paper fabricated (9° and 30°)? The paper's optima differ by angle, so this tests designing for a prescribed control setting, not only the easiest one.
 
-## Diagnostics
-Score artifacts may include top-level diagnostic entries for method-side prediction agreement. These are audit values, not experiments, and are not part of the gym ranking.
+## surrogate_validation (weight 0.15)
+How accurately does the submission predict hydrodynamic efficiency for hulls and angles it was not given labels for? The paper validates its predictions against measurements and reports 4.5% lift-to-drag error. Here the evaluator's ground truth plays that role on public query inputs.
+
+## Constraint
+Designs must stay in the convex hull of the base-hull library, and angles in the actuator range. Any constraint violation or impossible value fails the whole submission, and every metric then takes its worst value.

@@ -1,119 +1,67 @@
 #!/usr/bin/env python3
-from __future__ import annotations
+"""Surrogate-based CMA-ES shape optimisation inside the base-shape convex hull.
 
-import argparse
-import json
-from pathlib import Path
+For each angle of attack on the design grid the search starts from the average
+of the training shapes (uniform convex weights), runs CMA-ES on softmax logits
+so every candidate is a convex combination of the base hulls, and is repeated
+several times; the best design per angle is the one with the highest surrogate
+lift-to-drag ratio. The co-designed (shape, angle) pair is the best of those.
+No ground-truth evaluation is used anywhere in the search or the selection.
+"""
+
+from __future__ import annotations
 
 import cma
 import numpy as np
-import torch
 
-from data.glider_proxy import base_shape_library, hydrodynamic_coefficients, lift_to_drag, write_design
-from method.model import FluidSurrogate
+from data.glider_proxy import base_shape_library
+from method.train_surrogate import Predictor, features
 
 
-def softmax(z: np.ndarray) -> np.ndarray:
-    z = z - np.max(z)
+def softmax_rows(z: np.ndarray) -> np.ndarray:
+    z = z - z.max(axis=1, keepdims=True)
     e = np.exp(z)
-    return e / e.sum()
+    return e / e.sum(axis=1, keepdims=True)
 
 
-def main() -> None:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--checkpoint", default="checkpoints/fluid_surrogate.pt")
-    parser.add_argument("--output-dir", default="outputs/proposed")
-    parser.add_argument("--angles", default="9,30")
-    parser.add_argument("--generations", type=int, default=80)
-    parser.add_argument("--population", type=int, default=24)
-    parser.add_argument("--seed", type=int, default=0)
-    args = parser.parse_args()
-
-    np.random.seed(args.seed)
-    torch.manual_seed(args.seed)
-    bases, names = base_shape_library()
-    model = FluidSurrogate(input_dim=bases.shape[1] + 1)
-    ckpt = torch.load(args.checkpoint, map_location="cpu")
-    model.load_state_dict(ckpt["state_dict"])
-    model.eval()
-    target_mean = np.asarray(ckpt.get("target_mean", [0.0, 0.0]), dtype=np.float32)
-    target_std = np.asarray(ckpt.get("target_std", [1.0, 1.0]), dtype=np.float32)
-
-    def predict_coefficients(features: np.ndarray) -> np.ndarray:
-        with torch.no_grad():
-            pred_scaled = model(torch.tensor(features[None, :], dtype=torch.float32))[0].numpy()
-        pred = pred_scaled * target_std + target_mean
-        return np.maximum(pred, 1e-6)
-
-    output_dir = Path(args.output_dir)
-    output_dir.mkdir(parents=True, exist_ok=True)
-    all_results = []
-
-    for angle in [float(v) for v in args.angles.split(",") if v.strip()]:
-        x0 = np.zeros(len(bases), dtype=np.float64)
-        sigma0 = 0.85
-        es = cma.CMAEvolutionStrategy(
-            x0,
-            sigma0,
-            {
-                "seed": args.seed + int(angle * 10),
-                "popsize": args.population,
-                "maxiter": args.generations,
-                "verb_disp": 0,
-                "verbose": -9,
-            },
-        )
-
-        def objective(z: np.ndarray) -> float:
-            weights = softmax(z)
-            shape = weights @ bases
-            features = np.concatenate([shape, [angle / 30.0]], dtype=np.float32)
-            pred = predict_coefficients(features)
-            cd, cl = float(pred[0]), float(pred[1])
-            return -lift_to_drag(cd, cl)
-
-        while not es.stop():
-            solutions = es.ask()
-            scores = [objective(np.asarray(s)) for s in solutions]
-            es.tell(solutions, scores)
-
-        weights = softmax(np.asarray(es.result.xbest))
-        shape = weights @ bases
-        pred = predict_coefficients(np.concatenate([shape, [angle / 30.0]], dtype=np.float32))
-        pred_eta = lift_to_drag(float(pred[0]), float(pred[1]))
-        cd, cl = hydrodynamic_coefficients(shape, angle)
-        oracle_eta = lift_to_drag(float(cd), float(cl))
-        top_components = sorted(zip(names, weights.tolist()), key=lambda item: item[1], reverse=True)[:5]
-        result = {
-            "angle": angle,
-            "shape": shape.astype(float).tolist(),
-            "weights": weights.astype(float).tolist(),
-            "top_base_components": top_components,
-            "surrogate_cd": float(pred[0]),
-            "surrogate_cl": float(pred[1]),
-            "surrogate_lift_to_drag": pred_eta,
-            "oracle_cd": float(cd),
-            "oracle_cl": float(cl),
-            "oracle_lift_to_drag": oracle_eta,
-            "surrogate_eta_abs_pct_error": abs(pred_eta - oracle_eta) / max(oracle_eta, 1e-8) * 100.0,
-        }
-        all_results.append(result)
-
-    best = max(all_results, key=lambda item: item["oracle_lift_to_drag"])
-    write_design(
-        output_dir / "optimization_results.json",
-        "ai_enhanced_glider",
-        np.array(best["shape"], dtype=np.float32),
-        float(best["angle"]),
-        {
-            "selection": "best_cma_es_design_across_requested_angles",
-            "all_angle_results": all_results,
-            "surrogate_lift_to_drag": best["surrogate_lift_to_drag"],
-            "surrogate_eta_abs_pct_error": best["surrogate_eta_abs_pct_error"],
-        },
+def optimise_angle(predictor: Predictor, angle: float, seed: int, generations: int = 80,
+                   population: int = 24, sigma0: float = 0.85) -> tuple[np.ndarray, float]:
+    bases, _ = base_shape_library()
+    es = cma.CMAEvolutionStrategy(
+        np.zeros(len(bases)),
+        sigma0,
+        {"seed": int(seed), "popsize": population, "maxiter": generations,
+         "verbose": -9, "verb_disp": 0, "verb_log": 0},
     )
-    (output_dir / "all_results.json").write_text(json.dumps(all_results, indent=2) + "\n")
+    while not es.stop():
+        sols = es.ask()
+        w = softmax_rows(np.asarray(sols))
+        eta = predictor.lift_to_drag(features(w @ bases, angle))
+        es.tell(sols, (-eta).tolist())
+    w = softmax_rows(np.asarray(es.result.xbest)[None, :])[0]
+    pred = float(predictor.lift_to_drag(features((w @ bases)[None, :], angle))[0])
+    return w, pred
 
 
-if __name__ == "__main__":
-    main()
+def design_instance(predictor: Predictor, angles: list[float], design_angles: list[str],
+                    restarts: int = 3, generations: int = 80, population: int = 24,
+                    seed: int = 0) -> dict:
+    per_angle = {}
+    for a_idx, angle in enumerate(angles):
+        best = None
+        for r in range(restarts):
+            cma_seed = 1 + seed * 100003 + a_idx * 101 + r
+            w, pred = optimise_angle(predictor, angle, cma_seed, generations, population)
+            if best is None or pred > best[1]:
+                best = (w, pred)
+        per_angle[angle] = best
+    pool_angle = max(per_angle, key=lambda a: per_angle[a][1])
+    missing = [lab for lab in design_angles if float(lab) not in per_angle]
+    if missing:
+        raise ValueError(f"design angles {missing} are not on the optimisation grid {angles}")
+    return {
+        "pool_weights": per_angle[pool_angle][0],
+        "pool_aoa_deg": pool_angle,
+        "angle_weights": {lab: per_angle[float(lab)][0] for lab in design_angles},
+        "predicted_eta": {f"{a:g}": p for a, (_, p) in per_angle.items()},
+    }

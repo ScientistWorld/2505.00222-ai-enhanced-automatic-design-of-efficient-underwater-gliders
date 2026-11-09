@@ -1,29 +1,26 @@
 #!/bin/bash
-# Run a baseline method from the paper.
-#
-# Baselines are simple reference methods the paper compares against. 
-# Implement this only if applicable, i.e. the paper has baselines.
-# You do not need to implement all baselines to begin — 
-# just enough to validate that the evaluation pipeline works 
-# and provide a reference point. You can decide to expand more baselines later.
-# Each baseline must be actually run and scored through evaluate.sh
-# so the numbers are verified, not self-reported.
-# You can decide what this baseline script should do yourself.
+# Run a simple baseline that uses only the public data.
 #
 # Usage:
-#   bash scripts/baseline.sh <name>
+#   bash scripts/baseline.sh best_in_dataset   # exhaustive lookup over the labelled dataset
+#   bash scripts/baseline.sh average           # average base hull, no search
+#   bash scripts/baseline.sh torpedo           # conventional torpedo hull
+#
+# The artifact goes to outputs/<name>/ and every method on disk is rescored.
 
 set -e
 
 cd /home/user
 
-name="${1:-torpedo}"
+export PYTHONPATH="/home/user:${PYTHONPATH:-}"
+
+name="${1:-best_in_dataset}"
 case "$name" in
-  torpedo|torpedo_baseline)
-    python -m baseline.torpedo --output-dir outputs/torpedo
+  torpedo|average|best_in_dataset)
+    python -m baseline.simple --mode "$name" --output-dir "outputs/$name"
     ;;
   *)
-    echo "Unknown baseline: $name" >&2
+    echo "Unknown baseline: $name (choose torpedo, average, best_in_dataset)" >&2
     exit 2
     ;;
 esac

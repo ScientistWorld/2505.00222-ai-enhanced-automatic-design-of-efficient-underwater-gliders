@@ -1,28 +1,53 @@
 # Evaluation Protocol
 
-The evaluator reads design artifacts from `outputs/<method>/optimization_results.json`. Each artifact must include:
+## Submission
 
-- `shape`: normalized shape-parameter vector
-- `aoa_deg`: selected angle of attack
-- optional method-side estimates of lift-to-drag for diagnostics
+Write one artifact per method to `outputs/<method>/optimization_results.json`:
 
-`scripts/evaluate.sh` calls only code in `eval/` and `data/`. It does not import any submitted method. The evaluator recomputes hydrodynamic coefficients and writes `scoring/scores.json`.
+```json
+{
+  "name": "ai_enhanced_glider",
+  "instances": {
+    "<instance id>": {
+      "pool_design":   {"weights": [20 numbers], "aoa_deg": 12.0},
+      "angle_designs": {"9": {"weights": [20 numbers]}, "30": {"weights": [20 numbers]}},
+      "query_predictions": [[c_d, c_l], ...]
+    }
+  }
+}
+```
 
-## Metrics
+- `weights` are convex weights over the 20 base hulls in `data/glider_proxy.py` order: each ≥ 0, summing to 1 (tolerance 1e-4; renormalised).
+- `pool_design.aoa_deg` must lie in [-30, 30].
+- `query_predictions` has one `[c_d, c_l]` pair per entry of the instance's `queries.json`, in order, with `c_d > 0`.
+- The result rows are named after `name`: `<name>` in `pool_efficiency` and `surrogate_validation`, and `<name minus _glider>_9deg` and `_30deg` in `angle_sweep_efficiency`. Use `ai_enhanced_glider` to be ranked against the reference rows.
+- Other fields are ignored. Every scored number is recomputed from the weights, angles and predictions.
 
-`pool_efficiency` is the primary benchmark. It compares a submitted design against a torpedo baseline.
+## Running
 
-- `efficiency_gain_over_torpedo`: higher is better and is the primary benchmark metric. It is the candidate lift-to-drag ratio divided by the torpedo baseline lift-to-drag ratio under the same evaluator.
-- `lift_to_drag`: higher is better and is reported as a raw diagnostic.
-- `energy_per_distance_relative`: lower is better, computed as `1 / lift_to_drag`.
-- `trajectory_angle_deg`: lower is better, computed as `atan(1 / lift_to_drag)` in degrees.
+- `bash scripts/evaluate_train.sh` scores every artifact under `outputs/` on the development instances and writes `scoring/scores_train.json`. `bash scripts/evaluate.sh` writes the same scores to `scoring/scores.json`.
+- The hidden test (`scripts/evaluate_test.sh`, no arguments) scores every artifact the same way on the held-out instances, against ground truth that exists only in the hidden evaluator.
 
-Reproduced scores are reported directly on the local CFD-like oracle scale. The paper reports pool-test values with a large simulation-to-reality gap, so `scoring/reference.json` records the paper's physical numbers while `scoring/scores.json` records the uncalibrated values produced by this reusable benchmark. This avoids fitting or hardcoding paper results into the evaluator.
+## Experiments and metrics
 
-Top-level diagnostics may check whether a method's recorded efficiency estimate agrees with independent evaluation. Diagnostic metric coefficients are zero, so these values are not part of the ranking; the benchmark also supports methods that do not expose an internal predictor.
+All metrics are means over the instances of the slice.
 
-- `lift_to_drag`: independent evaluated efficiency on the local oracle scale.
-- method-side predicted efficiency on the same local scale, when provided.
-- absolute percentage error between method-side and evaluator-side efficiency, when provided.
+- `pool_efficiency`: the co-designed (hull, angle) pair, evaluated at the submitted angle. The `torpedo_baseline` row is the conventional torpedo hull at its own best angle. The evaluator fixes and computes it; it is not read from any artifact.
+  - `efficiency_gain_over_torpedo` (primary, higher is better): design `eta` divided by the torpedo's best `eta` on the same instance.
+  - `lift_to_drag` (higher is better).
+  - `energy_per_distance_relative` (lower is better): `1 / eta`, capped at 100.
+  - `trajectory_angle_deg` (lower is better): `atan(1 / eta)` in degrees; 90 when there is no lift.
+- `angle_sweep_efficiency`: the 9° and 30° hulls, each evaluated at its angle. Same four metrics, with the torpedo at that same angle as the denominator.
+- `surrogate_validation`: `surrogate_eta_abs_pct_error` (lower is better). For each query it is `|eta_pred − eta_true| / max(eta_true, 1) × 100`, capped at 100 and averaged. `eta_pred = max(c_l, 0) / c_d`.
 
-The paper reports an optimized pool-test lift-to-drag ratio of 2.5 for its two-wing design and 2.4 for its four-wing design, versus 0.3 for a torpedo-shaped literature baseline. It also reports 4.5 percent average error in wind-tunnel validation of lift-to-drag ratio.
+## Validity rules
+
+- A malformed or impossible value anywhere fails the whole artifact. That covers non-numeric or non-finite numbers, weights with a negative entry or a sum away from 1, an angle outside [-30, 30], a wrong-length prediction list, and `c_d ≤ 0`. Every scored metric of every experiment then takes its worst value (gain 0, eta 0, energy 100, glide angle 90, prediction error 100). Reasons are listed under `diagnostics.validity`.
+- A missing instance, design or prediction list scores the worst value for that item.
+- An unreadable artifact, or no artifact at all, scores the worst values.
+
+`diagnostics.per_instance` lists the per-instance results; `diagnostics.instances` lists the torpedo reference values.
+
+## Paper numbers
+
+`scoring/reference.json` keeps the paper's reported results: pool-test lift-to-drag 2.5 (two-wing, 9°) and 2.4 (four-wing, 30°) versus 0.3 for a torpedo design from the literature, and 4.5% lift-to-drag error in wind-tunnel validation. Benchmark values are on the simulator's scale, not the physical pool scale, so compare against `scoring/scores_train.json` / `scores_test.json` rather than the paper's absolute numbers.

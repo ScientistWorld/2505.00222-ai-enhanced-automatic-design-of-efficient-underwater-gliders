@@ -1,20 +1,22 @@
 # Scientist Constraints
 
 ## Data
-Use the provided base shape library and deterministic hydrodynamic evaluator in `data/glider_proxy.py`. Do not add external shape datasets, CFD labels, or physical-test data for scored comparisons unless the scoring files are explicitly updated to define a new benchmark.
+For each fluid instance, use only that instance's published labelled dataset (`data/instances/<id>/labels.csv`), the query inputs, and the base-hull library. The labelled dataset is the whole simulation budget. Do not bring in external hydrodynamic labels or physical-test data.
+
+## Evaluator code is not a data source
+The development ground truth in `eval/train/` exists to score your work. Do not use it, or its functional form, to generate extra labels, to build a model of the fluid, or to fit the held-out instances. Querying it to design for a development instance is direct optimisation of the scorer. Brute-forcing it does not transfer to the held-out instances and is out of bounds. Do not modify anything under `eval/`.
 
 ## Evaluation
-Report scores through `scripts/evaluate.sh`. The evaluator must remain independent of `method/` and must read method artifacts from `outputs/`.
+Report development scores with `scripts/evaluate_train.sh` (or `scripts/evaluate.sh`). Artifacts go to `outputs/<method>/optimization_results.json` in the format of `briefing/evaluation.md`. The hidden test scores the same artifact on the held-out instances.
 
 ## Design Domain
-Submitted designs must use the same normalized shape-parameter vector and angle-of-attack format. Designs should remain in the convex hull of the provided base shapes for direct comparability with the paper's constrained search domain.
+Designs are convex weights over the base-hull library, and the pool angle of attack lies in [-30, 30] degrees. Submissions outside the domain fail.
 
 ## Resource Scaling
-Do not improve scores merely by replacing the task with a higher-fidelity simulator, larger external data source, or physical measurements. Improvements should come from better use of the same benchmark data and evaluation interface.
+Any amount of computation on the published data is fine. More simulation labels are not.
 
 ## Compliance Checklist
-- [ ] Uses only the provided benchmark data/oracle for scored results
-- [ ] Writes design artifacts in the expected `outputs/<method>/optimization_results.json` format
-- [ ] Evaluates with `scripts/evaluate.sh`
-- [ ] Keeps evaluation code independent of `method/`
-- [ ] Keeps submitted designs in the shared shape-parameter design domain
+- [ ] Each instance's designs and predictions come only from that instance's published data
+- [ ] No use of `eval/` code or ground truth as a model, label source or optimisation target
+- [ ] Artifacts in the documented format under `outputs/<method>/`
+- [ ] Designs inside the convex hull, angles inside the actuator range

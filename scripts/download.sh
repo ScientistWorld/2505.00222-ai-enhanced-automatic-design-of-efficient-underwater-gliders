@@ -1,23 +1,19 @@
 #!/bin/bash
 # Download all data and models needed for this environment.
 #
-# Run on a node with internet access BEFORE building the container
-# or submitting compute jobs.
-#
-# This script should be idempotent — safe to run multiple times.
-# It should skip files that already exist.
-#
-# Update the storage estimate below as you add downloads.
-#
 # Estimated total download size: 0 GB
 # Estimated disk usage after extraction: 0 GB
 #
-# This reproduction has no external files to fetch. The script still creates
-# the expected downloads directory so fresh clones have the standard layout.
+# Nothing is fetched. The paper's meshes, cage fits and OpenFOAM labels were
+# never released; this benchmark's base-hull library and per-instance labelled
+# datasets are small tracked files under data/ (data/glider_proxy.py,
+# data/instances/), and no pretrained weights are used. The script only
+# creates the standard downloads directory so fresh clones have the layout.
 
 set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
 mkdir -p data/downloads
-echo "No external downloads are required. The paper's OpenFOAM labels and cage assets are not released, so this gym uses deterministic tracked data code in data/."
+test -f data/instances/index.json || { echo "data/instances/ missing from checkout" >&2; exit 1; }
+echo "No external downloads required."

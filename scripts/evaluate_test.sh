@@ -1,9 +1,8 @@
 #!/bin/bash
-# Evaluate method outputs on the held-out test slice.
+# Evaluate method outputs on the held-out fluid instances (test slice).
 #
-# Mirrors scripts/evaluate.sh: pass --proposed, --baseline, --output, or other
-# evaluator flags through to the slice evaluator. With no --proposed flag, all
-# outputs/*/optimization_results.json method artifacts are enumerated.
+# Runs with no arguments: enumerates every outputs/*/optimization_results.json
+# artifact and scores it against ground truth that exists only in eval/test/.
 
 set -e
 
