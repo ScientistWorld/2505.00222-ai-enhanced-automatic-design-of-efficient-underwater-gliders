@@ -5,4 +5,4 @@ set -e
 
 cd /home/user
 
-bash redteam/run_bundle.sh
+bash redteam/run_quality_check.sh

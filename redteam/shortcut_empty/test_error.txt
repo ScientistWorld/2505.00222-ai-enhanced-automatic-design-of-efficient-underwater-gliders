@@ -1,0 +1,16 @@
+Traceback (most recent call last):
+  File "/home/user/eval/test/evaluate.py", line 271, in <module>
+    main()
+  File "/home/user/eval/test/evaluate.py", line 262, in main
+    scores = build_scores(baseline_path, proposed_paths)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/eval/test/evaluate.py", line 208, in build_scores
+    shape_metrics(shape, POOL_ANGLES_DEG), baseline_eta
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/eval/test/evaluate.py", line 102, in shape_metrics
+    cd, cl = hydrodynamic_coefficients(shape, angle)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/data/glider_proxy.py", line 133, in hydrodynamic_coefficients
+    span, sweep, camber, thickness, tail, blunt, fin, sym = np.moveaxis(x, -1, 0)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: not enough values to unpack (expected 8, got 0)
