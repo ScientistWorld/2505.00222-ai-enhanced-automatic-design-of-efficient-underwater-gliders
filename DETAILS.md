@@ -124,6 +124,242 @@ The paper reports an optimized pool-test lift-to-drag ratio of 2.5 for its two-w
 
 </details>
 
+### Iteration 3: gpt-5.5
+- **Milestone**: `secondary_claims` | **Status**: done
+- **Working time**: 15m | **GPU**: 0.0h
+- **Jobs**: 5 total (5 completed, 0 failed)
+
+<details>
+<summary>Progress Log</summary>
+
+### [2026-06-02 02:46] - core_claim_plus
+- Verified the existing implementation against the paper: reduced-order cage parameters, interpolated base shapes, 4-layer tanh/batchnorm neural fluid surrogate, and CMA-ES over the convex hull of base shapes.
+- Confirmed completed CPU job `b5261386-72c` ran `scripts/reproduce.sh` and `python validate.py --compare` successfully.
+- Reproduced the core efficiency gain over the torpedo baseline and the additional 9-degree/30-degree angle sweep on the local hydrodynamic oracle benchmark.
+
+### [2026-06-02 02:54] - core_claim_plus
+- Continuation audit confirmed the method remains a real implementation of the paper's computational pipeline rather than a surrogate for reported numbers.
+- Fixed the evaluator so `scripts/baseline.sh` can score a torpedo-only artifact while full proposed scoring still requires the baseline artifact for the gain metric.
+- Cleaned `scoring/TARGETS.md` so all named targets correspond to experiments present in `reference.json` and `scores.json`; energy and glide angle remain constraint metrics inside efficiency experiments.
+
+### [2026-06-02 03:03] - secondary_claims
+- Completed CPU smoke job `6b0aae30-c2a` with exit code 0.
+- Verified the baseline-only evaluation path, then reran `scripts/reproduce.sh` and `python validate.py --compare` successfully.
+- Reproduced the main efficiency gain, the additional 9-degree/30-degree angle sweep, and the secondary surrogate-validation claim on the local hydrodynamic oracle benchmark.
+
+</details>
+
+### Iteration 4: gpt-5.5 (designer_stage_1)
+- **Milestone**: `secondary_claims` | **Status**: done
+- **Working time**: 6m | **GPU**: 0.0h
+- **Jobs**: 5 total (5 completed, 0 failed)
+
+<details>
+<summary>Progress Log</summary>
+
+### [2026-06-02 02:46] - core_claim_plus
+- Verified the existing implementation against the paper: reduced-order cage parameters, interpolated base shapes, 4-layer tanh/batchnorm neural fluid surrogate, and CMA-ES over the convex hull of base shapes.
+- Confirmed completed CPU job `b5261386-72c` ran `scripts/reproduce.sh` and `python validate.py --compare` successfully.
+- Reproduced the core efficiency gain over the torpedo baseline and the additional 9-degree/30-degree angle sweep on the local hydrodynamic oracle benchmark.
+
+### [2026-06-02 02:54] - core_claim_plus
+- Continuation audit confirmed the method remains a real implementation of the paper's computational pipeline rather than a surrogate for reported numbers.
+- Fixed the evaluator so `scripts/baseline.sh` can score a torpedo-only artifact while full proposed scoring still requires the baseline artifact for the gain metric.
+- Cleaned `scoring/TARGETS.md` so all named targets correspond to experiments present in `reference.json` and `scores.json`; energy and glide angle remain constraint metrics inside efficiency experiments.
+
+### [2026-06-02 03:03] - secondary_claims
+- Completed CPU smoke job `6b0aae30-c2a` with exit code 0.
+- Verified the baseline-only evaluation path, then reran `scripts/reproduce.sh` and `python validate.py --compare` successfully.
+- Reproduced the main efficiency gain, the additional 9-degree/30-degree angle sweep, and the secondary surrogate-validation claim on the local hydrodynamic oracle benchmark.
+
+</details>
+
+### Iteration 5: gpt-5.5 (designer_stage_2)
+- **Milestone**: `secondary_claims` | **Status**: done
+- **Working time**: 3m | **GPU**: 0.0h
+- **Jobs**: 5 total (5 completed, 0 failed)
+
+<details>
+<summary>Progress Log</summary>
+
+### [2026-06-02 02:46] - core_claim_plus
+- Verified the existing implementation against the paper: reduced-order cage parameters, interpolated base shapes, 4-layer tanh/batchnorm neural fluid surrogate, and CMA-ES over the convex hull of base shapes.
+- Confirmed completed CPU job `b5261386-72c` ran `scripts/reproduce.sh` and `python validate.py --compare` successfully.
+- Reproduced the core efficiency gain over the torpedo baseline and the additional 9-degree/30-degree angle sweep on the local hydrodynamic oracle benchmark.
+
+### [2026-06-02 02:54] - core_claim_plus
+- Continuation audit confirmed the method remains a real implementation of the paper's computational pipeline rather than a surrogate for reported numbers.
+- Fixed the evaluator so `scripts/baseline.sh` can score a torpedo-only artifact while full proposed scoring still requires the baseline artifact for the gain metric.
+- Cleaned `scoring/TARGETS.md` so all named targets correspond to experiments present in `reference.json` and `scores.json`; energy and glide angle remain constraint metrics inside efficiency experiments.
+
+### [2026-06-02 03:03] - secondary_claims
+- Completed CPU smoke job `6b0aae30-c2a` with exit code 0.
+- Verified the baseline-only evaluation path, then reran `scripts/reproduce.sh` and `python validate.py --compare` successfully.
+- Reproduced the main efficiency gain, the additional 9-degree/30-degree angle sweep, and the secondary surrogate-validation claim on the local hydrodynamic oracle benchmark.
+
+</details>
+
+### Iteration 6: gpt-5.5 (designer_stage_3)
+- **Milestone**: `secondary_claims` | **Status**: done
+- **Working time**: 4m | **GPU**: 0.0h
+- **Jobs**: 7 total (6 completed, 1 failed)
+
+<details>
+<summary>Progress Log</summary>
+
+### [2026-06-02 02:46] - core_claim_plus
+- Verified the existing implementation against the paper: reduced-order cage parameters, interpolated base shapes, 4-layer tanh/batchnorm neural fluid surrogate, and CMA-ES over the convex hull of base shapes.
+- Confirmed completed CPU job `b5261386-72c` ran `scripts/reproduce.sh` and `python validate.py --compare` successfully.
+- Reproduced the core efficiency gain over the torpedo baseline and the additional 9-degree/30-degree angle sweep on the local hydrodynamic oracle benchmark.
+
+### [2026-06-02 02:54] - core_claim_plus
+- Continuation audit confirmed the method remains a real implementation of the paper's computational pipeline rather than a surrogate for reported numbers.
+- Fixed the evaluator so `scripts/baseline.sh` can score a torpedo-only artifact while full proposed scoring still requires the baseline artifact for the gain metric.
+- Cleaned `scoring/TARGETS.md` so all named targets correspond to experiments present in `reference.json` and `scores.json`; energy and glide angle remain constraint metrics inside efficiency experiments.
+
+### [2026-06-02 03:03] - secondary_claims
+- Completed CPU smoke job `6b0aae30-c2a` with exit code 0.
+- Verified the baseline-only evaluation path, then reran `scripts/reproduce.sh` and `python validate.py --compare` successfully.
+- Reproduced the main efficiency gain, the additional 9-degree/30-degree angle sweep, and the secondary surrogate-validation claim on the local hydrodynamic oracle benchmark.
+
+</details>
+
+### Iteration 7: gpt-5.5 (packager)
+- **Milestone**: `secondary_claims` | **Status**: done
+- **Working time**: 2m | **GPU**: 0.0h
+- **Jobs**: 7 total (6 completed, 1 failed)
+
+<details>
+<summary>Progress Log</summary>
+
+### [2026-06-02 02:46] - core_claim_plus
+- Verified the existing implementation against the paper: reduced-order cage parameters, interpolated base shapes, 4-layer tanh/batchnorm neural fluid surrogate, and CMA-ES over the convex hull of base shapes.
+- Confirmed completed CPU job `b5261386-72c` ran `scripts/reproduce.sh` and `python validate.py --compare` successfully.
+- Reproduced the core efficiency gain over the torpedo baseline and the additional 9-degree/30-degree angle sweep on the local hydrodynamic oracle benchmark.
+
+### [2026-06-02 02:54] - core_claim_plus
+- Continuation audit confirmed the method remains a real implementation of the paper's computational pipeline rather than a surrogate for reported numbers.
+- Fixed the evaluator so `scripts/baseline.sh` can score a torpedo-only artifact while full proposed scoring still requires the baseline artifact for the gain metric.
+- Cleaned `scoring/TARGETS.md` so all named targets correspond to experiments present in `reference.json` and `scores.json`; energy and glide angle remain constraint metrics inside efficiency experiments.
+
+### [2026-06-02 03:03] - secondary_claims
+- Completed CPU smoke job `6b0aae30-c2a` with exit code 0.
+- Verified the baseline-only evaluation path, then reran `scripts/reproduce.sh` and `python validate.py --compare` successfully.
+- Reproduced the main efficiency gain, the additional 9-degree/30-degree angle sweep, and the secondary surrogate-validation claim on the local hydrodynamic oracle benchmark.
+
+</details>
+
+### Iteration 8: gpt-5.5 (verifier)
+- **Milestone**: `core_claim_plus` | **Status**: done
+- **Working time**: 6m | **GPU**: 0.0h
+- **Jobs**: 8 total (7 completed, 1 failed)
+
+<details>
+<summary>Progress Log</summary>
+
+### [2026-06-02 02:46] - core_claim_plus
+- Verified the existing implementation against the paper: reduced-order cage parameters, interpolated base shapes, 4-layer tanh/batchnorm neural fluid surrogate, and CMA-ES over the convex hull of base shapes.
+- Confirmed completed CPU job `b5261386-72c` ran `scripts/reproduce.sh` and `python validate.py --compare` successfully.
+- Reproduced the core efficiency gain over the torpedo baseline and the additional 9-degree/30-degree angle sweep on the local hydrodynamic oracle benchmark.
+
+### [2026-06-02 02:54] - core_claim_plus
+- Continuation audit confirmed the method remains a real implementation of the paper's computational pipeline rather than a surrogate for reported numbers.
+- Fixed the evaluator so `scripts/baseline.sh` can score a torpedo-only artifact while full proposed scoring still requires the baseline artifact for the gain metric.
+- Cleaned `scoring/TARGETS.md` so all named targets correspond to experiments present in `reference.json` and `scores.json`; energy and glide angle remain constraint metrics inside efficiency experiments.
+
+### [2026-06-02 03:03] - core_claim_plus
+- Completed CPU smoke job `6b0aae30-c2a` with exit code 0.
+- Verified the baseline-only evaluation path, then reran `scripts/reproduce.sh` and `python validate.py --compare` successfully.
+- Reproduced the main efficiency gain and the additional 9-degree/30-degree angle sweep on the local hydrodynamic oracle benchmark.
+- Surrogate agreement is reported as a diagnostic, but not counted as a physical secondary-claim reproduction because the paper's OpenFOAM cases, meshes, wind-tunnel data, and pool telemetry are not released.
+
+### [2026-06-02 03:33] - core_claim_plus
+- Completed final CPU verification job `68bfb717-c86` with exit code 0.
+- Reran `scripts/reproduce.sh`, `python validate.py --compare`, `scripts/evaluate_train.sh`, and `scripts/evaluate_test.sh` successfully.
+- Confirmed final `scores.json` includes the cage feature-range constraint for every efficiency result and that surrogate-agreement metrics remain diagnostic-only.
+
+</details>
+
+### Iteration 9: gpt-5.5 (verifier)
+- **Milestone**: `core_claim_plus` | **Status**: done
+- **Working time**: 7m | **GPU**: 0.0h
+- **Jobs**: 9 total (8 completed, 1 failed)
+
+<details>
+<summary>Progress Log</summary>
+
+### [2026-06-02 02:46] - core_claim_plus
+- Verified the existing implementation against the paper: reduced-order shape parameters, interpolated base shapes, 4-layer tanh/batchnorm neural fluid surrogate, and CMA-ES over the convex hull of base shapes.
+- Confirmed completed CPU job `b5261386-72c` ran `scripts/reproduce.sh` and `python validate.py --compare` successfully.
+- Reproduced the core efficiency gain over the torpedo baseline and the additional 9-degree/30-degree angle sweep on the local hydrodynamic oracle benchmark.
+
+### [2026-06-02 02:54] - core_claim_plus
+- Continuation audit confirmed the method remains a real implementation of the paper's computational pipeline rather than a surrogate for reported numbers.
+- Fixed the evaluator so `scripts/baseline.sh` can score a torpedo-only artifact while full proposed scoring still requires the baseline artifact for the gain metric.
+- Cleaned `scoring/TARGETS.md` so all named targets correspond to experiments present in `reference.json` and `scores.json`; energy and glide angle remain constraint metrics inside efficiency experiments.
+
+### [2026-06-02 03:03] - core_claim_plus
+- Completed CPU smoke job `6b0aae30-c2a` with exit code 0.
+- Verified the baseline-only evaluation path, then reran `scripts/reproduce.sh` and `python validate.py --compare` successfully.
+- Reproduced the main efficiency gain and the additional 9-degree/30-degree angle sweep on the local hydrodynamic oracle benchmark.
+- Surrogate agreement is reported as a diagnostic, but not counted as a physical secondary-claim reproduction because the paper's OpenFOAM cases, meshes, wind-tunnel data, and pool telemetry are not released.
+
+### [2026-06-02 03:33] - core_claim_plus
+- Completed final CPU verification job `68bfb717-c86` with exit code 0.
+- Reran `scripts/reproduce.sh`, `python validate.py --compare`, `scripts/evaluate_train.sh`, and `scripts/evaluate_test.sh` successfully.
+- Confirmed final `scores.json` includes the shape-domain constraint for every efficiency result and that surrogate-agreement metrics remain diagnostic-only.
+
+### [2026-06-02 03:33] - core_claim_plus
+- Fixed the final validator failure by moving `surrogate_validation` from scored `experiments` to top-level `diagnostics` in the evaluator outputs and score artifacts.
+- Reran `python validate.py --compare` successfully after the fix.
+
+### [2026-06-02 03:46] - core_claim_plus
+- Completed final managed-container CPU smoke job `b01de9c2-b2b` with exit code 0.
+- Reran `scripts/evaluate.sh`, `python validate.py --compare`, `scripts/evaluate_train.sh`, `scripts/evaluate_test.sh`, and a final `python validate.py --compare` successfully.
+- Confirmed the workspace is ready for gym use at `core_claim_plus` after method-agnostic documentation and scoring cleanup.
+
+</details>
+
+### Iteration 10: gpt-6.1-sol (redteam)
+- **Milestone**: `core_claim_plus` | **Status**: done
+- **Working time**: 12m | **GPU**: 0.0h
+- **Jobs**: 9 total (8 completed, 1 failed)
+
+<details>
+<summary>Progress Log</summary>
+
+### [2026-06-02 02:46] - core_claim_plus
+- Verified the existing implementation against the paper: reduced-order shape parameters, interpolated base shapes, 4-layer tanh/batchnorm neural fluid surrogate, and CMA-ES over the convex hull of base shapes.
+- Confirmed completed CPU job `b5261386-72c` ran `scripts/reproduce.sh` and `python validate.py --compare` successfully.
+- Reproduced the core efficiency gain over the torpedo baseline and the additional 9-degree/30-degree angle sweep on the local hydrodynamic oracle benchmark.
+
+### [2026-06-02 02:54] - core_claim_plus
+- Continuation audit confirmed the method remains a real implementation of the paper's computational pipeline rather than a surrogate for reported numbers.
+- Fixed the evaluator so `scripts/baseline.sh` can score a torpedo-only artifact while full proposed scoring still requires the baseline artifact for the gain metric.
+- Cleaned `scoring/TARGETS.md` so all named targets correspond to experiments present in `reference.json` and `scores.json`; energy and glide angle remain constraint metrics inside efficiency experiments.
+
+### [2026-06-02 03:03] - core_claim_plus
+- Completed CPU smoke job `6b0aae30-c2a` with exit code 0.
+- Verified the baseline-only evaluation path, then reran `scripts/reproduce.sh` and `python validate.py --compare` successfully.
+- Reproduced the main efficiency gain and the additional 9-degree/30-degree angle sweep on the local hydrodynamic oracle benchmark.
+- Surrogate agreement is reported as a diagnostic, but not counted as a physical secondary-claim reproduction because the paper's OpenFOAM cases, meshes, wind-tunnel data, and pool telemetry are not released.
+
+### [2026-06-02 03:33] - core_claim_plus
+- Completed final CPU verification job `68bfb717-c86` with exit code 0.
+- Reran `scripts/reproduce.sh`, `python validate.py --compare`, `scripts/evaluate_train.sh`, and `scripts/evaluate_test.sh` successfully.
+- Confirmed final `scores.json` includes the shape-domain constraint for every efficiency result and that surrogate-agreement metrics remain diagnostic-only.
+
+### [2026-06-02 03:33] - core_claim_plus
+- Fixed the final validator failure by moving `surrogate_validation` from scored `experiments` to top-level `diagnostics` in the evaluator outputs and score artifacts.
+- Reran `python validate.py --compare` successfully after the fix.
+
+### [2026-06-02 03:46] - core_claim_plus
+- Completed final managed-container CPU smoke job `b01de9c2-b2b` with exit code 0.
+- Reran `scripts/evaluate.sh`, `python validate.py --compare`, `scripts/evaluate_train.sh`, `scripts/evaluate_test.sh`, and a final `python validate.py --compare` successfully.
+- Confirmed the workspace is ready for gym use at `core_claim_plus` after method-agnostic documentation and scoring cleanup.
+
+</details>
+
 
 ---
 
