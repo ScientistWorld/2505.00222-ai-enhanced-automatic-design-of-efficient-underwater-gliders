@@ -5,8 +5,4 @@ set -e
 
 cd /home/user
 
-bash scripts/evaluate.sh
-python validate.py --compare
-bash scripts/evaluate_train.sh
-bash scripts/evaluate_test.sh
-python validate.py --compare
+bash redteam/run_bundle.sh

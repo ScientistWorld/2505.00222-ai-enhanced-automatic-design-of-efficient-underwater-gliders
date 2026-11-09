@@ -1,0 +1,7 @@
+_state/
+**/checkpoint*.pt
+**/training.log
+**/optimization.log
+**/train.log
+**/test.log
+**/__pycache__/
