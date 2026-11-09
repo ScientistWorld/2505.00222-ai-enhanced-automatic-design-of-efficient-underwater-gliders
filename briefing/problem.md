@@ -12,7 +12,7 @@ A hull is described by 8 normalised descriptors (span, sweep, camber, thickness,
 
 ## What is known about the fluid
 
-Hydrodynamic coefficients come from an expensive simulator that you cannot call. Each *fluid instance* is a different flow response over the same hull library. For every instance you get a fixed labelled dataset (`data/instances/<id>/labels.csv`): `c_d` and `c_l` for every base hull and 10 evenly spaced morphs between every pair of base hulls (1,920 hulls), each at -30, -15, 0, 15 and 30 degrees. That is the whole simulation budget.
+Hydrodynamic coefficients come from an expensive simulator that you cannot call. Each *fluid instance* is a different flow response over the same hull library. For every instance you get a fixed labelled dataset (`data/instances/<id>/labels.csv`): `c_d` and `c_l` for every base hull and 10 evenly spaced morphs between every pair of base hulls (1,920 hulls), each at -30, -15, 0, 15 and 30 degrees. That is the whole simulation budget. The labels come from a simulation: every published coefficient carries an independent error of a few percent. Designs and predictions are scored against the error-free response.
 
 There are two kinds of instance (`data/instances/index.json`):
 

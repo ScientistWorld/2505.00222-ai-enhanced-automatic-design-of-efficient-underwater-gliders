@@ -38,6 +38,8 @@ def main() -> None:
     parser.add_argument("--batch-size", type=int, default=128)
     parser.add_argument("--warmup", type=int, default=10)
     parser.add_argument("--ensemble", type=int, default=1, help="number of independently seeded surrogates averaged")
+    parser.add_argument("--target-transform", default="log_cd", choices=["log_cd", "standard"])
+    parser.add_argument("--schedule", default="constant", choices=["constant", "cosine"])
     parser.add_argument("--angles", default="0,3,6,9,12,15,18,21,24,27,30")
     parser.add_argument("--restarts", type=int, default=3)
     parser.add_argument("--generations", type=int, default=80)
@@ -53,7 +55,8 @@ def main() -> None:
         t0 = time.time()
         ckpts = [
             train_surrogate(iid, args.epochs, args.lr, args.batch_size, args.warmup,
-                            seed=args.seed * 1000 + k, log_every=0)
+                            seed=args.seed * 1000 + k, log_every=0,
+                            target_transform=args.target_transform, schedule=args.schedule)
             for k in range(args.ensemble)
         ]
         if args.checkpoint_dir:

@@ -26,7 +26,7 @@ Write one artifact per method to `outputs/<method>/optimization_results.json`:
 ## Running
 
 - `bash scripts/evaluate_train.sh` scores every artifact under `outputs/` on the development instances and writes `scoring/scores_train.json`. `bash scripts/evaluate.sh` writes the same scores to `scoring/scores.json`.
-- The hidden test (`scripts/evaluate_test.sh`, no arguments) scores every artifact the same way on the held-out instances, against ground truth that exists only in the hidden evaluator.
+- The hidden test (`scripts/evaluate_test.sh`, no arguments) scores every artifact the same way on the held-out instances, against ground truth that exists only in the hidden evaluator. Ground truth is the error-free hydrodynamic response; the published labels are simulations of it with independent errors of a few percent per coefficient.
 
 ## Experiments and metrics
 

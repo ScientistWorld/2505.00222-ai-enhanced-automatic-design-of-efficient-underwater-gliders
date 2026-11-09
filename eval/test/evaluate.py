@@ -40,6 +40,8 @@ INSTANCES = {
     "heldout_1": "5edbabe21b8528729ba6d6f2d8c69bc2",
     "heldout_2": "853569e2e5732015a501ccbfa343cbb6",
     "heldout_3": "9a600f2785260921e18db619645aac94",
+    "heldout_4": "ab28bea5799eb1f0b09334780929c8f1",
+    "heldout_5": "e897c086b77e81ad3a7771208ecd760c",
 }
 DESIGN_ANGLES = ("9", "30")
 TORPEDO_AOA_GRID = [-30.0 + 0.25 * i for i in range(241)]

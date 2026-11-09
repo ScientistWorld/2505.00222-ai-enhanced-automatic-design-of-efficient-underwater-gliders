@@ -4,8 +4,7 @@
 # Hardening job: honest variants, baselines and shortcuts through the
 # unmodified no-argument hidden test (hardening/harness.py, resumable), the
 # rank summary, then the end-to-end reference reproduction that produces the
-# committed score files, validation, and a difficulty calibration on
-# throwaway instance families.
+# committed score files, and validation.
 
 set -e
 
@@ -23,5 +22,3 @@ b = json.load(open("hardening/cases/reference/artifact/optimization_results.json
 print("reproduce.sh artifact identical to the harness reference:", a == b)
 PY
 python validate.py || echo "VALIDATE FAILED"
-
-python hardening/calibrate.py || echo "calibration failed (non-fatal)"

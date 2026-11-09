@@ -1,6 +1,6 @@
 # Experiment Overview
 
-All experiments are averaged over the fluid instances of a slice: two public development instances (train) and four held-out instances (hidden test). The method sees only each instance's labelled dataset. The ground truth stays inside the evaluator.
+All experiments are averaged over the fluid instances of a slice: two public development instances (train) and six held-out instances (hidden test). The method sees only each instance's labelled dataset, whose labels carry simulation error. The error-free ground truth stays inside the evaluator.
 
 ## pool_efficiency (weight 0.5)
 Can a hull and operating angle chosen jointly beat a conventional torpedo-shaped glider on efficiency? This is the paper's central practical claim: automated design finds gliders that need less energy per distance than the standard design. The design is scored at the angle the submitter chose. The torpedo is scored at its own best angle. Both evaluations happen inside the evaluator.

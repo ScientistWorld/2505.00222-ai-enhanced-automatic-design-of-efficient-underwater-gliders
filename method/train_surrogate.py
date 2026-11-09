@@ -5,6 +5,13 @@ Paper settings: 4-layer MLP with batch normalisation and tanh, MSE loss, Adam
 with learning rate 0.1, batch size 128, a 10-epoch warm-up and 200 epochs,
 trained on every labelled hull (base shapes + 10 morphs per pair) at five
 angles of attack between -30 and +30 degrees.
+
+Target preprocessing (not specified by the paper): the network regresses the
+standardised log drag coefficient and the standardised lift coefficient
+(``target_transform="log_cd"``), so drag is learned to relative accuracy at
+every angle; ``"standard"`` (standardised raw coefficients) is kept for
+comparison. ``schedule="cosine"`` (decay after warm-up) is an optional variant;
+the paper's schedule is warm-up then constant learning rate.
 """
 
 from __future__ import annotations
@@ -39,6 +46,8 @@ def train_surrogate(
     warmup: int = 10,
     seed: int = 0,
     log_every: int = 50,
+    target_transform: str = "log_cd",
+    schedule: str = "constant",
 ) -> dict:
     """Train one surrogate on an instance's labelled dataset; return a checkpoint dict."""
 
@@ -47,13 +56,14 @@ def train_surrogate(
     labels = load_labels(instance_id)
     x = features(labels["shape"], labels["aoa_deg"])
     y = np.stack([labels["cd"], labels["cl"]], axis=1).astype(np.float32)
+    y_model = encode_targets(y, target_transform)
     n = len(x)
     order = rng.permutation(n)
     split = int(0.8 * n)
     train_idx, val_idx = order[:split], order[split:]
-    y_mean = y[train_idx].mean(axis=0)
-    y_std = np.maximum(y[train_idx].std(axis=0), 1e-6)
-    y_scaled = (y - y_mean) / y_std
+    y_mean = y_model[train_idx].mean(axis=0)
+    y_std = np.maximum(y_model[train_idx].std(axis=0), 1e-6)
+    y_scaled = (y_model - y_mean) / y_std
 
     loader = DataLoader(
         TensorDataset(torch.tensor(x[train_idx]), torch.tensor(y_scaled[train_idx])),
@@ -73,6 +83,8 @@ def train_surrogate(
     for epoch in range(epochs):
         model.train()
         scale = min(1.0, (epoch + 1) / float(max(warmup, 1)))
+        if schedule == "cosine" and epoch >= warmup:
+            scale = 0.5 * (1.0 + np.cos(np.pi * (epoch - warmup) / max(epochs - warmup, 1)))
         for group in opt.param_groups:
             group["lr"] = lr * scale
         losses = []
@@ -86,7 +98,7 @@ def train_surrogate(
         with torch.no_grad():
             pred_scaled = model(val_x)
             val_loss = float(loss_fn(pred_scaled, val_y_scaled))
-            pred = (pred_scaled * std_t + mean_t).clamp_min(1e-6)
+            pred = torch.tensor(decode_targets((pred_scaled * std_t + mean_t).numpy(), target_transform)).clamp_min(1e-6)
             eta_p = pred[:, 1] / pred[:, 0]
             eta_t = val_y[:, 1] / val_y[:, 0].clamp_min(1e-8)
             mask = eta_t > 0.5
@@ -106,12 +118,30 @@ def train_surrogate(
         "input_dim": int(x.shape[1]),
         "target_mean": y_mean.tolist(),
         "target_std": y_std.tolist(),
+        "target_transform": target_transform,
+        "schedule": schedule,
         "best_epoch": best_epoch,
         "best_val_mse": best_val,
         "history": history,
         "seed": seed,
         "instance": instance_id,
     }
+
+
+def encode_targets(y: np.ndarray, transform: str) -> np.ndarray:
+    """(c_d, c_l) -> network targets before standardisation."""
+
+    if transform == "log_cd":
+        return np.stack([np.log(np.maximum(y[:, 0], 1e-6)), y[:, 1]], axis=1).astype(np.float32)
+    if transform == "standard":
+        return y.astype(np.float32)
+    raise ValueError(f"unknown target transform {transform!r}")
+
+
+def decode_targets(t: np.ndarray, transform: str) -> np.ndarray:
+    if transform == "log_cd":
+        return np.stack([np.exp(np.clip(t[:, 0], -30.0, 30.0)), t[:, 1]], axis=1)
+    return np.asarray(t)
 
 
 def load_model(ckpt: dict) -> FluidSurrogate:
@@ -128,13 +158,14 @@ class Predictor:
         self.models = [load_model(c) for c in ckpts]
         self.means = [np.asarray(c["target_mean"], dtype=np.float32) for c in ckpts]
         self.stds = [np.asarray(c["target_std"], dtype=np.float32) for c in ckpts]
+        self.transforms = [c.get("target_transform", "standard") for c in ckpts]
 
     def coefficients(self, x: np.ndarray) -> np.ndarray:
         xt = torch.tensor(np.asarray(x, dtype=np.float32))
         outs = []
         with torch.no_grad():
-            for m, mu, sd in zip(self.models, self.means, self.stds):
-                outs.append(m(xt).numpy() * sd + mu)
+            for m, mu, sd, tr in zip(self.models, self.means, self.stds, self.transforms):
+                outs.append(decode_targets(m(xt).numpy() * sd + mu, tr))
         return np.mean(outs, axis=0)
 
     def lift_to_drag(self, x: np.ndarray) -> np.ndarray:
@@ -151,8 +182,11 @@ def main() -> None:
     parser.add_argument("--batch-size", type=int, default=128)
     parser.add_argument("--warmup", type=int, default=10)
     parser.add_argument("--seed", type=int, default=0)
+    parser.add_argument("--target-transform", default="log_cd", choices=["log_cd", "standard"])
+    parser.add_argument("--schedule", default="constant", choices=["constant", "cosine"])
     args = parser.parse_args()
-    ckpt = train_surrogate(args.instance, args.epochs, args.lr, args.batch_size, args.warmup, args.seed)
+    ckpt = train_surrogate(args.instance, args.epochs, args.lr, args.batch_size, args.warmup, args.seed,
+                           target_transform=args.target_transform, schedule=args.schedule)
     Path(args.checkpoint).parent.mkdir(parents=True, exist_ok=True)
     torch.save(ckpt, args.checkpoint)
 
