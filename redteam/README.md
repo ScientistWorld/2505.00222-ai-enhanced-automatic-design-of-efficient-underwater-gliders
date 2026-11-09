@@ -3,9 +3,10 @@
 Run `bash redteam/run_bundle.sh` in the gym's existing compute container, or
 `bash redteam/<case>/run.sh` for one case. Do not run training on the login node.
 Each case produces `status.json`, `scores_train.json`, `scores_test.json` when
-accepted, and the exact submitted JSON artifacts. Expected invalid cases retain
-an error status instead of claiming a score. Logs and trained checkpoints stay
-local and are ignored by git.
+accepted, and the exact submitted JSON artifacts. Empty geometry is rejected;
+NaN geometry exits successfully but has no finite rank. Logs and trained
+checkpoints stay local and are ignored by git. Job transcripts are archived in
+`job_evidence/`.
 
 `harness.py` saves/restores pre-audit files in ignored `_state/`. It never edits
 `eval/`, the hidden test shell script, the Python environment, or evaluator
@@ -33,3 +34,15 @@ morphs per pair, trains 600 epochs at learning rate .003, and searches 200
 generations. Three reference retrainings retain all original default settings,
 varying both training and optimization seeds. The one-epoch ablation changes
 only training duration; mean-shape and torpedo controls remove design search.
+
+`bash redteam/run_quality_check.sh` compares the saved reference and six trained
+checkpoints on one common independently sampled public-oracle dataset. This is
+a diagnostic of predictor quality, not another submitted method or test score.
+It requires checkpoints from the bundle; its small results are preserved in
+`training_quality.json`.
+
+See `../REDTEAM.md` for conclusions. `RESULTS.md` contains all raw metric
+summaries; `summary.json` lists normalization cohorts, every weighted term, and
+seed spreads. The all-finite cohort supplies the primary reported rank deltas.
+The honest-cohort normalization has constant domain violations and is unsuitable
+for deciding whether invalid geometry pays; use the all-finite cohort there.

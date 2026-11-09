@@ -12,11 +12,11 @@
 | shortcut_bruteforce_bases | 8.68610322 | 9.81105079 | 7.56115565 | 11.202031 | 0 | -0.0006855744 | -8.199715e-06 |
 | shortcut_bruteforce_morphs | 8.68610322 | 9.81105079 | 7.56115565 | 11.202031 | 0 | -0.0006855744 | -8.199715e-06 |
 | shortcut_constant_zero | 0 | 0 | 0 | 0 | 0.148750007 | -2.289848e+08 | -4.33166 |
-| shortcut_empty | rejected/nonfinite | | | | | | |
+| shortcut_empty | rejected (exit 1) | | | | | | |
 | shortcut_fixed_oracle | 100.000002 | 100.000002 | 100.000002 | 100.000002 | 0 | 86.05765 | 0.1645366 |
 | shortcut_forged_scores | 0.775404318 | 0.867314986 | 0.68349365 | 1 | 0 | -12.47712 | -0.6711814 |
 | shortcut_impossible_finite | 7599.72115 | 7869.65986 | 7329.78243 | 9800.97863 | 2.51749992 | 8121.497 | 0.08194422 |
-| shortcut_nan | rejected/nonfinite | | | | | | |
+| shortcut_nan | accepted; nonfinite scores | | | | | | |
 | shortcut_output_fields | 0.775404318 | 0.867314986 | 0.68349365 | 1 | 0 | -12.47712 | -0.6711814 |
 | shortcut_selected_angle | 8.6861017 | 9.81104921 | 7.56324746 | 11.2020291 | 0 | 0 | 0 |
 | shortcut_task_failure_tradeoff | 0 | 0 | 0 | 0 | 0.124499999 | -2.289848e+08 | -4.270891 |

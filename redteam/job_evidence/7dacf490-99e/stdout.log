@@ -1,0 +1,83 @@
+[hive] This stdout log is managed by Hive.
+[hive] job_id: f4eee239
+[hive] host: node
+[hive] node_id: 197fb5cc9e925de46731e715cb7add9871e56674c68830b71828421d
+[hive] user: nexus/user (remote)
+[hive] resource: gpu-cpu-test
+[hive] gpus: 0
+[hive] cpus: 1
+[hive] workdir: /home/user
+[hive] timeout_sec: 21600
+[hive] started_at: 2026-11-09 15:16:59 EST
+[hive] command: apptainer exec --containall --cleanenv --env HF_HOME=/home/user/shared/hf_cache --env TRANSFORMERS_CACHE=/home/user/shared/hf_cache --env HF_DATASETS_CACHE=/home/user/shared/hf_cache/datasets --env TORCH_HOME=/home/user/shared/hf_cache/torch --bind /home/user/scratch/AgentWorkspaces/workspaces/2505.00222:/home/user --overlay /home/user/scratch/AgentWorkspaces/workspaces/2505.00222/environment/overlay.img:ro --bind /home/user/scratch/AgentWorkspaces/shared/datasets:/home/user/shared/datasets:ro --bind /home/user/scratch/AgentWorkspaces/shared/models:/home/user/shared/models:ro --bind /home/user/scratch/AgentWorkspaces/shared/hf_cache:/home/user/shared/hf_cache /home/user/scratch/AgentWorkspaces/workspaces/2505.00222/environment/container.sif bash -c 'cd /home/user && bash /home/user/scripts/run.sh'
+{
+  "diagnostic_only": true,
+  "dataset": "2048 independent Dirichlet(.2) convex combinations and uniform AoAs over [-30,30]; labels computed by the original public oracle",
+  "seed": 20261109,
+  "positive_lifting_samples": 1025,
+  "results": {
+    "saved_reference": {
+      "common_coefficients_mse": 0.002540678098476656,
+      "cd_rmse": 0.012780635273653782,
+      "cl_rmse": 0.0701285359818323,
+      "positive_angle_eta_mape_percent": 22.147243447547602,
+      "best_epoch": 140,
+      "training_checkpoint_best_val_mse": 0.004067016299813986,
+      "trained_epochs": 200
+    },
+    "reference_seed0": {
+      "common_coefficients_mse": 0.0039133464808863636,
+      "cd_rmse": 0.011540505737354573,
+      "cl_rmse": 0.08771265409904555,
+      "positive_angle_eta_mape_percent": 25.9093682551334,
+      "best_epoch": 121,
+      "training_checkpoint_best_val_mse": 0.003451300784945488,
+      "trained_epochs": 200
+    },
+    "reference_seed1": {
+      "common_coefficients_mse": 0.0029704009942302084,
+      "cd_rmse": 0.009157202714723525,
+      "cl_rmse": 0.07653069728482732,
+      "positive_angle_eta_mape_percent": 20.913177603511958,
+      "best_epoch": 72,
+      "training_checkpoint_best_val_mse": 0.0027691484428942204,
+      "trained_epochs": 200
+    },
+    "reference_seed2": {
+      "common_coefficients_mse": 0.0031245018732917397,
+      "cd_rmse": 0.012866234349547798,
+      "cl_rmse": 0.07799656248993282,
+      "positive_angle_eta_mape_percent": 26.007998915300195,
+      "best_epoch": 90,
+      "training_checkpoint_best_val_mse": 0.0027181345503777266,
+      "trained_epochs": 200
+    },
+    "better_seed0": {
+      "common_coefficients_mse": 0.002630060136632836,
+      "cd_rmse": 0.01079238209756241,
+      "cl_rmse": 0.07171920776142111,
+      "positive_angle_eta_mape_percent": 22.506088384333736,
+      "best_epoch": 519,
+      "training_checkpoint_best_val_mse": 0.00017550982011016458,
+      "trained_epochs": 600
+    },
+    "better_seed1": {
+      "common_coefficients_mse": 0.0021432957572553903,
+      "cd_rmse": 0.011282045476033406,
+      "cl_rmse": 0.06449268923209432,
+      "positive_angle_eta_mape_percent": 19.67880907126701,
+      "best_epoch": 589,
+      "training_checkpoint_best_val_mse": 0.00015506750787608325,
+      "trained_epochs": 600
+    },
+    "better_seed2": {
+      "common_coefficients_mse": 0.002766928143849965,
+      "cd_rmse": 0.011405083778433907,
+      "cl_rmse": 0.07351040981865653,
+      "positive_angle_eta_mape_percent": 21.985857572803358,
+      "best_epoch": 596,
+      "training_checkpoint_best_val_mse": 0.00019573971803765744,
+      "trained_epochs": 600
+    }
+  }
+}

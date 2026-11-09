@@ -206,7 +206,7 @@
         ]
       },
       "better_seed1": {
-        "rank_delta": -4.2154536964313464e-05,
+        "rank_delta": -4.215453696431347e-05,
         "rank_delta_experiment_mean": -2.066839395551129e-05,
         "terms": [
           3.891230017780984e-07,
@@ -228,7 +228,7 @@
       },
       "better_seed2": {
         "rank_delta": -0.011685212556283131,
-        "rank_delta_experiment_mean": -0.005842271921143661,
+        "rank_delta_experiment_mean": -0.00584227192114366,
         "terms": [
           3.1974612353053946e-07,
           3.197461233182843e-07,
@@ -269,7 +269,7 @@
         ]
       },
       "reference_seed0": {
-        "rank_delta": -0.7453952811850427,
+        "rank_delta": -0.745395281185043,
         "rank_delta_experiment_mean": -0.6086490082872998,
         "terms": [
           -0.22384596474145782,
@@ -290,7 +290,7 @@
         ]
       },
       "reference_seed1": {
-        "rank_delta": -0.19333533747203818,
+        "rank_delta": -0.1933353374720382,
         "rank_delta_experiment_mean": -0.15908897119085158,
         "terms": [
           -0.059453447230577015,
@@ -311,7 +311,7 @@
         ]
       },
       "reference_seed2": {
-        "rank_delta": -0.17823525531415274,
+        "rank_delta": -0.17823525531415277,
         "rank_delta_experiment_mean": -0.14962491307628067,
         "terms": [
           -0.05745204919100105,
@@ -353,8 +353,8 @@
         ]
       },
       "shortcut_box_domain": {
-        "rank_delta": 0.8185058736399207,
-        "rank_delta_experiment_mean": 0.598219042912724,
+        "rank_delta": 0.8185058736399208,
+        "rank_delta_experiment_mean": 0.5982190429127241,
         "terms": [
           0.17965794128778131,
           0.17965794128778106,
@@ -374,7 +374,7 @@
         ]
       },
       "shortcut_bruteforce_bases": {
-        "rank_delta": -0.0006855743923427797,
+        "rank_delta": -0.0006855743923427796,
         "rank_delta_experiment_mean": -0.0003423783216447444,
         "terms": [
           3.891230017780984e-07,
@@ -395,7 +395,7 @@
         ]
       },
       "shortcut_bruteforce_morphs": {
-        "rank_delta": -0.0006855743923427797,
+        "rank_delta": -0.0006855743923427796,
         "rank_delta_experiment_mean": -0.0003423783216447444,
         "terms": [
           3.891230017780984e-07,
@@ -480,7 +480,7 @@
       },
       "shortcut_impossible_finite": {
         "rank_delta": 8121.496554559538,
-        "rank_delta_experiment_mean": 6006.545577383416,
+        "rank_delta_experiment_mean": 6006.5455773834165,
         "terms": [
           1945.686403052306,
           1945.686403052306,
@@ -563,8 +563,8 @@
         ]
       },
       "weaker_average": {
-        "rank_delta": -5.160643890739793,
-        "rank_delta_experiment_mean": -3.8232825068809024,
+        "rank_delta": -5.1606438907397925,
+        "rank_delta_experiment_mean": -3.823282506880902,
         "terms": [
           -1.130235762839239,
           -1.1302357628392392,
@@ -584,8 +584,8 @@
         ]
       },
       "weaker_one_epoch": {
-        "rank_delta": -1.664763271905421,
-        "rank_delta_experiment_mean": -1.3596558588956908,
+        "rank_delta": -1.6647632719054206,
+        "rank_delta_experiment_mean": -1.3596558588956906,
         "terms": [
           -0.4962731443715258,
           -0.496273144371526,
@@ -733,7 +733,7 @@
         ]
       },
       "reference_seed1": {
-        "rank_delta": -0.0019857870750595577,
+        "rank_delta": -0.0019857870750595572,
         "rank_delta_experiment_mean": -0.00165634162351411,
         "terms": [
           -1.0349910400077584e-09,
@@ -755,7 +755,7 @@
       },
       "reference_seed2": {
         "rank_delta": -0.0019164143803406287,
-        "rank_delta_experiment_mean": -0.001637958526242944,
+        "rank_delta_experiment_mean": -0.0016379585262429439,
         "terms": [
           -1.0001498468568105e-09,
           -8.875780830102158e-05,
@@ -797,7 +797,7 @@
       },
       "shortcut_box_domain": {
         "rank_delta": 0.008710375898457775,
-        "rank_delta_experiment_mean": 0.006430683730359731,
+        "rank_delta_experiment_mean": 0.006430683730359732,
         "terms": [
           3.127562288826577e-09,
           0.0002775539834891517,
@@ -859,7 +859,7 @@
         ]
       },
       "shortcut_constant_zero": {
-        "rank_delta": -4.331660402406801,
+        "rank_delta": -4.3316604024068,
         "rank_delta_experiment_mean": -3.2005151359137693,
         "terms": [
           -3.8757549173962396e-08,
@@ -880,7 +880,7 @@
         ]
       },
       "shortcut_fixed_oracle": {
-        "rank_delta": 0.16453663905856372,
+        "rank_delta": 0.16453663905856375,
         "rank_delta_experiment_mean": 0.12158253617491196,
         "terms": [
           3.0722932372618e-07,
@@ -902,7 +902,7 @@
       },
       "shortcut_forged_scores": {
         "rank_delta": -0.6711813852361252,
-        "rank_delta_experiment_mean": -0.4960690297485612,
+        "rank_delta_experiment_mean": -0.49606902974856115,
         "terms": [
           -3.529768052229507e-08,
           -0.003132475369680381,
@@ -922,8 +922,8 @@
         ]
       },
       "shortcut_impossible_finite": {
-        "rank_delta": 0.08194422379038757,
-        "rank_delta_experiment_mean": 0.060571680791689064,
+        "rank_delta": 0.08194422379038811,
+        "rank_delta_experiment_mean": 0.060571680791689335,
         "terms": [
           3.387134115224821e-05,
           3.0058955808850496,
@@ -944,7 +944,7 @@
       },
       "shortcut_output_fields": {
         "rank_delta": -0.6711813852361252,
-        "rank_delta_experiment_mean": -0.4960690297485612,
+        "rank_delta_experiment_mean": -0.49606902974856115,
         "terms": [
           -3.529768052229507e-08,
           -0.003132475369680381,
@@ -986,7 +986,7 @@
       },
       "shortcut_task_failure_tradeoff": {
         "rank_delta": -4.2708909014794605,
-        "rank_delta_experiment_mean": -3.15561826582566,
+        "rank_delta_experiment_mean": -3.1556182658256606,
         "terms": [
           -3.8757549173962396e-08,
           -0.003439519718581199,
@@ -1027,8 +1027,8 @@
         ]
       },
       "weaker_one_epoch": {
-        "rank_delta": -0.02096562602579173,
-        "rank_delta_experiment_mean": -0.017302466579682017,
+        "rank_delta": -0.020965626025791727,
+        "rank_delta_experiment_mean": -0.01730246657968202,
         "terms": [
           -8.63933517309726e-09,
           -0.0007666935685206592,
@@ -1049,7 +1049,7 @@
       },
       "weaker_torpedo": {
         "rank_delta": -0.6711813852361252,
-        "rank_delta_experiment_mean": -0.4960690297485612,
+        "rank_delta_experiment_mean": -0.49606902974856115,
         "terms": [
           -3.529768052229507e-08,
           -0.003132475369680381,
@@ -1073,18 +1073,18 @@
   "seed_rank_spread": {
     "honest": {
       "seeds": [
-        -0.7453952811850427,
-        -0.19333533747203818,
-        -0.17823525531415274
+        -0.745395281185043,
+        -0.1933353374720382,
+        -0.17823525531415277
       ],
-      "min": -0.7453952811850427,
-      "max": -0.17823525531415274,
-      "range": 0.56716002587089
+      "min": -0.745395281185043,
+      "max": -0.17823525531415277,
+      "range": 0.5671600258708902
     },
     "all_finite_audit": {
       "seeds": [
         -0.008249757493611927,
-        -0.0019857870750595577,
+        -0.0019857870750595572,
         -0.0019164143803406287
       ],
       "min": -0.008249757493611927,

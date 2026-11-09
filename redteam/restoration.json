@@ -1,0 +1,40 @@
+{
+  "start_commit": "72db3f2cbe46bbbc13bf5b1f2a57f598a5bdbcd2",
+  "restored_with_git": [
+    "scripts/run.sh"
+  ],
+  "removed_post_start_bookkeeping_git_entries": [
+    "jobs/0844252f-798/meta.json",
+    "jobs/0844252f-798/result.json",
+    "jobs/0844252f-798/stderr.log",
+    "jobs/0844252f-798/stdout.log",
+    "jobs/7dacf490-99e/meta.json",
+    "jobs/7dacf490-99e/result.json",
+    "jobs/7dacf490-99e/stderr.log",
+    "jobs/7dacf490-99e/stdout.log",
+    "trajectory/session.json"
+  ],
+  "gym_tracked_paths_match_start_commit": true,
+  "restored_file_sha256": {
+    "checkpoints/.gitkeep": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "checkpoints/fluid_surrogate.pt": "40b0440c3b4442fe9e78a225efe54f90d969ea97861d4ad6007b2eacc9eb9722",
+    "data/glider_proxy.py": "8615b30ec006b4352db5ca273c0fbbffeb6dabf910e5315a921b9222b4d269fc",
+    "outputs/proposed/all_results.json": "82bfa763787b14d2f564e4ac0ea74cf2e13d028a951d1a9e5108152307b4b3d2",
+    "outputs/proposed/optimization_results.json": "c4f566fb3e534b218a9fe70dbed9e378b3df14e2bde2665e25601bff4904692f",
+    "outputs/proposed/surrogate_training.json": "ce62958660c32ecd4d4d8bd8330888e09cd5967adb439b630d6452c22dd8a7f8",
+    "outputs/torpedo/optimization_results.json": "9d33dcedbeb96c1aa7d1534fc20cb7b23e040672bd62702afdce1db868e11901",
+    "scoring/scores.json": "0aa5514d5405fb4c5f249baf3ff47f117f82026b36e7c9f0b45df505db8addee",
+    "scoring/scores_test.json": "aec59e6048aa782f96534102cb6045cb2a9af38392efc3bf8c0daed78b23ee57",
+    "scoring/scores_train.json": "f2e2b0f97287e2c7ff1d675e8072507ff21abe585527733e0cddd9a89478c13e"
+  },
+  "preexisting_status_preserved": [
+    " M README.md",
+    " M manifest.json",
+    " D trajectory/turn_0001_raw.jsonl",
+    " D trajectory/turn_0002_raw.jsonl",
+    " D trajectory/turn_0003_raw.jsonl",
+    " D trajectory/turn_0004_raw.jsonl",
+    " D trajectory/turn_0005_raw.jsonl"
+  ],
+  "note": "Pre-existing README.md/manifest.json device masks and trajectory deletions were not changed. trajectory/ is a system-owned read-only mount. Root action.yaml is the required completion control file."
+}

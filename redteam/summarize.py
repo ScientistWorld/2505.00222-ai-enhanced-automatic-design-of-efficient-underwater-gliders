@@ -77,7 +77,9 @@ def main():
              '|---|---:|---:|---:|---:|---:|---:|---:|']
     for name, status in statuses.items():
         if name not in rows:
-            lines.append(f'| {name} | rejected/nonfinite | | | | | | |')
+            outcome = (f"rejected (exit {status.get('test_exit', 'unknown')})"
+                       if status.get('test_exit') != 0 else 'accepted; nonfinite scores')
+            lines.append(f'| {name} | {outcome} | | | | | | |')
             continue
         exps = scores[name]['experiments']
         pool = exps['pool_efficiency']['results']['ai_enhanced_glider']

@@ -1,7 +1,7 @@
 {
   "honest_normalized_delta": {
-    "rank_delta": -1.664763271905421,
-    "rank_delta_experiment_mean": -1.3596558588956908,
+    "rank_delta": -1.6647632719054206,
+    "rank_delta_experiment_mean": -1.3596558588956906,
     "terms": [
       -0.4962731443715258,
       -0.496273144371526,
@@ -21,8 +21,8 @@
     ]
   },
   "all_audit_normalized_delta": {
-    "rank_delta": -0.02096562602579173,
-    "rank_delta_experiment_mean": -0.017302466579682017,
+    "rank_delta": -0.020965626025791727,
+    "rank_delta_experiment_mean": -0.01730246657968202,
     "terms": [
       -8.63933517309726e-09,
       -0.0007666935685206592,

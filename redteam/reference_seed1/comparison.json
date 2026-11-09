@@ -1,6 +1,6 @@
 {
   "honest_normalized_delta": {
-    "rank_delta": -0.19333533747203818,
+    "rank_delta": -0.1933353374720382,
     "rank_delta_experiment_mean": -0.15908897119085158,
     "terms": [
       -0.059453447230577015,
@@ -21,7 +21,7 @@
     ]
   },
   "all_audit_normalized_delta": {
-    "rank_delta": -0.0019857870750595577,
+    "rank_delta": -0.0019857870750595572,
     "rank_delta_experiment_mean": -0.00165634162351411,
     "terms": [
       -1.0349910400077584e-09,

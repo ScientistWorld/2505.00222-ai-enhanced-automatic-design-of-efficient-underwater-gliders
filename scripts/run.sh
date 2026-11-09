@@ -5,4 +5,8 @@ set -e
 
 cd /home/user
 
-bash redteam/run_quality_check.sh
+bash scripts/evaluate.sh
+python validate.py --compare
+bash scripts/evaluate_train.sh
+bash scripts/evaluate_test.sh
+python validate.py --compare
