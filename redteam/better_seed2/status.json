@@ -1,0 +1,10 @@
+{
+  "name": "better_seed2",
+  "test_command": "bash scripts/evaluate_test.sh",
+  "no_arguments": true,
+  "fresh_evaluator_process": true,
+  "train_exit": 0,
+  "test_exit": 0,
+  "elapsed_seconds": 77.44330555805936,
+  "protected_evaluators_unchanged": true
+}

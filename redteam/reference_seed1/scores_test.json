@@ -1,0 +1,54 @@
+{
+  "_slice": "test",
+  "experiments": {
+    "pool_efficiency": {
+      "results": {
+        "torpedo_baseline": {
+          "lift_to_drag": 0.7754043180181328,
+          "energy_per_distance_relative": 1.3080275178270715,
+          "trajectory_angle_deg": 52.35602611288126,
+          "shape_domain_violation": 0.0,
+          "efficiency_gain_over_torpedo": 1.0
+        },
+        "ai_enhanced_glider": {
+          "lift_to_drag": 8.454145925355464,
+          "energy_per_distance_relative": 0.12023329407377381,
+          "trajectory_angle_deg": 6.854382494663338,
+          "shape_domain_violation": 0.0,
+          "efficiency_gain_over_torpedo": 10.902887343938886
+        }
+      }
+    },
+    "angle_sweep_efficiency": {
+      "results": {
+        "ai_enhanced_9deg": {
+          "lift_to_drag": 9.530281116213507,
+          "energy_per_distance_relative": 0.10492869914390435,
+          "trajectory_angle_deg": 5.990052229665937,
+          "shape_domain_violation": 0.0,
+          "efficiency_gain_over_torpedo": 10.988258319834667
+        },
+        "ai_enhanced_30deg": {
+          "lift_to_drag": 7.576780454738093,
+          "energy_per_distance_relative": 0.13198217976273235,
+          "trajectory_angle_deg": 7.518566784142821,
+          "shape_domain_violation": 0.0,
+          "efficiency_gain_over_torpedo": 11.085370668425897
+        }
+      }
+    }
+  },
+  "diagnostics": {
+    "surrogate_validation": {
+      "results": {
+        "ai_enhanced_glider": {
+          "lift_to_drag": 6.13341402608237,
+          "surrogate_lift_to_drag": 6.045377301483555,
+          "surrogate_eta_abs_pct_error": 1.4353624950873827,
+          "raw_lift_to_drag": 6.13341402608237,
+          "raw_surrogate_lift_to_drag": 6.045377301483555
+        }
+      }
+    }
+  }
+}

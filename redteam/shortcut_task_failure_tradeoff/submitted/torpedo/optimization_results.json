@@ -1,0 +1,21 @@
+{
+  "name": "torpedo",
+  "shape": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "aoa_deg": 15.0,
+  "oracle_cd": 0.1103590652346611,
+  "oracle_cl": 0.10839324444532394,
+  "oracle_lift_to_drag": 0.9821870474785451,
+  "oracle_energy_per_distance_relative": 1.018136008377614,
+  "oracle_trajectory_angle_deg": 45.51487549013377,
+  "selection": "best_angle_for_fixed_torpedo",
+  "searched_eta": 0.9821870474785451
+}

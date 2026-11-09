@@ -1,0 +1,20 @@
+[
+  {
+    "max_span_face_unique": true,
+    "on_max_span_face": true,
+    "differs_from_forced_vertex": true,
+    "coordinate_envelope_violation": 0.0
+  },
+  {
+    "max_span_face_unique": true,
+    "on_max_span_face": true,
+    "differs_from_forced_vertex": true,
+    "coordinate_envelope_violation": 0.0
+  },
+  {
+    "max_span_face_unique": true,
+    "on_max_span_face": true,
+    "differs_from_forced_vertex": true,
+    "coordinate_envelope_violation": 0.0
+  }
+]

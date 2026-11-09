@@ -1,0 +1,40 @@
+{
+  "experiments": {
+    "pool_efficiency": {
+      "results": {
+        "torpedo_baseline": {
+          "lift_to_drag": 1e+60,
+          "efficiency_gain_over_torpedo": 1e+60,
+          "energy_per_distance_relative": 0.0,
+          "trajectory_angle_deg": 0.0,
+          "shape_domain_violation": 0.0
+        },
+        "ai_enhanced_glider": {
+          "lift_to_drag": 1e+60,
+          "efficiency_gain_over_torpedo": 1e+60,
+          "energy_per_distance_relative": 0.0,
+          "trajectory_angle_deg": 0.0,
+          "shape_domain_violation": 0.0
+        }
+      }
+    },
+    "angle_sweep_efficiency": {
+      "results": {
+        "ai_enhanced_9deg": {
+          "lift_to_drag": 1e+60,
+          "efficiency_gain_over_torpedo": 1e+60,
+          "energy_per_distance_relative": 0.0,
+          "trajectory_angle_deg": 0.0,
+          "shape_domain_violation": 0.0
+        },
+        "ai_enhanced_30deg": {
+          "lift_to_drag": 1e+60,
+          "efficiency_gain_over_torpedo": 1e+60,
+          "energy_per_distance_relative": 0.0,
+          "trajectory_angle_deg": 0.0,
+          "shape_domain_violation": 0.0
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "name": "weaker_one_epoch",
+  "test_command": "bash scripts/evaluate_test.sh",
+  "no_arguments": true,
+  "fresh_evaluator_process": true,
+  "train_exit": 0,
+  "test_exit": 0,
+  "elapsed_seconds": 14.214120379881933,
+  "protected_evaluators_unchanged": true
+}

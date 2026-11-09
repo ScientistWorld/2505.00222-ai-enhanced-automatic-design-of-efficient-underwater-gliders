@@ -1,0 +1,10 @@
+{
+  "name": "shortcut_baseline_move",
+  "test_command": "bash scripts/evaluate_test.sh",
+  "no_arguments": true,
+  "fresh_evaluator_process": true,
+  "train_exit": 0,
+  "test_exit": 0,
+  "elapsed_seconds": 1.1581636320333928,
+  "protected_evaluators_unchanged": true
+}

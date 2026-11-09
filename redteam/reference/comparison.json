@@ -1,0 +1,63 @@
+{
+  "honest_normalized_delta": {
+    "rank_delta": 0.0,
+    "rank_delta_experiment_mean": 0.0,
+    "terms": [
+      0.0,
+      0.0,
+      -0.0,
+      -0.0,
+      0.0,
+      0.0,
+      0.0,
+      -0.0,
+      -0.0,
+      0.0,
+      0.0,
+      0.0,
+      -0.0,
+      -0.0,
+      0.0
+    ]
+  },
+  "all_audit_normalized_delta": {
+    "rank_delta": 0.0,
+    "rank_delta_experiment_mean": 0.0,
+    "terms": [
+      0.0,
+      0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      0.0,
+      0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      0.0,
+      0.0,
+      -0.0,
+      -0.0,
+      -0.0
+    ]
+  },
+  "directional_deltas": [
+    0.0,
+    0.0,
+    -0.0,
+    -0.0,
+    -0.0,
+    0.0,
+    0.0,
+    -0.0,
+    -0.0,
+    -0.0,
+    0.0,
+    0.0,
+    -0.0,
+    -0.0,
+    -0.0
+  ],
+  "pareto_no_worse": true,
+  "pareto_no_better": true
+}

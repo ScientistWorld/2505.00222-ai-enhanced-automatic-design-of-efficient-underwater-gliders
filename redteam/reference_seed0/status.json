@@ -1,0 +1,10 @@
+{
+  "name": "reference_seed0",
+  "test_command": "bash scripts/evaluate_test.sh",
+  "no_arguments": true,
+  "fresh_evaluator_process": true,
+  "train_exit": 0,
+  "test_exit": 0,
+  "elapsed_seconds": 43.75388098391704,
+  "protected_evaluators_unchanged": true
+}
