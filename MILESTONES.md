@@ -36,3 +36,8 @@
 
 ## Current Limitation
 - Higher milestones beyond `core_claim_plus` are limited by unreleased paper assets: real deformation-cage fits, meshes, OpenFOAM cases/labels, optimized CAD files, wind-tunnel data, or pool telemetry.
+
+### [2026-11-10] - core_claim_plus (hardening)
+- Rebuilt the benchmark around hidden per-instance ground truth and the paper's dataset scale (job `ddd3196e-324`, round 1; job `b7ce38e7-e9b`, round 2). Details in `HARDENING.md`.
+- The co-designed glider reaches 14.7x the torpedo's best lift-to-drag on held-out instances (paper: 8.3x in its pool test). The 9°/30° designs also beat the torpedo by a wide margin. The scored surrogate error (24%) does not reproduce the paper's 4.5%, so the milestone stays `core_claim_plus`.
+

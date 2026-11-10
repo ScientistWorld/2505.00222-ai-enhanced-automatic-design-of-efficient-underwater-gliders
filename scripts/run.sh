@@ -1,24 +1,15 @@
 #!/bin/bash
-# Job script submitted via action.yaml.
+# Job script submitted via action.yaml: reproduce the reference end to end
+# (paper's method on every published instance, then the development and
+# held-out evaluations) and validate the workspace.
 #
-# Hardening job: honest variants, baselines and shortcuts through the
-# unmodified no-argument hidden test (hardening/harness.py, resumable), the
-# rank summary, then the end-to-end reference reproduction that produces the
-# committed score files, and validation.
+# The hardening study that produced HARDENING.md is `python hardening/harness.py all`
+# followed by `python hardening/summarize.py`.
 
 set -e
 
 cd /home/user
 export PYTHONPATH=/home/user
 
-python hardening/harness.py all
-python hardening/summarize.py
-
 bash scripts/reproduce.sh
-python - <<'PY'
-import json
-a = json.load(open("outputs/proposed/optimization_results.json"))["instances"]
-b = json.load(open("hardening/cases/reference/artifact/optimization_results.json"))["instances"]
-print("reproduce.sh artifact identical to the harness reference:", a == b)
-PY
-python validate.py || echo "VALIDATE FAILED"
+python validate.py

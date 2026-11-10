@@ -1,3 +1,5 @@
+> Superseded (iteration 11): this report verified the earlier public-oracle gym. See `HARDENING.md` for the current gym and its verification.
+
 # Verification Report
 
 ## Initial Assessment

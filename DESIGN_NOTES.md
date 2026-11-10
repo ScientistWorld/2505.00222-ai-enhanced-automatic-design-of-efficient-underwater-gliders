@@ -1,3 +1,5 @@
+> Superseded (iteration 11): the train/test design described below was replaced. See `HARDENING.md` for the current design: hidden per-instance ground truth in `eval/train` and `eval/test`, evaluator-fixed baselines, and validity gates.
+
 # Train/Test Evaluation Design Notes
 
 ## Checked

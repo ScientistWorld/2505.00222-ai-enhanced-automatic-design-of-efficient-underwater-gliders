@@ -98,3 +98,12 @@ The train/test slice evaluators also passed and wrote method-matched scores with
 Post-validation fix: `surrogate_validation` was moved out of `experiments` and into top-level `diagnostics` in the standard and split score artifacts. This prevents the validator from treating the diagnostic surrogate error as a paper-consistency primary metric while preserving the audit value for methods that report an internal hydrodynamic prediction.
 
 Final verification job `b01de9c2-b2b` completed successfully with exit code 0 on 0 GPUs. It reran `scripts/evaluate.sh`, `python validate.py --compare`, `scripts/evaluate_train.sh`, `scripts/evaluate_test.sh`, and a final `python validate.py --compare` inside the managed container. All validation checks passed, including method/eval separation, no committed `shared/` references, train/test independence, method-key consistency across train/test scores, and primary-metric discrimination.
+
+## Iteration 11 (hardening, 2026-11-09/10)
+
+The gym was rebuilt so the hidden test rewards better research; see `HARDENING.md`.
+- Ground truth is hidden in `eval/train` (2 development instances) and `eval/test` (6 held-out instances); methods get the paper-size labelled dataset per instance (with ~5% simulation error) and nothing else.
+- The method now runs the paper's settings per instance, with 10 morphs per pair and repeated CMA-ES per angle; selection uses surrogate predictions only; log-c_d target preprocessing.
+- Scoring: evaluator-fixed torpedo baseline, convex-weight hull gate, failed runs at worst values, co-design scored at the submitted angle, scored surrogate validation (weight 0.15).
+- Reference (seed 0), hidden test: pool gain 14.68, 9° gain 19.42, 30° gain 12.54, prediction error 24.2%. Better variants beat the same-seed reference in 8/8 paired comparisons; every shortcut fails.
+
