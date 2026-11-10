@@ -97,7 +97,7 @@ The reference sits at the bound of no scored metric:
 - Gain, eta, energy and glide angle are unbounded in the useful direction. The true optimum inside the hull is about 1.15–1.45× the best labelled hull per instance and angle (local search on the development instances).
 - Prediction error is 24.2% against a bound of 0.
 
-The old `shape_domain_violation` metric was stuck at 0 for every valid method. It is now a gate, not a score. Its paper value is kept under `_paper_reported`.
+The old `shape_domain_violation` metric was stuck at 0 for every valid method. It is now a gate, not a score. Its old reference value is kept under `_paper_reported`.
 
 I added one scored experiment from where the paper's method falls short: **`surrogate_validation`**. Here the paper-setting surrogate is far from its reported 4.5%, and also worse than a nearest-neighbour predictor. The reference, all baselines and all variants were run on it (table above). Every better variant scores above the reference. No simple variant reaches a bound.
 
@@ -109,7 +109,7 @@ I added one scored experiment from where the paper's method falls short: **`surr
 | `angle_sweep_efficiency` (two rows) | 0.35 | 0.35 | Unchanged. |
 | `surrogate_validation` | 0.01 (coefficients 0) | 0.15 | One of the paper's four stated contributions, with a reported number (Table I). It is the only scored quantity that measures the predictor directly, and it is no longer self-reported. |
 
-Metric coefficients are unchanged. `scoring/reference.json` keeps the paper's reported numbers. Values that no longer map to a scored metric are kept under `_paper_reported`, with a note on scale.
+Metric coefficients are unchanged. The paper's reported numbers are kept unchanged in `scoring/reference.json`, under each experiment's `_paper_reported`. They are physical pool and wind-tunnel values, not on this benchmark's simulation scale. `results` now holds the gym's own reference: the seed-0 hidden-test scores, identical to `scoring/scores_test.json`. Without this, `validate.py --post-design` flagged the scale gap (gain 14.7 vs 8.3; prediction error 24% vs 4.5%). The setup was not changed to close it.
 
 ## Departures from the paper that remain
 

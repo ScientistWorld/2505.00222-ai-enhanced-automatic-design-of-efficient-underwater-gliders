@@ -50,4 +50,4 @@ All metrics are means over the instances of the slice.
 
 ## Paper numbers
 
-`scoring/reference.json` keeps the paper's reported results: pool-test lift-to-drag 2.5 (two-wing, 9°) and 2.4 (four-wing, 30°) versus 0.3 for a torpedo design from the literature, and 4.5% lift-to-drag error in wind-tunnel validation. Benchmark values are on the simulator's scale, not the physical pool scale, so compare against `scoring/scores_train.json` / `scores_test.json` rather than the paper's absolute numbers.
+`scoring/reference.json` lists this benchmark's reference scores (the paper's method on the held-out instances) under `results`, and keeps the paper's reported results unchanged under each experiment's `_paper_reported`: pool-test lift-to-drag 2.5 (two-wing, 9°) and 2.4 (four-wing, 30°) versus 0.3 for a torpedo design from the literature, and 4.5% lift-to-drag error in wind-tunnel validation. Benchmark values are on the simulator's scale, not the physical pool scale, so compare against `scoring/scores_train.json` / `scores_test.json` rather than the paper's absolute numbers.
