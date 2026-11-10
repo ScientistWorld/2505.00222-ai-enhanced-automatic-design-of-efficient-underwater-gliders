@@ -5,38 +5,38 @@
       "results": {
         "torpedo_baseline": {
           "efficiency_gain_over_torpedo": 1.0,
-          "lift_to_drag": 0.9974794499386475,
-          "energy_per_distance_relative": 1.006750474885226,
-          "trajectory_angle_deg": 45.13040766693318
+          "lift_to_drag": 1.000631193589652,
+          "energy_per_distance_relative": 1.0029758624172789,
+          "trajectory_angle_deg": 45.03211989387154
         },
         "ai_enhanced_glider": {
-          "efficiency_gain_over_torpedo": 16.1906801072798,
-          "lift_to_drag": 15.628197339659245,
-          "energy_per_distance_relative": 0.07601717241658282,
-          "trajectory_angle_deg": 4.3441345748536175
+          "efficiency_gain_over_torpedo": 14.678847020146554,
+          "lift_to_drag": 14.33090050084092,
+          "energy_per_distance_relative": 0.08606758906158403,
+          "trajectory_angle_deg": 4.913011727356135
         }
       }
     },
     "angle_sweep_efficiency": {
       "results": {
         "ai_enhanced_9deg": {
-          "efficiency_gain_over_torpedo": 21.1044144575872,
-          "lift_to_drag": 14.64164239329812,
-          "energy_per_distance_relative": 0.08649435029315976,
-          "trajectory_angle_deg": 4.936047143715998
+          "efficiency_gain_over_torpedo": 19.42378790112719,
+          "lift_to_drag": 13.591735279290722,
+          "energy_per_distance_relative": 0.0904017431935874,
+          "trajectory_angle_deg": 5.159864905955234
         },
         "ai_enhanced_30deg": {
-          "efficiency_gain_over_torpedo": 12.211140677242206,
-          "lift_to_drag": 6.748646712189029,
-          "energy_per_distance_relative": 0.15536811956320434,
-          "trajectory_angle_deg": 8.823531173724177
+          "efficiency_gain_over_torpedo": 12.5361232410008,
+          "lift_to_drag": 6.870751742293291,
+          "energy_per_distance_relative": 0.151853504353734,
+          "trajectory_angle_deg": 8.626931180090612
         }
       }
     },
     "surrogate_validation": {
       "results": {
         "ai_enhanced_glider": {
-          "surrogate_eta_abs_pct_error": 25.791629091340386
+          "surrogate_eta_abs_pct_error": 24.199906363940116
         }
       }
     }
@@ -72,37 +72,63 @@
         "torpedo_best_aoa_deg": 17.0,
         "torpedo_eta_9deg": 0.6799322089642071,
         "torpedo_eta_30deg": 0.5849573290375679
+      },
+      "heldout_4": {
+        "torpedo_best_eta": 0.958390516322534,
+        "torpedo_best_aoa_deg": 14.75,
+        "torpedo_eta_9deg": 0.704673443400698,
+        "torpedo_eta_30deg": 0.523374118118594
+      },
+      "heldout_5": {
+        "torpedo_best_eta": 1.0554788454607886,
+        "torpedo_best_aoa_deg": 15.75,
+        "torpedo_eta_9deg": 0.737014999875781,
+        "torpedo_eta_30deg": 0.5459731399616196
       }
     },
     "per_instance": {
       "ai_enhanced_glider": {
         "heldout_0": {
-          "pool_eta": 9.024252091020395,
-          "pool_aoa_deg": 15.0,
-          "eta_9deg": 7.125895294911888,
-          "eta_30deg": 5.240536814404395,
-          "query_eta_abs_pct_error": 29.38198185341501
+          "pool_eta": 7.498751713538725,
+          "pool_aoa_deg": 18.0,
+          "eta_9deg": 7.124525222597573,
+          "eta_30deg": 5.168180472586515,
+          "query_eta_abs_pct_error": 23.335865969005724
         },
         "heldout_1": {
-          "pool_eta": 28.12180613919073,
-          "pool_aoa_deg": 12.0,
-          "eta_9deg": 26.390969038167963,
-          "eta_30deg": 9.405810713297814,
-          "query_eta_abs_pct_error": 27.885984254716803
+          "pool_eta": 29.223710254976982,
+          "pool_aoa_deg": 9.0,
+          "eta_9deg": 29.223710254976982,
+          "eta_30deg": 9.278276575913576,
+          "query_eta_abs_pct_error": 24.207039732948992
         },
         "heldout_2": {
-          "pool_eta": 12.783023188270366,
-          "pool_aoa_deg": 15.0,
-          "eta_9deg": 15.271937318265216,
-          "eta_30deg": 5.956685380431905,
-          "query_eta_abs_pct_error": 21.79522576079164
+          "pool_eta": 15.563377613352314,
+          "pool_aoa_deg": 12.0,
+          "eta_9deg": 14.740419211898093,
+          "eta_30deg": 5.710464863213669,
+          "query_eta_abs_pct_error": 23.588833962487506
         },
         "heldout_3": {
-          "pool_eta": 12.583707940155495,
-          "pool_aoa_deg": 18.0,
-          "eta_9deg": 9.77776792184741,
-          "eta_30deg": 6.391553940621998,
-          "query_eta_abs_pct_error": 24.10332449643809
+          "pool_eta": 11.869003908176802,
+          "pool_aoa_deg": 12.0,
+          "eta_9deg": 10.57067319315794,
+          "eta_30deg": 7.641233459085154,
+          "query_eta_abs_pct_error": 23.036274999320156
+        },
+        "heldout_4": {
+          "pool_eta": 7.72663113214736,
+          "pool_aoa_deg": 21.0,
+          "eta_9deg": 8.507456192799049,
+          "eta_30deg": 5.774325844213933,
+          "query_eta_abs_pct_error": 27.33602170948976
+        },
+        "heldout_5": {
+          "pool_eta": 14.103928382853342,
+          "pool_aoa_deg": 15.0,
+          "eta_9deg": 11.38362760031469,
+          "eta_30deg": 7.652029238746904,
+          "query_eta_abs_pct_error": 23.69540181038857
         }
       }
     }

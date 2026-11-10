@@ -5,4 +5,4 @@ action: submit
 gpus: 0
 test: false
 milestone: core_claim_plus
-notes: "Hardening study: reference (5 seeds), better variants (ensemble, tuned), weaker baselines and 18 shortcuts through the no-argument hidden test; end-to-end reference reproduction + validate; difficulty calibration."
+notes: "Hardening round 2: reference (5 seeds), better variants (cosine, tuned, ensemble), weaker controls and 18 shortcuts through the no-argument hidden test on noisy-label instances (6 held-out); end-to-end reproduce + validate."

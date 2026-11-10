@@ -10,33 +10,33 @@
           "trajectory_angle_deg": 42.072736500929125
         },
         "ai_enhanced_glider": {
-          "efficiency_gain_over_torpedo": 14.989507505161265,
-          "lift_to_drag": 16.877712881427595,
-          "energy_per_distance_relative": 0.07600998668081177,
-          "trajectory_angle_deg": 4.341215575692763
+          "efficiency_gain_over_torpedo": 17.886586310724713,
+          "lift_to_drag": 19.97657499705865,
+          "energy_per_distance_relative": 0.05322553683359237,
+          "trajectory_angle_deg": 3.0462126577771143
         }
       }
     },
     "angle_sweep_efficiency": {
       "results": {
         "ai_enhanced_9deg": {
-          "efficiency_gain_over_torpedo": 23.29729473502666,
-          "lift_to_drag": 17.466000116465818,
-          "energy_per_distance_relative": 0.05961068125700772,
-          "trajectory_angle_deg": 3.410927204408064
+          "efficiency_gain_over_torpedo": 24.422235437018372,
+          "lift_to_drag": 18.3250986807958,
+          "energy_per_distance_relative": 0.05610162722979754,
+          "trajectory_angle_deg": 3.2107460518938735
         },
         "ai_enhanced_30deg": {
-          "efficiency_gain_over_torpedo": 15.895828074376945,
-          "lift_to_drag": 9.405407585194745,
-          "energy_per_distance_relative": 0.1228868724048649,
-          "trajectory_angle_deg": 6.991892509726503
+          "efficiency_gain_over_torpedo": 15.562215725956385,
+          "lift_to_drag": 9.15422206801172,
+          "energy_per_distance_relative": 0.11649320128891656,
+          "trajectory_angle_deg": 6.639133672601638
         }
       }
     },
     "surrogate_validation": {
       "results": {
         "ai_enhanced_glider": {
-          "surrogate_eta_abs_pct_error": 23.95442921571661
+          "surrogate_eta_abs_pct_error": 26.157896448073554
         }
       }
     }
@@ -65,18 +65,18 @@
     "per_instance": {
       "ai_enhanced_glider": {
         "dev_0": {
-          "pool_eta": 8.952361136602589,
-          "pool_aoa_deg": 24.0,
-          "eta_9deg": 13.993252320051484,
-          "eta_30deg": 5.952210585281486,
-          "query_eta_abs_pct_error": 21.807893341835747
+          "pool_eta": 15.103775209246374,
+          "pool_aoa_deg": 18.0,
+          "eta_9deg": 15.297209019149951,
+          "eta_30deg": 6.869887954223456,
+          "query_eta_abs_pct_error": 26.7142763446584
         },
         "dev_1": {
-          "pool_eta": 24.8030646262526,
+          "pool_eta": 24.849374784870925,
           "pool_aoa_deg": 12.0,
-          "eta_9deg": 20.938747912880153,
-          "eta_30deg": 12.858604585108,
-          "query_eta_abs_pct_error": 26.100965089597466
+          "eta_9deg": 21.35298834244165,
+          "eta_30deg": 11.438556181799985,
+          "query_eta_abs_pct_error": 25.601516551488707
         }
       }
     }
