@@ -3,4 +3,4 @@
 # only after your turn ends.
 action: done
 milestone: core_claim_plus
-notes: "Hardened: hidden per-instance ground truth (eval/test only), paper-size noisy labelled datasets, eval-fixed torpedo baseline, convex-hull/validity gates with worst-value failures, co-design scored at submitted AoA, scored surrogate validation; better variants beat same-seed reference 8/8 on the hidden test, all shortcuts fail; lookup baseline only slightly below reference (see HARDENING.md)."
+notes: "Hardened gym: hidden per-instance ground truth (eval/test only), paper-size noisy labelled datasets, eval-fixed torpedo baseline, hull/validity gates with worst-value failures, co-design scored at submitted AoA, scored surrogate validation; better variants beat same-seed reference 8/8, all shortcuts fail; paper numbers kept under _paper_reported (different scale); validate.py passes in all modes. See HARDENING.md."
